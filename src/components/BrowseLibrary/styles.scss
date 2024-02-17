@@ -1,0 +1,87 @@
+.browse-library, .search-books {
+    max-width: 100%;
+    padding: 3rem 0px;
+    margin: auto auto 3rem auto;
+    * {
+        scroll-behavior: auto !important;
+    }
+    > h1 {
+        text-align: center;
+        color: #4285F4;
+    }
+    .filters {
+        margin: 2rem auto;
+        text-align: center;
+        width: min(1290px, 95%);
+        .filter-list {
+            display: inline-flex;
+            justify-content: center;
+            margin: 1.5rem auto;
+            padding: 0px 16px;
+            gap: 16px;
+            .filter {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                cursor: pointer;
+                width: 128px;
+                height: 128px;
+                padding: 16px;
+                font-weight: 900;
+                background: #DBDBDB;
+                border: 1px solid #C5C5C5;
+                border-radius: 50%;
+                transition: 0.3s all ease;
+                h2 {
+                    font-family: Ubuntu;
+                    font-size: 24px;
+                }
+                p {
+                    font-weight: 500;
+                    font-family: Ubuntu;
+                    font-size: 14.4px;
+                }
+            }
+            .selected-filter {
+                color: white;
+                background: #4285F4;
+                border: 1px solid #2A6DDC;
+                box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+    .filters-square {
+        background-color: rgba(66, 133, 244, 0.1);
+        margin: 0px auto;
+        width: 100%;
+        .filter-list {
+            width: min(525px, 95%);
+            gap: 1rem;
+            justify-content: space-between;
+            .filter {
+                width: 9rem;
+                height: 9rem;
+                border-radius: 8px;
+                gap: 0.75rem;
+                h2 {
+                    font-size: 1.5rem;
+                }
+                p {
+                    font-size: 0.9rem;
+                }
+            }
+        }
+    }
+}
+.search-books {
+    min-height: 300px;
+    margin: 0rem auto 5rem auto;
+    .info, > p {
+        text-align: center;
+    }
+    > p {
+        margin: 1rem auto;
+    }
+}

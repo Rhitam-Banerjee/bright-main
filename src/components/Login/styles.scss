@@ -1,0 +1,40 @@
+.otp {
+    .otp-field {
+        > * {
+            display: flex;
+            gap: 0.5rem;
+            > * {
+                height: 3rem;
+                flex: 1;
+                margin: 0px !important;
+            }
+        }
+    }
+}
+.resend-otp {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    > * {
+        color: #1595DC;
+    }
+    svg {
+        animation: spin 1s infinite;
+    }
+    @keyframes spin {
+        0% {transform: rotate(0deg);}
+        100% {transform: rotate(360deg);}
+    }
+    .secondary-text {
+        color: #1595DC;
+    }
+}
+.resend-otp-button {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #1595DC;
+    text-decoration: underline;
+    text-align: left;
+    background-color: transparent;
+    margin: -1rem 0px;
+}
