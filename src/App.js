@@ -27,6 +27,7 @@ import "./index.css";
 import Series from "./components/Series";
 import Genre from "./components/BrowseLibrary/Genre";
 import { BrowseLibraryRenew } from "./components/BrowseLibraryRenew";
+import { IoIosCloseCircle } from "react-icons/io";
 const App = () => {
   const {
     book: { loading },
@@ -60,15 +61,22 @@ const App = () => {
   );
 
   useEffect(() => {
-    if (alert) setTimeout(() => dispatch(resetAlert()), 3000);
+    if (alert) setTimeout(() => dispatch(resetAlert()), 5000);
   }, [dispatch, alert]);
 
   return (
     <div className="app">
       {alert.text && (
-        <p className="alert" style={{ backgroundColor: alert.color }}>
-          {alert.text}
-        </p>
+        <div
+          className="alert flex flex-row items-center justify-around"
+          style={{ backgroundColor: alert.color }}
+        >
+          <p>{alert.text}</p>
+          <IoIosCloseCircle
+            className="text-white ml-auto"
+            onClick={() => dispatch(resetAlert())}
+          />
+        </div>
       )}
       {loading && <span className="loader"></span>}
       <Header />

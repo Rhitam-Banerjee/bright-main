@@ -18,7 +18,7 @@ import urls from "../../utils/urls";
 import axios from "axios";
 
 import logo from "../../icons/BrightR.Club.png";
-import { FaRegUser } from "react-icons/fa";
+// import { FaRegUser } from "react-icons/fa";
 
 const maxAge = 13;
 
@@ -61,7 +61,7 @@ const NewHeader = () => {
         <Link to={"/"} className="flex items-center justify-center mr-4">
           <img src={logo} alt="Logo" />
         </Link>
-        <div className="flex-1 max-w-[800px] ml-auto flex flex-row items-center justify-between">
+        <div className="flex-1 max-w-[500px] ml-auto flex flex-row items-center justify-between">
           {searchBarLinks.map((link, index) => {
             return (
               <Link
@@ -98,14 +98,9 @@ const NewHeader = () => {
             </Link>
           )}
           {isLoggedIn && (
-            <>
-              <div className="text-white ml-4" onClick={logOut}>
-                Log Out
-              </div>
-              <div>
-                <FaRegUser />
-              </div>
-            </>
+            <div className="text-white ml-4 cursor-pointer" onClick={logOut}>
+              Log Out
+            </div>
           )}
         </div>
       </div>

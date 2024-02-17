@@ -137,21 +137,6 @@ img,
 video {
   max-width: none !important;
 }
-.alert {
-  font-size: 0.9rem;
-  z-index: 3;
-  position: fixed;
-  top: 1rem;
-  border-radius: 5px;
-  box-shadow: 0px 0px 3px black;
-  padding: 0.5rem;
-  left: calc(50% - 250px);
-  color: #ffffff;
-  text-align: center;
-  width: min(500px, 95%);
-  height: auto;
-}
-
 .blue-button {
   display: flex;
   align-items: center;
