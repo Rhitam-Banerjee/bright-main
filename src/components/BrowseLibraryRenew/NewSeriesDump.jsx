@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import urls from "../../utils/urls";
@@ -7,7 +13,7 @@ import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import { Navigation, Virtual } from "swiper/modules";
 
 import { NewBook } from "./";
 import {
@@ -27,48 +33,52 @@ const NewSeriesDump = () => {
     (store) => store.book
   );
   const [seriesLoaded, setSeriesLoaded] = useState(false);
-  const getBooks = async () => {
-    if (loading) return;
-    try {
-      dispatch(load());
-      const response = await axios
-        .get(
-          age === ""
-            ? `${urls.getBooksSeriesMore}?start=${bookSetLimit - 5}&end=${
-                bookSetLimit + 10
-              }`
-            : `${urls.getBooksSeriesMore}?age=${age}&start=${
-                bookSetLimit - 5
-              }&end=${bookSetLimit + 10}`
-        )
-        .then((res) => res.data)
-        .catch((err) => {
-          console.log(err);
+  const getBooks = useMemo(
+    () => async () => {
+      if (loading) return;
+      try {
+        dispatch(load());
+        const response = await axios
+          .get(
+            age === "" || age === undefined
+              ? `${urls.getBooksSeriesMore}?start=${
+                  bookSetLimit - 5
+                }&end=${bookSetLimit}`
+              : `${urls.getBooksSeriesMore}?age=${age}&start=${
+                  bookSetLimit - 5
+                }&end=${bookSetLimit}`
+          )
+          .then((res) => res.data)
+          .catch((err) => {
+            console.log(err);
+          });
+        console.log(response);
+        delete response.books_series["Best Seller - Most Popular"];
+        delete response.books_series["Most Popular Series"];
+        delete response.books_series["New York Times Bestseller"];
+        delete response.books_series["Global Bestseller"];
+        delete response.books_series["Teacher Pick"];
+        const title = Object.keys(await response.books_series);
+        // setSeries(title);
+        title.forEach((serie) => {
+          response.books_series[`${serie}`].sort((a, b) => {
+            return b.stock_available - a.stock_available;
+          });
         });
-      delete response.books_series["Best Seller - Most Popular"];
-      delete response.books_series["Most Popular Series"];
-      delete response.books_series["New York Times Bestseller"];
-      delete response.books_series["Global Bestseller"];
-      delete response.books_series["Teacher Pick"];
-      const title = Object.keys(await response.books_series);
-      // setSeries(title);
-      title.forEach((serie) => {
-        response.books_series[`${serie}`].sort((a, b) => {
-          return b.stock_available - a.stock_available;
-        });
-      });
-      // setSeriesBook(await response.books_series);
+        // setSeriesBook(await response.books_series);
 
-      setBookSet(null);
-      if (bookSetLimit === 5)
-        dispatch(setBookSet({ bookSet: response.books_series }));
-      else dispatch(appendBookSet({ bookSet: response.books_series }));
-      setSeriesLoaded(true);
-    } catch (err) {
-      console.log(err);
-    }
-    dispatch(stopLoad());
-  };
+        setBookSet(null);
+        if (bookSetLimit === 5)
+          dispatch(setBookSet({ bookSet: response.books_series }));
+        else dispatch(appendBookSet({ bookSet: response.books_series }));
+        setSeriesLoaded(true);
+      } catch (err) {
+        console.log(err);
+      }
+      dispatch(stopLoad());
+    },
+    [age, bookSetLimit]
+  );
   const loadMore = () => {
     if (loadMoreRef.current)
       if (window.innerHeight + window.scrollY >= loadMoreRef.current.offsetTop)
@@ -77,7 +87,7 @@ const NewSeriesDump = () => {
   useEffect(() => {
     appendBookSet(null);
     getBooks();
-  }, [age, bookSetLimit]);
+  }, [getBooks]);
   useEffect(() => {
     dispatch(resetBookSet());
     window.addEventListener("scroll", loadMore);
@@ -120,7 +130,7 @@ const NewSeriesDump = () => {
                   clickable: true,
                 }}
                 navigation={true}
-                modules={[Navigation]}
+                modules={[Navigation, Virtual]}
                 className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px]"
               >
                 {bookSet[`${serie}`].map((book, index) => {
@@ -137,7 +147,7 @@ const NewSeriesDump = () => {
             </div>
           );
         })}
-        {/* <div ref={loadMoreRef}></div> */}
+        <div ref={loadMoreRef}></div>
       </section>
     )
   );

@@ -5,6 +5,7 @@ import NewSeries from "./NewSeries";
 import NewGenre from "./NewGenre";
 import NewSeriesDump from "./NewSeriesDump";
 import NewGenreDump from "./NewGenreDump";
+import MostPopularDump from "./MostPopularDump";
 export {
   BrowseLibraryRenew,
   AuthorSection,
@@ -13,4 +14,5 @@ export {
   NewGenre,
   NewSeriesDump,
   NewGenreDump,
+  MostPopularDump,
 };

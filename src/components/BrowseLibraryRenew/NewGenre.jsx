@@ -18,7 +18,7 @@ import bookIcon from "../../icons/bookIcon.svg";
 import seriesImg from "../../icons/series1Img.png";
 
 const NewGenre = () => {
-  const { genersChosen } = useSelector((store) => store.book);
+  const { age, genersChosen } = useSelector((store) => store.book);
   const [geners, setGenre] = useState([]);
   const [genersBooks, setGenreBooks] = useState({});
   const [genresLoaded, setGenresLoaded] = useState(false);
@@ -33,7 +33,11 @@ const NewGenre = () => {
   const dispatch = useDispatch();
   const getBooks = async () => {
     const response = await axios
-      .get(`${urls.getBooksGenre}?start=0&end=10`)
+      .get(
+        age === "" || age === undefined
+          ? `${urls.getBooksGenre}?start=0&end=10`
+          : `${urls.getBooksGenre}?age=${age}&start=0&end=10`
+      )
       .then((res) => res.data)
       .catch((err) => {
         console.log(err);
@@ -61,11 +65,11 @@ const NewGenre = () => {
   };
   useEffect(() => {
     getBooks();
-  }, []);
+  }, [age]);
   return (
     genresLoaded && (
       <section className="px-8 md:px-2">
-        <h1 className="font-bold text-[1.2rem] md:px-6">Genre</h1>
+        <h1 className="font-bold md:text-[12px] md:pl-[18px]">Genre</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
@@ -11,7 +11,6 @@ import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 
 import { setAlert } from "../../reducers/mainSlice";
-import { addToWishlist } from "../../reducers/wishlistSlice";
 
 const NewBook = ({ book }) => {
   const location = useLocation();
@@ -87,25 +86,24 @@ const NewBook = ({ book }) => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    async function fetchBookSet() {
-      try {
-        const response = await axios.get(
-          `https://server.brightr.club/api_v2/get-wishlists?guid=${user.id}`,
-          { withCredentials: true }
-        );
-        setWishListBooks(response.data.wishlists);
+  const fetchBookSet = async () => {
+    try {
+      const response = await axios.get(
+        `https://server.brightr.club/api_v2/get-wishlists?guid=${user.id}`,
+        { withCredentials: true }
+      );
+      setWishListBooks(response.data.wishlists);
 
-        const initialWishClickedMap = {};
-        response.data.wishlists.forEach((book) => {
-          initialWishClickedMap[book.isbn] = true;
-        });
-        setWishClickedMap(initialWishClickedMap);
-      } catch (error) {
-        console.error(error);
-      }
+      const initialWishClickedMap = {};
+      response.data.wishlists.forEach((book) => {
+        initialWishClickedMap[book.isbn] = true;
+      });
+      setWishClickedMap(initialWishClickedMap);
+    } catch (error) {
+      console.error(error);
     }
-
+  };
+  useEffect(() => {
     if (isLoggedIn) {
       fetchBookSet();
     }
@@ -121,6 +119,7 @@ const NewBook = ({ book }) => {
               className="h-full !m-auto !max-h-[140px] w-auto !max-w-[140px]"
               src={newImage}
               alt={name}
+              loading="lazy"
             />
           </Link>
           {stock_available === 0 && (

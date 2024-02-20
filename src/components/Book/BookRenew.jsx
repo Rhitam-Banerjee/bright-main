@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -94,42 +94,45 @@ const BookRenew = () => {
     }
   };
 
-  const getAuthorBooks = async () => {
-    try {
-      const response = await axios
-        .get(urls.getAuthorNameBook, {
-          params: { book_search_id: String(isbn) },
-        })
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-      const title = Object.keys(await response.book);
-      title.forEach((author) => {
-        response.book[`${author}`].sort((a, b) => {
-          return b.stock_available - a.stock_available;
+  const getAuthorBooks = useMemo(
+    () => async () => {
+      try {
+        const response = await axios
+          .get(urls.getAuthorNameBook, {
+            params: { book_search_id: String(isbn) },
+          })
+          .then((res) => res.data)
+          .catch((err) => console.log(err));
+        const title = Object.keys(await response.book);
+        title.forEach((author) => {
+          response.book[`${author}`].sort((a, b) => {
+            return b.stock_available - a.stock_available;
+          });
         });
-      });
-      setAuthorsBook(response.book);
+        setAuthorsBook(response.book);
 
-      title.forEach((author) => {
-        let totalReview = 0;
-        response.book[`${author}`].forEach((book) => {
-          totalReview += parseInt(book.review_count);
+        title.forEach((author) => {
+          let totalReview = 0;
+          response.book[`${author}`].forEach((book) => {
+            totalReview += parseInt(book.review_count);
+          });
+          totalReview = kFormatter(totalReview);
+          setAuthorReview((prevState) => ({
+            ...prevState,
+            [author]: totalReview,
+          }));
         });
-        totalReview = kFormatter(totalReview);
-        setAuthorReview((prevState) => ({
-          ...prevState,
-          [author]: totalReview,
-        }));
-      });
-      title.sort((a, b) => {
-        return response.book[`${b}`].length - response.book[`${a}`].length;
-      });
+        title.sort((a, b) => {
+          return response.book[`${b}`].length - response.book[`${a}`].length;
+        });
 
-      dispatch(setBooksAuthors(title));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+        dispatch(setBooksAuthors(title));
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    []
+  );
 
   const wishlistAdd = async (book) => {
     dispatch(
@@ -161,8 +164,8 @@ const BookRenew = () => {
     );
   return (
     <section className="px-8 py-2 md:px-4 mt-10 m-auto w-full">
-      <div className="flex flex-row md:flex-col justify-start md:items-center gap-8 max-w-5xl w-[90%] md:w-full m-auto">
-        <div className="relative border-[3px] border-mainColor w-full max-w-max h-max m-auto">
+      <div className="flex flex-row justify-start md:items-center gap-8 max-w-5xl w-[90%] md:w-full m-auto">
+        <div className="relative w-full max-w-max h-max m-auto">
           <div className="m-auto !w-full h-max">
             <img
               className="!max-w-[300px] w-full"
@@ -173,13 +176,13 @@ const BookRenew = () => {
               alt=""
             />
           </div>
-          <div className="p-1 bottom-0 h-max mt-auto flex flex-row justify-between items-center w-full bg-gray-100 rounded-md">
-            <div className="flex flex-row justify-between items-center text-black text-[1.1rem] font-bold">
+          <div className="p-1 bottom-0 h-max mt-auto flex flex-row items-center w-full text-[12px] bg-gray-100 rounded-md">
+            <div className="flex flex-row justify-between items-center text-black font-bold">
               <Star />
               <span className="ml-2">{book.rating}</span>
             </div>
             <div className="flex-1 flex flex-row border-l-[3px] ml-[10px] pl-[10px] border-secondary">
-              <div className="w-full text-[1.1rem] text-black font-bold">
+              <div className="w-full text-black font-bold">
                 <span className="">
                   {kFormatter(parseFloat(book.review_count.replace(/,/g, "")))}
                 </span>
@@ -194,7 +197,7 @@ const BookRenew = () => {
         </div>
         <div className="flex flex-col justify-between ">
           <div className="!p-0 flex flex-row items-center">
-            <div className="max-w-[250px] md:max-w-full pr-2 text-unHighlightDark font-black">
+            <div className="max-w-[350px] md:max-w-full pr-2 text-unHighlightDark font-black">
               {bookInSeries}
             </div>
             <div className="h-[0.5px] w-[10px] bg-secondary" />

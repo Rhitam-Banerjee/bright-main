@@ -3,7 +3,8 @@
 // const newDomain = process.env.REACT_APP_API + "/api_v2_books";
 
 // const newDomainUpdated = process.env.REACT_APP_API + "/api_v2_books";
-const host = process.env.REACT_APP_API;
+// const host = process.env.REACT_APP_API;
+const host = "http://127.0.0.1:5000";
 
 const domain = `${host}/api`;
 
@@ -71,14 +72,19 @@ const urls = {
   searchBooks: newDomain + "/search-new-books",
   getMostPopularSet: newDomain + "/get-most-popular-set",
 
-  getBooksByAuthor: `${newDomainUpdated}/get-books-author`,
+  // getBooksByAuthor: `${newDomainUpdated}/get-books-author`,
+  getPopularAuthor: `${newDomainUpdated}/get-books-author-popular`,
   getBooksByAuthorAll: `${newDomainUpdated}/get-all-books-author`,
   getAuthorNameBook: `${newDomainUpdated}/get-author-from-book`,
+
   getBooksSeries: `${newDomainUpdated}/get-book-set`,
   getBooksSeriesMore: `${newDomainUpdated}/get-book-set-all`,
   getSeriesNameBook: `${newDomainUpdated}/get-set-from-book`,
+
   getBooksGenre: `${newDomainUpdated}/get-genre-book`,
   getBooksGenreMore: `${newDomainUpdated}/get-genre-book-all`,
+
+  getPopularBooks: `${newDomainUpdated}/get-global-best-seller`,
 };
 
 export default urls;

@@ -7,7 +7,7 @@ import urls from "../../utils/urls";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import { Navigation, Virtual } from "swiper/modules";
 
 import { setSeriesChosen } from "../../reducers/bookSlice";
 
@@ -18,7 +18,7 @@ import seriesImg from "../../icons/series1Img.png";
 
 // import { appendBookSet, setBookSet } from "../../reducers/bookSlice";
 const NewSeries = () => {
-  const { seriesChosen } = useSelector((store) => store.book);
+  const { age, seriesChosen } = useSelector((store) => store.book);
   const dispatch = useDispatch();
   const [series, setSeries] = useState([]);
   const [seriesBook, setSeriesBook] = useState({});
@@ -33,7 +33,11 @@ const NewSeries = () => {
 
   const getBooks = async () => {
     const response = await axios
-      .get(`${urls.getBooksSeries}?start=0&end=20`)
+      .get(
+        age === "" || age === undefined
+          ? `${urls.getBooksSeries}?start=0&end=20`
+          : `${urls.getBooksSeries}?age=${age}&start=0&end=20`
+      )
       .then((res) => res.data)
       .catch((err) => {
         console.log(err);
@@ -66,11 +70,11 @@ const NewSeries = () => {
   };
   useEffect(() => {
     getBooks();
-  }, []);
+  }, [age]);
   return (
     seriesLoaded && (
-      <section className="px-8 md:px-2">
-        <h1 className="font-bold text-[1.2rem] md:px-6">Series</h1>
+      <section className="px-8 md:px-2 border-b-[0.5px] border-unHighlight mb-[10px]">
+        <h1 className="font-bold md:text-[12px] md:pl-[18px]">Series</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -79,7 +83,7 @@ const NewSeries = () => {
             clickable: true,
           }}
           navigation={true}
-          modules={[Navigation]}
+          modules={[Navigation, Virtual]}
           className="mySwiper !p-4"
         >
           {series.map((serie, index) => {
@@ -106,7 +110,7 @@ const NewSeries = () => {
                         seriesChosen === serie ? "text-white" : ""
                       }`}
                     >
-                      {serie}
+                      {serie.replace(/ *\([^)]*\) */g, "")}
                     </div>
                     <div
                       className={`flex flex-col mt-4 text-[0.8rem] gap-2 ${
@@ -169,7 +173,7 @@ const NewSeries = () => {
             })}
           </Swiper>
         )}
-        <div className="my-3 w-[90%] h-[2px] m-auto bg-unHighlight opacity-50" />
+        {/* <div className="my-3 w-[90%] h-[2px] m-auto bg-unHighlight opacity-50" /> */}
       </section>
     )
   );

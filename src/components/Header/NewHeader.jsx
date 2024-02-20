@@ -54,6 +54,7 @@ const NewHeader = () => {
   };
   useEffect(() => {
     checkPathname();
+    dispatch(setAge(""));
   }, [location]);
   return (
     <nav className="relative w-full mb-16 px-8 py-2 flex flex-col justify-start items-center bg-mainColor">

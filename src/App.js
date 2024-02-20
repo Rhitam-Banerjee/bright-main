@@ -1,11 +1,7 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
-// import Header from "./components/Header";
 import Header from "./components/Header/NewHeader";
-import BrowseLibrary from "./components/BrowseLibrary";
 import YourLibrary from "./components/YourLibrary";
-import MostPopular from "./components/BrowseLibrary/MostPopular";
-import MustRead from "./components/BrowseLibrary/MustRead";
 import Landing from "./components/Landing";
 import Register from "./components/Register";
 import Login from "./components/Login";
@@ -13,7 +9,6 @@ import ForgotPassword from "./components/Login/ForgotPassword";
 import Content from "./components/Content";
 import HowItWorks from "./components/Content/HowItWorks";
 import SearchBooks from "./components/BrowseLibrary/SearchBooks";
-// import Book from "./components/Book";
 import Book from "./components/Book/BookRenew";
 import Pricing from "./components/Pricing";
 import Footer from "./components/Footer";
@@ -21,13 +16,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, resetAlert } from "./reducers/mainSlice";
 import devUrls from "./utils/devUrls";
 import axios from "axios";
-// import Author from "./components/Author";
 import Author from "./components/Author/NewAuthor";
-import "./index.css";
-import Series from "./components/Series";
-import Genre from "./components/BrowseLibrary/Genre";
-import { BrowseLibraryRenew } from "./components/BrowseLibraryRenew";
 import { IoIosCloseCircle } from "react-icons/io";
+import "./index.css";
+
+const LazyBrowseLibraryRenew = lazy(() =>
+  import("./components/BrowseLibraryRenew/BrowseLibraryRenew")
+);
+
 const App = () => {
   const {
     book: { loading },
@@ -49,16 +45,11 @@ const App = () => {
 
   useEffect(() => {
     refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(
-    () => {
-      window.scrollTo(0, 0);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [location]
-  );
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   useEffect(() => {
     if (alert) setTimeout(() => dispatch(resetAlert()), 5000);
@@ -81,21 +72,16 @@ const App = () => {
       {loading && <span className="loader"></span>}
       <Header />
       <Routes>
-        {/* <Route path="/must-read" element={<MustRead />} />
-        <Route path="/most-popular" element={<MostPopular />} /> */}
-
-        {/* <Route path="/browse-library" element={<BrowseLibrary />} /> */}
-        <Route path="/browse-library" element={<BrowseLibraryRenew />} />
-
-        {/* <Route path="/browse-library-by-genre" element={<Genre />} /> */}
-        {/* <Route
-          path="/browse-library-by-genre"
-          element={<BrowseLibraryRenew />}
-        /> */}
-
+        <Route
+          path="/browse-library"
+          element={
+            <Suspense fallback={<h1>Loading...</h1>}>
+              <LazyBrowseLibraryRenew />
+            </Suspense>
+          }
+        />
         <Route path="/book/:isbn" element={<Book />} />
         <Route path="/author/:author" element={<Author />} />
-        <Route path="/series/:series" element={<Series />} />
         <Route path="/search-books" element={<SearchBooks />} />
         <Route
           path="/your-library"

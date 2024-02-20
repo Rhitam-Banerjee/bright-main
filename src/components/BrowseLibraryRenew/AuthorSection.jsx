@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./styles.scss";
-import { Navigation } from "swiper/modules";
+import { Navigation, Virtual } from "swiper/modules";
 
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -16,13 +16,16 @@ import { NewBook } from "./";
 import amazon from "../../icons/amazonWhite.svg";
 import bookIcon from "../../icons/bookIcon.svg";
 import authorImg from "../../icons/author.png";
+import NewSlider from "../BookSlider/NewSlider";
 
 const AuthorSection = () => {
+  const { age } = useSelector((store) => store.book);
   const { authorChosen } = useSelector((store) => store.book);
   const [authors, setAuthors] = useState([]);
-  const [authorBooks, setAuthorBooks] = useState({});
+  const [authorDetails, setAuthorDetails] = useState({});
   const [authorsLoaded, setAuthorsLoaded] = useState(false);
-  const [authorReview, setAuthorReview] = useState({});
+  const [authorsBookLoaded, setAuthorsBookLoaded] = useState(false);
+  const [authorBooks, setAuthorBooks] = useState({});
 
   function kFormatter(num) {
     return Math.abs(num) > 999
@@ -31,142 +34,136 @@ const AuthorSection = () => {
   }
 
   const dispatch = useDispatch();
-  const getBooks = async () => {
-    const response = await axios
-      .get(`${urls.getBooksByAuthor}?start=0&end=10`)
-      .then((res) => res.data)
-      .catch((err) => {
-        console.log(err);
-      });
-    const title = Object.keys(await response.books_authors);
-    setAuthors(title);
-    title.forEach((author) => {
-      response.books_authors[`${author}`].sort((a, b) => {
+
+  const getPopularAuthors = async () => {
+    try {
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getPopularAuthor}`
+            : `${urls.getPopularAuthor}?age=${age}`
+        )
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      setAuthorDetails(response.popular_author);
+      setAuthors(Object.keys(await response.popular_author));
+      setAuthorsLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadAuthorBooks = async (author) => {
+    try {
+      const response = await axios
+        .get(`${urls.getBooksByAuthorAll}?author=${author}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      response.author_details.books.sort((a, b) => {
         return b.stock_available - a.stock_available;
       });
-    });
-    setAuthorBooks(response.books_authors);
-    title.forEach((author, index) => {
-      let totalReview = 0;
-      response.books_authors[`${author}`].forEach((book) => {
-        totalReview += parseInt(book.review_count);
-      });
-      totalReview = kFormatter(totalReview);
-      setAuthorReview((prevState) => ({
-        ...prevState,
-        [author]: totalReview,
-      }));
-    });
-    setAuthorsLoaded(true);
+      setAuthorBooks(response.author_details.books);
+      setAuthorsBookLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   useEffect(() => {
-    getBooks();
-  }, []);
+    getPopularAuthors();
+    dispatch(setAuthorChosen(null));
+    setAuthorsBookLoaded(false);
+  }, [age]);
   return (
-    authorsLoaded && (
-      <section className="px-8 md:px-2">
-        <h1 className="font-bold text-[1.2rem] md:px-6">Authors</h1>
-        <Swiper
-          slidesPerView={"auto"}
-          grabCursor={true}
-          spaceBetween={30}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={true}
-          modules={[Navigation]}
-          className="mySwiper !p-4"
-        >
-          {authors.map((author, index) => {
-            return (
-              <SwiperSlide
-                key={index}
-                className={`!max-w-[300px] !h-auto rounded-lg ${
-                  authorChosen === author ? "!bg-mainColor" : "bg-unHighlight"
-                }`}
+    <section className="px-8 md:px-2 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px]">
+      {authorsLoaded && (
+        <h1 className="font-bold md:text-[12px] md:pl-[18px]">
+          Popular Authors
+        </h1>
+      )}
+      <Swiper
+        slidesPerView={"auto"}
+        grabCursor={true}
+        spaceBetween={30}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Navigation, Virtual]}
+        className="mySwiper !p-4"
+      >
+        {authors.map((author, index) => {
+          return (
+            <SwiperSlide
+              key={author}
+              className={`!max-w-[300px] !h-auto rounded-lg ${
+                authorChosen === author ? "!bg-mainColor" : "bg-unHighlight"
+              }`}
+              virtualIndex={index}
+            >
+              <div
+                className="relative h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                onClick={() => {
+                  if (authorChosen === author) {
+                    dispatch(setAuthorChosen(null));
+                    setAuthorsBookLoaded(false);
+                  } else {
+                    loadAuthorBooks(author);
+                    dispatch(setAuthorChosen(author));
+                  }
+                }}
               >
                 <div
-                  className="relative h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
-                  onClick={() => {
-                    authorChosen === author
-                      ? dispatch(setAuthorChosen(null))
-                      : dispatch(setAuthorChosen(author));
-                  }}
+                  className={`p-2 pr-[100px] h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
                 >
                   <div
-                    className={`p-2 pr-[100px] h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
+                    className={`${authorChosen === author ? "text-white" : ""}`}
                   >
-                    <div
-                      className={`${
-                        authorChosen === author ? "text-white" : ""
-                      }`}
-                    >
-                      {author}
+                    {author}
+                  </div>
+                  <div
+                    className={`flex flex-col mt-4 text-[0.8rem] gap-2 ${
+                      authorChosen === author ? "text-white" : ""
+                    }`}
+                  >
+                    <div className="flex flex-row items-center justify-start gap-1">
+                      <img
+                        className={`w-[10px] ${
+                          authorChosen === author ? "" : "invert"
+                        }`}
+                        src={bookIcon}
+                        alt="BooksCount"
+                      />
+                      <p>{authorDetails[`${author}`].books_count} Books</p>
                     </div>
-                    <div
-                      className={`flex flex-col mt-4 text-[0.8rem] gap-2 ${
-                        authorChosen === author ? "text-white" : ""
-                      }`}
-                    >
-                      <div className="flex flex-row items-center justify-start gap-1">
-                        <img
-                          className={`w-[10px] ${
-                            authorChosen === author ? "" : "invert"
-                          }`}
-                          src={bookIcon}
-                          alt="BooksCount"
-                        />
-                        <p>{authorBooks[`${author}`].length} Books</p>
-                      </div>
-                      <div className="flex flex-row items-center justify-start gap-1">
-                        <img
-                          className={`w-[10px] ${
-                            authorChosen === author ? "" : "invert"
-                          }`}
-                          src={amazon}
-                          alt="Amazon"
-                        />
-                        <p>{authorReview[`${author}`]} Reviews</p>
-                      </div>
+                    <div className="flex flex-row items-center justify-start gap-1">
+                      <img
+                        className={`w-[10px] ${
+                          authorChosen === author ? "" : "invert"
+                        }`}
+                        src={amazon}
+                        alt="Amazon"
+                      />
+                      <p>{authorDetails[`${author}`].total_review} Reviews</p>
                     </div>
                   </div>
-                  <div className="">
-                    <img
-                      className="absolute !bottom-0 right-0 w-[100px] !z-10 saturate-0"
-                      src={authorImg}
-                      alt=""
-                    />
-                  </div>
-                  <div className="absolute -bottom-[20px] -right-[10px] h-[100px] w-[100px] rounded-full bg-[#ffffff70]" />
                 </div>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-        {authorsLoaded && authorChosen !== null && (
-          <Swiper
-            slidesPerView={"auto"}
-            spaceBetween={30}
-            grabCursor={true}
-            pagination={{
-              clickable: true,
-            }}
-            navigation={true}
-            modules={[Navigation]}
-            className="mySwiper !p-4"
-          >
-            {authorBooks[`${authorChosen}`]?.map((book, index) => {
-              return (
-                <SwiperSlide key={index} className="flex flex-col !w-[150px]">
-                  <NewBook book={book} />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        )}
-        <div className="my-3 w-[90%] h-[2px] m-auto bg-unHighlight opacity-50" />
-      </section>
-    )
+                <div className="">
+                  <img
+                    className="absolute !bottom-0 right-0 w-[100px] !z-10 saturate-0"
+                    src={authorImg}
+                    alt=""
+                  />
+                </div>
+                <div className="absolute -bottom-[20px] -right-[10px] h-[100px] w-[100px] rounded-full bg-[#ffffff70]" />
+              </div>
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+      {authorsBookLoaded && <NewSlider container={authorBooks} />}
+      {/* <div className="my-3 w-[90%] h-[2px] m-auto bg-unHighlight opacity-50" /> */}
+    </section>
   );
 };
 
