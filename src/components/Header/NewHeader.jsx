@@ -28,7 +28,7 @@ const NewHeader = () => {
   const dispatch = useDispatch();
   const [renderAge, setRenderAge] = useState(false);
   const {
-    main: { isLoggedIn, ageDropDown },
+    main: { isLoggedIn },
     book: { age, searchQuery },
   } = useSelector((state) => state);
   const logOut = async () => {
@@ -39,23 +39,21 @@ const NewHeader = () => {
       console.log(err);
     }
   };
-  const checkPathname = () => {
-    const excludePath = [
-      "/browse-library",
-      "/browse-library-by-genre",
-      "/most-popular",
-      "/must-read",
-    ];
-    const res = excludePath.map((path) => {
-      return pathname === path ? true : false;
-    });
-    let check = (arr) => arr.some((ele) => ele === true);
-    setRenderAge(check(res));
-  };
   useEffect(() => {
-    checkPathname();
-    dispatch(setAge(""));
+    if (pathname === "/browse-library") {
+      setRenderAge(true);
+    } else {
+      setRenderAge(false);
+    }
   }, [location]);
+  useEffect(() => {
+    if (localStorage.getItem("age")) {
+      dispatch(setAge(localStorage.getItem("age")));
+    } else {
+      localStorage.setItem("age", "");
+      dispatch(setAge(""));
+    }
+  }, []);
   return (
     <nav className="relative w-full mb-16 px-8 py-2 flex flex-col justify-start items-center bg-mainColor">
       <div className="w-full flex flex-row justify-between items-center">
@@ -106,34 +104,32 @@ const NewHeader = () => {
         </div>
       </div>
       {renderAge && (
-        <div className="absolute top-full left-0 h-[50px] m-auto px-8 py-2 flex flex-row items-center">
-          <div
-            className="mr-4 text-secondary font-bold cursor-pointer"
-            onClick={() => dispatch(setAgeDropDown())}
-          >
-            {ageDropDown ? "Close Age Tab" : "Show Ages Tab"}
-          </div>
-          {ageDropDown && (
-            <div className="flex flex-row gap-2">
-              {Array(maxAge)
-                .fill(true)
-                .map((_, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className={`px-2 py-[2px] rounded-md cursor-pointer font-bold ${
-                        parseInt(age) === i
-                          ? "bg-secondary text-white"
-                          : "bg-mainColor"
-                      }`}
-                      onClick={() => dispatch(setAge({ age: i.toString() }))}
-                    >
-                      {i === 12 ? `${i}+ ` : `${i} - ${i + 1}`}
-                    </div>
-                  );
-                })}
-            </div>
-          )}
+        <div className="absolute top-full left-0 !w-full h-[50px] m-auto px-8 py-2 flex flex-row items-center justify-start gap-2">
+          {Array(maxAge)
+            .fill(true)
+            .map((_, i) => {
+              return (
+                <div
+                  key={i}
+                  className={`px-2 py-[2px] rounded-md cursor-pointer font-bold ${
+                    age == i.toString()
+                      ? "bg-secondary text-white"
+                      : "bg-mainColor"
+                  }`}
+                  onClick={() => {
+                    if (age == i.toString()) {
+                      dispatch(setAge(""));
+                      localStorage.setItem("age", "");
+                    } else {
+                      dispatch(setAge(i));
+                      localStorage.setItem("age", i.toString());
+                    }
+                  }}
+                >
+                  {i === 12 ? `${i}+ ` : `${i} - ${i + 1}`}
+                </div>
+              );
+            })}
         </div>
       )}
     </nav>

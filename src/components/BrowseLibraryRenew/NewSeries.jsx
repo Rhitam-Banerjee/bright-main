@@ -91,7 +91,7 @@ const NewSeries = () => {
               <SwiperSlide
                 key={index}
                 className={`!max-w-[300px] !h-auto rounded-lg  ${
-                  seriesChosen === serie ? "!bg-mainColor" : "bg-unHighlight"
+                  seriesChosen === serie ? "!bg-mainColor" : "bg-mainColorLight"
                 }`}
               >
                 <div

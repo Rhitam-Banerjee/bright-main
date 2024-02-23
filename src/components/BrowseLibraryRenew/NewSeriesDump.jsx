@@ -41,18 +41,17 @@ const NewSeriesDump = () => {
         const response = await axios
           .get(
             age === "" || age === undefined
-              ? `${urls.getBooksSeriesMore}?start=${
-                  bookSetLimit - 5
-                }&end=${bookSetLimit}`
+              ? `${urls.getBooksSeriesMore}?start=${bookSetLimit - 5}&end=${
+                  bookSetLimit + 10
+                }`
               : `${urls.getBooksSeriesMore}?age=${age}&start=${
                   bookSetLimit - 5
-                }&end=${bookSetLimit}`
+                }&end=${bookSetLimit + 10}`
           )
           .then((res) => res.data)
           .catch((err) => {
             console.log(err);
           });
-        console.log(response);
         delete response.books_series["Best Seller - Most Popular"];
         delete response.books_series["Most Popular Series"];
         delete response.books_series["New York Times Bestseller"];

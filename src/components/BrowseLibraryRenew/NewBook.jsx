@@ -7,6 +7,7 @@ import devUrls from "../../utils/devUrls";
 
 import star from "../../icons/star.svg";
 import amazon from "../../icons/amazon.svg";
+import { FaAmazon } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 
@@ -113,10 +114,10 @@ const NewBook = ({ book }) => {
       <div
         className={`h-[180px] !w-full max-w-[150px] relative bg-white flex flex-col`}
       >
-        <div className="relative p-[5px] border-mainColor border-opacity-20 border-[2px] rounded-md h-[150px]">
+        <div className="relative p-[10px] bg-unHighlight rounded-md h-[150px]">
           <Link to={`/book/${isbn}`} className="m-auto !h-full !w-full">
             <img
-              className="h-full !m-auto !max-h-[140px] w-auto !max-w-[140px]"
+              className="h-full !m-auto !max-h-[130px] w-auto !max-w-[130px]"
               src={newImage}
               alt={name}
               loading="lazy"
@@ -140,7 +141,8 @@ const NewBook = ({ book }) => {
             </p>
           </div>
           <div className="flex-1 flex flex-row items-center justify-center border-l-[0.5px] ml-2 pl-2 border-secondary">
-            <img className="!w-[10px] mr-2" src={amazon} alt="amazon" />
+            {/* <img className="!w-[10px] mr-2" src={amazon} alt="amazon" /> */}
+            <FaAmazon className="!w-[12px] mr-2" />
             <div className="w-full text-black flex flex-row">
               <p className="text-black text-[9px]">
                 {kFormatter(parseFloat(review_count.replace(/,/g, "")))}

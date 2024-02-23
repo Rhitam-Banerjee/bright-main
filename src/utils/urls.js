@@ -85,6 +85,8 @@ const urls = {
   getBooksGenreMore: `${newDomainUpdated}/get-genre-book-all`,
 
   getPopularBooks: `${newDomainUpdated}/get-global-best-seller`,
+  getBookYTVideos: `${newDomainUpdated}/get-videos-from-book`,
+  getBookSetYtVideos: `${newDomainUpdated}/get-book-set-video`,
 };
 
 export default urls;

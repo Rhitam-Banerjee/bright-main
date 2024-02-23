@@ -4,10 +4,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        wishlistedBox: "#c4e6ff",
+        mainColorLight: "#DAF0FF",
         mainColor: "#0094FF",
         secondary: "orange",
         unHighlight: "#ECECEC",
+        unHighlightLignt: "#ABABAB",
         unHighlightDark: "#7A7A7A",
       },
       boxShadow: {

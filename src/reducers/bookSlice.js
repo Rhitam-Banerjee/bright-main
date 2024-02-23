@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   bookSet: {},
   bookSetLimit: 5,
-  age: "",
+  age: localStorage.getItem("age"),
   searchedBookSet: [],
   searchQuery: "",
   loading: false,
@@ -52,11 +52,7 @@ export const bookSlice = createSlice({
     },
     setAge: (state, { payload }) => {
       state.bookSetLimit = initialState.bookSetLimit;
-      if (state.age === payload.age) {
-        state.age = initialState.age;
-      } else {
-        state.age = payload.age;
-      }
+      state.age = payload;
     },
     load: (state) => {
       state.loading = true;

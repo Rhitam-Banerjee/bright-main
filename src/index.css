@@ -230,3 +230,7 @@ video {
 .swiper-button-disabled {
   display: none;
 }
+.ytp-large-play-button svg,
+.ytp-button svg {
+  width: 28px !important;
+}
