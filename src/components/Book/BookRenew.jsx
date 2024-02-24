@@ -318,7 +318,7 @@ const BookRenew = () => {
           </div>
           {isLoggedIn && (
             <div
-              className="text-[12px] font-bold px-[50px] py-[3px] h-[22px] w-full max-w-[200px] mr-auto bg-unHighlight cursor-pointer rounded-[5px]"
+              className="text-[12px] md:text-[10px] text-center font-bold px-[50px] py-[3px] h-[22px] w-full max-w-[200px] mr-auto bg-unHighlight cursor-pointer rounded-[5px]"
               onClick={() => wishlistAdd(book)}
             >
               Add To Wishlist
