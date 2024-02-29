@@ -55,7 +55,7 @@ const MostSoughtAfter = () => {
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
-          className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px]"
+          className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px] no-slider-arrow"
         >
           {popularBooks?.map((book, index) => {
             return (

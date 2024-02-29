@@ -17,7 +17,7 @@ const NewSlider = ({ container }) => {
       }}
       navigation={true}
       modules={[Navigation, Virtual]}
-      className="mySwiper !p-4"
+      className="mySwiper !py-4 no-slider-arrow"
     >
       {container.map((book, index) => {
         return (

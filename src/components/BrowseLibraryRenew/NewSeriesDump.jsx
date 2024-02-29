@@ -104,18 +104,18 @@ const NewSeriesDump = () => {
                 className="flex flex-row items-baseline text-[12px]"
                 ref={heightRef}
               >
-                <p className="font-bold pl-[18px]" key={index}>
+                <p className="pl-[18px]" key={index}>
                   {serie.replace(/\s*\(.*?\)\s*/g, "")}
                 </p>
                 {bookSet[`${serie}`][0].authors?.split(",")[0] && (
-                  <p className="text-[12px] border-l-[0.5px] ml-[10px] pl-[10px] border-secondary">
+                  <p className="text-[12px] text-unHighlightDark border-l-[0.5px] ml-[10px] pl-[10px] border-secondary">
                     {bookSet[`${serie}`][0].authors?.split(",")[0]}
                   </p>
                 )}
 
                 {bookSet[`${serie}`][0].publisher?.split(",")[0] && (
                   <p
-                    className={`xs:hidden text-[12px] border-l-[0.5px] ml-[10px] pl-[10px] border-secondary`}
+                    className={`xs:hidden text-unHighlightLight text-[12px] border-l-[0.5px] ml-[10px] pl-[10px] border-secondary`}
                   >
                     {bookSet[`${serie}`][0].publisher?.split(",")[0]}
                   </p>
@@ -130,7 +130,7 @@ const NewSeriesDump = () => {
                 }}
                 navigation={true}
                 modules={[Navigation, Virtual]}
-                className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px]"
+                className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px] no-slider-arrow"
               >
                 {bookSet[`${serie}`].map((book, index) => {
                   return (

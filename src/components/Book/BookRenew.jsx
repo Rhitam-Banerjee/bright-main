@@ -273,7 +273,7 @@ const BookRenew = () => {
               <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                 {seriesBook[bookInSeries]?.length} Books
               </div>
-              <div className="text-[12px] md:text-[8px] text-unHighlightLignt font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+              <div className="text-[12px] md:text-[8px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                 {seriesReview} Reviews
               </div>
             </div>
@@ -293,7 +293,7 @@ const BookRenew = () => {
                     <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                       {authorsBook[`${author}`]?.length} Books
                     </div>
-                    <div className="text-[12px] md:text-[8px] text-unHighlightLignt font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                    <div className="text-[12px] md:text-[8px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                       {authorReview[author]} Reviews
                     </div>
                   </div>
@@ -398,7 +398,7 @@ const BookRenew = () => {
             spaceBetween={30}
             navigation={true}
             modules={[Navigation, Virtual]}
-            className="mySwiper py-4"
+            className="mySwiper py-4 no-slider-arrow"
           >
             {seriesBook[`${bookInSeries}`]?.map((book, index) => {
               return (
@@ -417,7 +417,7 @@ const BookRenew = () => {
             <span className="text-[12px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
               {bookSetVideos.length} Videos
             </span>
-            <span className="text-[12px] text-unHighlightLignt font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+            <span className="text-[12px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
               {bookSetViews} Views
             </span>
           </div>
@@ -482,7 +482,7 @@ const BookRenew = () => {
                     <span className="text-[12px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                       {authorsBook[`${author}`]?.length} Books
                     </span>
-                    <span className="text-[12px] text-unHighlightLignt font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                    <span className="text-[12px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                       {authorReview[`${author}`]} Reviews
                     </span>
                   </div>
@@ -492,7 +492,7 @@ const BookRenew = () => {
                     spaceBetween={30}
                     navigation={true}
                     modules={[Navigation, Virtual]}
-                    className="mySwiper py-4"
+                    className="mySwiper py-4 no-slider-arrow"
                   >
                     {authorsBook[`${author}`]?.map((book, index) => {
                       return (

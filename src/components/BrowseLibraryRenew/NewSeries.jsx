@@ -16,6 +16,7 @@ import amazon from "../../icons/amazonWhite.svg";
 import bookIcon from "../../icons/bookIcon.svg";
 import seriesImg from "../../icons/seriesImg.svg";
 import seriesImgSelected from "../../icons/seriesImgSelected.svg";
+import { FaAmazon } from "react-icons/fa";
 
 const NewSeries = () => {
   const { age } = useSelector((store) => store.book);
@@ -62,8 +63,8 @@ const NewSeries = () => {
   }, [age]);
   return (
     seriesLoaded && (
-      <section className="px-8 md:px-2 border-b-[0.5px] border-unHighlight mb-[10px]">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px]">
+      <section className="pl-8 md:px-2 pb-[10px]">
+        <h1 className="font-bold md:text-[12px] md:pl-[18px] pb-[10px]">
           Bestseller Series - Amazon
         </h1>
         <Swiper
@@ -74,18 +75,18 @@ const NewSeries = () => {
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
-          className="mySwiper !p-4"
+          className="mySwiper no-slider-arrow"
         >
           {seriesTitle.map((serie, index) => {
             return (
               <SwiperSlide
                 key={index}
-                className={`!max-w-[300px] !h-auto rounded-lg  ${
+                className={`!max-w-[180px] !h-auto rounded-lg  ${
                   seriesChosen === serie ? "!bg-mainColor" : "bg-mainColorLight"
                 }`}
               >
                 <div
-                  className="relative min-w-[280px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                  className="relative w-[180px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                   onClick={() => {
                     seriesChosen === serie
                       ? setSeriesChosen(null)
@@ -93,55 +94,57 @@ const NewSeries = () => {
                   }}
                 >
                   <div
-                    className={`p-2 h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
+                    className={`p-2 h-full rounded-lg flex flex-col items-start justify-center cursor-pointer`}
                   >
                     <div
                       className={`${
                         seriesChosen === serie ? "text-white" : ""
-                      }`}
+                      } text-[12px]`}
                     >
-                      {serie.replace(/ *\([^)]*\) */g, "")}
+                      {serie?.length <= 18
+                        ? `${serie.replace(/ *\([^)]*\) */g, "")}`
+                        : `${serie
+                            .replace(/ *\([^)]*\) */g, "")
+                            .substring(0, 15)}...`}
                     </div>
                     <div
-                      className={`flex flex-col mt-4 text-[0.8rem] gap-2 ${
+                      className={`flex flex-col mt-4 text-[12px] gap-2 ${
                         seriesChosen === serie ? "text-white" : ""
                       }`}
                     >
                       <div className="flex flex-row items-center justify-start gap-1">
                         <img
-                          className={`w-[10px] ${
+                          className={`w-[8px] ${
                             seriesChosen === serie ? "" : "invert"
                           }`}
                           src={bookIcon}
                           alt="BooksCount"
                         />
-                        <p>{seriesBook[`${serie}`].total_books.length} Books</p>
+                        <p className="text-[8px]">
+                          {seriesBook[`${serie}`].total_books.length} Books
+                        </p>
                       </div>
                       <div className="flex flex-row items-center justify-start gap-1">
-                        <img
-                          className={`w-[10px] ${
-                            seriesChosen === serie ? "" : "invert"
-                          }`}
-                          src={amazon}
-                          alt="Amazon"
-                        />
+                        <FaAmazon className="w-[8px]" />
                         <p>
-                          {kFormatter(seriesBook[`${serie}`].total_review)}
-                          Reviews
+                          <span className="text-[8px]">
+                            {kFormatter(seriesBook[`${serie}`].total_review)}
+                          </span>
+                          <span className="pl-[2px] text-[8px]">Reviews</span>
                         </p>
                       </div>
                     </div>
                   </div>
                   <div className="">
                     <img
-                      className="absolute !bottom-0 right-0 w-[73px] !z-10 saturate-0"
+                      className="absolute !bottom-0 right-[0px] w-[73px] !z-10 saturate-0"
                       src={
                         seriesChosen === serie ? seriesImgSelected : seriesImg
                       }
                       alt=""
                     />
                   </div>
-                  <div className="absolute -bottom-[20px] -right-[10px] h-[100px] w-[100px] rounded-full bg-[#ffffff70]" />
+                  <div className="absolute -bottom-[30px] right-[-20px] h-[102px] w-[102px] rounded-full bg-[#ffffff70]" />
                 </div>
               </SwiperSlide>
             );
@@ -157,7 +160,7 @@ const NewSeries = () => {
             }}
             navigation={true}
             modules={[Navigation]}
-            className="mySwiper bg-transparent !p-4"
+            className="mySwiper py-4 no-slider-arrow"
           >
             {seriesBook[`${seriesChosen}`].total_books?.map((book, index) => {
               return (
@@ -168,7 +171,11 @@ const NewSeries = () => {
             })}
           </Swiper>
         )}
-        {/* <div className="my-3 w-[90%] h-[2px] m-auto bg-unHighlight opacity-50" /> */}
+        <div
+          className={`${
+            seriesLoaded && seriesChosen !== null ? "mt-0" : "mt-[14px]"
+          } h-[0.5px] w-[calc(100%_-_50px)] mr-auto bg-unHighlight`}
+        />
       </section>
     )
   );

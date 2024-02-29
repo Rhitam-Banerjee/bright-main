@@ -39,8 +39,8 @@ const MostPopularDump = () => {
   }, [age]);
   return (
     !isLoading && (
-      <section className="px-8 md:px-2">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px]">
+      <section className="pl-8 md:px-2 pb-[14px]">
+        <h1 className="font-bold md:text-[12px] md:pl-[18px] pb-[10px]">
           Chart Topping - NewYork Times
         </h1>
         <Swiper
@@ -51,7 +51,7 @@ const MostPopularDump = () => {
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
-          className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px]"
+          className="mySwiper no-slider-arrow"
         >
           {popularBooks?.map((book, index) => {
             return (
@@ -65,6 +65,7 @@ const MostPopularDump = () => {
             );
           })}
         </Swiper>
+        <div className="mt-[20px] h-[0.5px] w-[calc(100%_-_50px)] mr-auto bg-unHighlight" />
       </section>
     )
   );

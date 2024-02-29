@@ -123,7 +123,7 @@ const NewHeader = () => {
             freeMode={true}
             navigation={true}
             modules={[FreeMode, Navigation, Virtual]}
-            className="mySwiper !ml-0 ageSlider"
+            className="mySwiper !ml-0 no-slider-arrow"
           >
             {Array(maxAge)
               .fill(true)

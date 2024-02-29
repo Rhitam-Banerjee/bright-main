@@ -4,12 +4,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        mainColorLight: "#DAF0FF",
+        mainColorLight: "#D6E2FF",
         mainColor: "#3B72FF",
-        secondary: "orange",
+        secondary: "#ff9f30",
+        secondaryLight: "#fff1e0",
+        lightGrey: "#f5f5f5",
         unHighlight: "#ECECEC",
-        unHighlightLignt: "#ABABAB",
-        unHighlightDark: "#9C9B9B",
+        unHighlightLight: "#ABABAB",
+        unHighlightDark: "#7a7a7a",
       },
       boxShadow: {
         customShadowLight: "0 4px 10px rgba(0,0,0,0.4)",

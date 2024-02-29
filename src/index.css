@@ -5,7 +5,7 @@
 @layer base {
   .font-outline-1 {
     /* -webkit-text-stroke: 1px blue; */
-    text-shadow: 0 0 2px blue;
+    text-shadow: 0 0 2px #3b72ff;
   }
   .font-outline-2 {
     -webkit-text-stroke: 2px blue;
@@ -244,7 +244,7 @@ video {
 .ytp-button svg {
   width: 28px !important;
 }
-.ageSlider > .swiper-button-next,
-.ageSlider > .swiper-button-prev {
+.no-slider-arrow > .swiper-button-next,
+.no-slider-arrow > .swiper-button-prev {
   display: none;
 }
