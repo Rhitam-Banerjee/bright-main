@@ -14,7 +14,7 @@ const newDomainUpdated = `${host}/api_v3`;
 
 const urls = {
   getMostBorrowedBooks: domain + "/get-most-borrowed",
-  getAmazonBestsellersBooks: domain + "/get-bestsellers",
+  // getAmazonBestsellersBooks: domain + "/get-bestsellers",
   getAuthorBooks: domain + "/get-author-books",
   getSeriesBooks: domain + "/get-series-books",
   getPublisherBooks: domain + "/get-publisher-books",
@@ -84,9 +84,16 @@ const urls = {
   getBooksGenre: `${newDomainUpdated}/get-genre-book`,
   getBooksGenreMore: `${newDomainUpdated}/get-genre-book-all`,
 
-  getPopularBooks: `${newDomainUpdated}/get-global-best-seller`,
+  getPopularBooks: `${newDomainUpdated}/get-newyork-best-seller`,
   getBookYTVideos: `${newDomainUpdated}/get-videos-from-book`,
   getBookSetYtVideos: `${newDomainUpdated}/get-book-set-video`,
+
+  getAmazonBestsellersBooks: `${newDomainUpdated}/get-amazon-bestseller-books`,
+  getAmazonBestsellersSets: `${newDomainUpdated}/get-amazon-bestseller-sets`,
+  getAmazonBestsellersGenre: `${newDomainUpdated}/get-amazon-bestseller-genres`,
+
+  getYoutubeBestsellerBooks: `${newDomainUpdated}/get-youtube-bestseller-books`,
+  getMostSoughtAfter: `${newDomainUpdated}/get-most-sought-after`,
 };
 
 export default urls;
