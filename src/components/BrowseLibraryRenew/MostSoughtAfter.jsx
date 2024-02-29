@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -12,27 +12,31 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import NewBook from "./NewBook";
+import { load, stopLoad } from "../../reducers/bookSlice";
 
-const MostPopularDump = () => {
+const MostSoughtAfter = () => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
 
   const getBooks = async () => {
     try {
+      dispatch(load);
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getPopularBooks}`
-            : `${urls.getPopularBooks}?age=${age}`
+            ? `${urls.getMostSoughtAfter}`
+            : `${urls.getMostSoughtAfter}?age=${age}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      setPopularBooks(response.book_set[0].books);
+      setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
+    dispatch(stopLoad());
   };
   useEffect(() => {
     getBooks();
@@ -41,7 +45,7 @@ const MostPopularDump = () => {
     !isLoading && (
       <section className="px-8 md:px-2">
         <h1 className="font-bold md:text-[12px] md:pl-[18px]">
-          Chart Topping - NewYork Times
+          Most Sought After
         </h1>
         <Swiper
           slidesPerView={"auto"}
@@ -70,4 +74,4 @@ const MostPopularDump = () => {
   );
 };
 
-export default MostPopularDump;
+export default MostSoughtAfter;

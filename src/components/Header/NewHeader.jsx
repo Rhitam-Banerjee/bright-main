@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
+
 import { searchBarLinks } from "./constants";
 import {
   load,
@@ -11,7 +18,6 @@ import {
   setSearchQuery,
   setAge,
 } from "../../reducers/bookSlice";
-import { setAgeDropDown, setAlert } from "../../reducers/mainSlice";
 
 import devUrls from "../../utils/devUrls";
 import urls from "../../utils/urls";
@@ -50,12 +56,16 @@ const NewHeader = () => {
     if (localStorage.getItem("age")) {
       dispatch(setAge(localStorage.getItem("age")));
     } else {
-      localStorage.setItem("age", "");
-      dispatch(setAge(""));
+      localStorage.setItem("age", "2");
+      dispatch(setAge("2"));
     }
   }, []);
   return (
-    <nav className="relative w-full mb-16 px-8 py-2 flex flex-col justify-start items-center bg-mainColor">
+    <nav
+      className={`fixed ${
+        renderAge ? "h-[110px]" : "h-[50px]"
+      } top-0 left-0 w-full mb-16 px-8 py-2 flex flex-col justify-start items-center bg-mainColor z-[999]`}
+    >
       <div className="w-full flex flex-row justify-between items-center">
         <Link to={"/"} className="flex items-center justify-center mr-4">
           <img src={logo} alt="Logo" />
@@ -104,32 +114,48 @@ const NewHeader = () => {
         </div>
       </div>
       {renderAge && (
-        <div className="absolute top-full left-0 !w-full h-[50px] m-auto px-8 py-2 flex flex-row items-center justify-start gap-2">
-          {Array(maxAge)
-            .fill(true)
-            .map((_, i) => {
-              return (
-                <div
-                  key={i}
-                  className={`px-2 py-[2px] rounded-md cursor-pointer font-bold ${
-                    age == i.toString()
-                      ? "bg-secondary text-white"
-                      : "bg-mainColor"
-                  }`}
-                  onClick={() => {
-                    if (age == i.toString()) {
-                      dispatch(setAge(""));
-                      localStorage.setItem("age", "");
-                    } else {
-                      dispatch(setAge(i));
-                      localStorage.setItem("age", i.toString());
-                    }
-                  }}
-                >
-                  {i === 12 ? `${i}+ ` : `${i} - ${i + 1}`}
-                </div>
-              );
-            })}
+        <div className="absolute bottom-0 left-0 !w-full px-8 md:px-3 py-2 flex flex-row items-center justify-start gap-[15px] bg-gradient-to-b from-mainColorLight to-white">
+          <Swiper
+            slidesPerView={"auto"}
+            grabCursor={true}
+            centeredSlides={true}
+            centeredSlidesBounds={true}
+            freeMode={true}
+            navigation={true}
+            modules={[FreeMode, Navigation, Virtual]}
+            className="mySwiper !ml-0 ageSlider"
+          >
+            {Array(maxAge)
+              .fill(true)
+              .map((_, i) => {
+                return (
+                  <SwiperSlide key={i}>
+                    <div
+                      key={i}
+                      className={`flex flex-col items-center justify-center px-[16px] py-[5px] rounded-md cursor-pointer font-bold ${
+                        age == i.toString()
+                          ? "bg-mainColor text-white"
+                          : "bg-unHighlight text-unHighlightDark border-[1px] border-unHighlightDark"
+                      }`}
+                      onClick={() => {
+                        if (age == i.toString()) {
+                          dispatch(setAge(""));
+                          localStorage.setItem("age", "");
+                        } else {
+                          dispatch(setAge(i));
+                          localStorage.setItem("age", i.toString());
+                        }
+                      }}
+                    >
+                      <div className="text-[12px]">
+                        {i === 12 ? `${i}+ ` : `${i} - ${i + 1}`}
+                      </div>
+                      <div className="text-[12px]">Years</div>
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+          </Swiper>
         </div>
       )}
     </nav>

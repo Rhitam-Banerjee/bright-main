@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -7,23 +7,22 @@ import urls from "../../utils/urls";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation, Virtual } from "swiper/modules";
-
-import { setSeriesChosen } from "../../reducers/bookSlice";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { NewBook } from "./";
 import amazon from "../../icons/amazonWhite.svg";
 import bookIcon from "../../icons/bookIcon.svg";
-import seriesImg from "../../icons/series1Img.png";
+import seriesImg from "../../icons/seriesImg.svg";
+import seriesImgSelected from "../../icons/seriesImgSelected.svg";
 
-// import { appendBookSet, setBookSet } from "../../reducers/bookSlice";
 const NewSeries = () => {
-  const { age, seriesChosen } = useSelector((store) => store.book);
-  const dispatch = useDispatch();
-  const [series, setSeries] = useState([]);
+  const { age } = useSelector((store) => store.book);
+  const [seriesTitle, setSeriesTitle] = useState([]);
   const [seriesBook, setSeriesBook] = useState({});
   const [seriesLoaded, setSeriesLoaded] = useState(false);
-  const [seriesReview, setSeriesReview] = useState({});
+  const [seriesChosen, setSeriesChosen] = useState(null);
 
   function kFormatter(num) {
     return Math.abs(num) > 999
@@ -35,38 +34,28 @@ const NewSeries = () => {
     const response = await axios
       .get(
         age === "" || age === undefined
-          ? `${urls.getBooksSeries}?start=0&end=20`
-          : `${urls.getBooksSeries}?age=${age}&start=0&end=20`
+          ? `${urls.getAmazonBestsellersSets}`
+          : `${urls.getAmazonBestsellersSets}?age=${age}`
       )
       .then((res) => res.data)
       .catch((err) => {
         console.log(err);
       });
-    delete response.books_series["Best Seller - Most Popular"];
-    delete response.books_series["Most Popular Series"];
-    delete response.books_series["New York Times Bestseller"];
-    delete response.books_series["Global Bestseller"];
-    delete response.books_series["Teacher Pick"];
-    const title = Object.keys(await response.books_series);
-    setSeries(title);
-    setSeriesBook(await response.books_series);
-    setSeriesLoaded(true);
+    delete response.books["Best Seller - Most Popular"];
+    delete response.books["Most Popular Series"];
+    delete response.books["New York Times Bestseller"];
+    delete response.books["Global Bestseller"];
+    delete response.books["Teacher Pick"];
+    const title = Object.keys(await response.books);
+    setSeriesTitle(title);
+    setSeriesBook(await response.books);
     title.forEach((serie) => {
-      response.books_series[`${serie}`].sort((a, b) => {
+      response.books[`${serie}`].total_books.sort((a, b) => {
         return b.stock_available - a.stock_available;
       });
     });
-    title.forEach((series, index) => {
-      let totalReview = 0;
-      response.books_series[`${series}`].forEach((book) => {
-        totalReview += parseInt(book.review_count);
-      });
-      totalReview = kFormatter(totalReview);
-      setSeriesReview((prevState) => ({
-        ...prevState,
-        [series]: totalReview,
-      }));
-    });
+    setSeriesChosen(title[0]);
+    setSeriesLoaded(true);
   };
   useEffect(() => {
     getBooks();
@@ -74,19 +63,20 @@ const NewSeries = () => {
   return (
     seriesLoaded && (
       <section className="px-8 md:px-2 border-b-[0.5px] border-unHighlight mb-[10px]">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px]">Series</h1>
+        <h1 className="font-bold md:text-[12px] md:pl-[18px]">
+          Bestseller Series - Amazon
+        </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          spaceBetween={30}
-          pagination={{
-            clickable: true,
-          }}
+          centeredSlides={true}
+          centeredSlidesBounds={true}
+          freeMode={true}
           navigation={true}
-          modules={[Navigation, Virtual]}
+          modules={[FreeMode, Navigation, Virtual]}
           className="mySwiper !p-4"
         >
-          {series.map((serie, index) => {
+          {seriesTitle.map((serie, index) => {
             return (
               <SwiperSlide
                 key={index}
@@ -95,15 +85,15 @@ const NewSeries = () => {
                 }`}
               >
                 <div
-                  className="relative h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                  className="relative min-w-[280px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                   onClick={() => {
                     seriesChosen === serie
-                      ? dispatch(setSeriesChosen(null))
-                      : dispatch(setSeriesChosen(serie));
+                      ? setSeriesChosen(null)
+                      : setSeriesChosen(serie);
                   }}
                 >
                   <div
-                    className={`p-2 pr-[100px] h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
+                    className={`p-2 h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
                   >
                     <div
                       className={`${
@@ -125,7 +115,7 @@ const NewSeries = () => {
                           src={bookIcon}
                           alt="BooksCount"
                         />
-                        <p>{seriesBook[`${serie}`].length} Books</p>
+                        <p>{seriesBook[`${serie}`].total_books.length} Books</p>
                       </div>
                       <div className="flex flex-row items-center justify-start gap-1">
                         <img
@@ -135,14 +125,19 @@ const NewSeries = () => {
                           src={amazon}
                           alt="Amazon"
                         />
-                        <p>{seriesReview[`${serie}`]} Reviews</p>
+                        <p>
+                          {kFormatter(seriesBook[`${serie}`].total_review)}
+                          Reviews
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div className="">
                     <img
-                      className="absolute !bottom-0 right-0 w-[100px] !z-10 saturate-0"
-                      src={seriesImg}
+                      className="absolute !bottom-0 right-0 w-[73px] !z-10 saturate-0"
+                      src={
+                        seriesChosen === serie ? seriesImgSelected : seriesImg
+                      }
                       alt=""
                     />
                   </div>
@@ -164,7 +159,7 @@ const NewSeries = () => {
             modules={[Navigation]}
             className="mySwiper bg-transparent !p-4"
           >
-            {seriesBook[`${seriesChosen}`]?.map((book, index) => {
+            {seriesBook[`${seriesChosen}`].total_books?.map((book, index) => {
               return (
                 <SwiperSlide key={index} className="flex flex-col !w-[150px]">
                   <NewBook book={book} />

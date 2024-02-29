@@ -13,8 +13,9 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import NewBook from "./NewBook";
 
-const MostPopularDump = () => {
+const YoutubeTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [title, setTitle] = useState("");
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
 
@@ -23,12 +24,12 @@ const MostPopularDump = () => {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getPopularBooks}`
-            : `${urls.getPopularBooks}?age=${age}`
+            ? `${urls.getYoutubeBestsellerBooks}`
+            : `${urls.getYoutubeBestsellerBooks}?age=${age}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      setPopularBooks(response.book_set[0].books);
+      setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -41,7 +42,7 @@ const MostPopularDump = () => {
     !isLoading && (
       <section className="px-8 md:px-2">
         <h1 className="font-bold md:text-[12px] md:pl-[18px]">
-          Chart Topping - NewYork Times
+          Most Popular - Youtube
         </h1>
         <Swiper
           slidesPerView={"auto"}
@@ -57,10 +58,13 @@ const MostPopularDump = () => {
             return (
               <SwiperSlide
                 key={index}
-                className="flex flex-col !w-[150px]"
+                className="relative flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
                 <NewBook book={book} />
+                <div className="absolute bottom-6 left-3 text-[48px] font-bold text-white font-outline-1">
+                  {index + 1}
+                </div>
               </SwiperSlide>
             );
           })}
@@ -70,4 +74,4 @@ const MostPopularDump = () => {
   );
 };
 
-export default MostPopularDump;
+export default YoutubeTopBooks;

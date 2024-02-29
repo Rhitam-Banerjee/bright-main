@@ -1,39 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "./styles.scss";
-import { Navigation, Virtual } from "swiper/modules";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import axios from "axios";
 import urls from "../../utils/urls";
 
-import { setAuthorChosen } from "../../reducers/bookSlice";
-
-import { NewBook } from "./";
 import amazon from "../../icons/amazonWhite.svg";
 import bookIcon from "../../icons/bookIcon.svg";
-import authorImg from "../../icons/author.png";
+import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
 
 const AuthorSection = () => {
   const { age } = useSelector((store) => store.book);
-  const { authorChosen } = useSelector((store) => store.book);
   const [authors, setAuthors] = useState([]);
   const [authorDetails, setAuthorDetails] = useState({});
   const [authorsLoaded, setAuthorsLoaded] = useState(false);
   const [authorsBookLoaded, setAuthorsBookLoaded] = useState(false);
   const [authorBooks, setAuthorBooks] = useState({});
-
-  function kFormatter(num) {
-    return Math.abs(num) > 999
-      ? (Math.abs(num) / 1000).toFixed(1) + "k"
-      : Math.abs(num);
-  }
-
-  const dispatch = useDispatch();
+  const [authorChosen, setAuthorChosen] = useState(null);
 
   const getPopularAuthors = async () => {
     try {
@@ -56,7 +46,11 @@ const AuthorSection = () => {
   const loadAuthorBooks = async (author) => {
     try {
       const response = await axios
-        .get(`${urls.getBooksByAuthorAll}?author=${author}`)
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksByAuthorAll}?author=${author}`
+            : `${urls.getBooksByAuthorAll}?author=${author}&age=${age}`
+        )
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.author_details.books.sort((a, b) => {
@@ -71,25 +65,23 @@ const AuthorSection = () => {
 
   useEffect(() => {
     getPopularAuthors();
-    dispatch(setAuthorChosen(null));
     setAuthorsBookLoaded(false);
   }, [age]);
   return (
     <section className="px-8 md:px-2 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px]">
       {authorsLoaded && (
         <h1 className="font-bold md:text-[12px] md:pl-[18px]">
-          Popular Authors
+          Bestseller Authors - Amazon
         </h1>
       )}
       <Swiper
         slidesPerView={"auto"}
         grabCursor={true}
-        spaceBetween={30}
-        pagination={{
-          clickable: true,
-        }}
+        centeredSlides={true}
+        centeredSlidesBounds={true}
+        freeMode={true}
         navigation={true}
-        modules={[Navigation, Virtual]}
+        modules={[FreeMode, Navigation, Virtual]}
         className="mySwiper !p-4"
       >
         {authors.map((author, index) => {
@@ -97,19 +89,19 @@ const AuthorSection = () => {
             <SwiperSlide
               key={author}
               className={`!max-w-[300px] !h-auto rounded-lg ${
-                authorChosen === author ? "!bg-mainColor" : "bg-unHighlight"
+                authorChosen === author ? "!bg-mainColor" : "bg-mainColorLight"
               }`}
               virtualIndex={index}
             >
               <div
-                className="relative h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                className="relative min-w-[280px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                 onClick={() => {
                   if (authorChosen === author) {
-                    dispatch(setAuthorChosen(null));
+                    setAuthorChosen(null);
                     setAuthorsBookLoaded(false);
                   } else {
                     loadAuthorBooks(author);
-                    dispatch(setAuthorChosen(author));
+                    setAuthorChosen(author);
                   }
                 }}
               >
@@ -150,7 +142,7 @@ const AuthorSection = () => {
                 </div>
                 <div className="">
                   <img
-                    className="absolute !bottom-0 right-0 w-[100px] !z-10 saturate-0"
+                    className="absolute !bottom-0 right-0 w-[83px] !z-10 saturate-0"
                     src={authorImg}
                     alt=""
                   />

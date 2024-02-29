@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
@@ -123,7 +123,7 @@ const NewBook = ({ book }) => {
               loading="lazy"
             />
           </Link>
-          {stock_available === 0 && (
+          {isLoggedIn && stock_available === 0 && (
             <div className="absolute top-0 left-0 h-full w-full bg-slate-500 rounded-md opacity-80 z-10 pointer-events-none" />
           )}
         </div>
@@ -145,7 +145,9 @@ const NewBook = ({ book }) => {
             <FaAmazon className="!w-[12px] mr-2" />
             <div className="w-full text-black flex flex-row">
               <p className="text-black text-[9px]">
-                {kFormatter(parseFloat(review_count.replace(/,/g, "")))}
+                {kFormatter(
+                  parseFloat(review_count.toString().replace(/,/g, ""))
+                )}
               </p>
               <p className="text-black text-[9px] pl-[2px]">Review</p>
             </div>

@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import ReactPlayer from "react-player/youtube";
 
 import devUrls from "../../utils/devUrls";
 import urls from "../../utils/urls";
@@ -8,13 +9,14 @@ import axios from "axios";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Virtual } from "swiper/modules";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { FaAmazon } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa6";
-import Star from "../../icons/Star";
 
 import moment from "moment";
 import { setBooksAuthors, setBookInSeries } from "../../reducers/bookSlice";
@@ -51,6 +53,8 @@ const BookRenew = () => {
   const [authorsBook, setAuthorsBook] = useState({});
   const [authorReview, setAuthorReview] = useState({});
   const [seriesReview, setSeriesReview] = useState("");
+
+  const [videoToPlay, setVideoToPlay] = useState("");
 
   const getseriesBooks = async () => {
     try {
@@ -341,37 +345,35 @@ const BookRenew = () => {
             <Swiper
               slidesPerView={"auto"}
               grabCursor={true}
-              spaceBetween={30}
+              centeredSlides={true}
+              centeredSlidesBounds={true}
+              freeMode={true}
               navigation={true}
-              modules={[Navigation, Virtual]}
+              modules={[FreeMode, Navigation, Virtual]}
               className="mySwiper !p-4"
             >
               {bookVideos.map((video, index) => {
                 return (
-                  <SwiperSlide key={index} className="relative cursor-pointer">
+                  <SwiperSlide key={index} className="h-full w-full">
+                    {/* <div
+                        className={`${
+                          videoToPlay === video.yt_links ? "!hidden" : "!flex"
+                        } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 w-full h-full flex-col justify-center items-center z-[1] pointer-events-none`}
+                      >
+                        <div className="mt-[10px] text-[10px] flex flex-row items-center justify-center bg-white w-full">
+                          <div className="pl-[15px]">{video.duration}</div>
+                          <div className="ml-[5px] pl-[5px] border-l-[0.5px] border-secondary">
+                            {kFormatter(video.views)} Views
+                          </div>
+                        </div>
+                      </div> */}
                     <iframe
-                      className="flex h-full w-full bg-cover bg-no-repeat rounded-[5px]"
-                      src={`https://www.youtube.com/embed/${video.yt_links}`}
+                      className="h-[150px] w-[300px] flex bg-cover bg-no-repeat rounded-[5px] z-0"
+                      src={`https://www.youtube.com/embed/${video.yt_links}?wmode=opaque`}
                       title="YouTube video player"
-                      allow="accelerometer; 
-                        autoplay; 
-                        clipboard-write; 
-                        encrypted-media; 
-                        gyroscope; 
-                        fullscreen;
-                        web-share"
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen={true}
                     ></iframe>
-                    {/* <div
-                      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col justify-center items-center z-10`}
-                    >
-                      <div className="mt-[10px] text-[10px] flex flex-row items-center justify-center bg-white w-full">
-                        <div className="pl-[15px]">{video.duration}</div>
-                        <div className="ml-[5px] pl-[5px] border-l-[0.5px] border-secondary">
-                          {kFormatter(video.views)} Views
-                        </div>
-                      </div>
-                    </div> */}
                   </SwiperSlide>
                 );
               })}
@@ -423,16 +425,21 @@ const BookRenew = () => {
             <Swiper
               slidesPerView={"auto"}
               grabCursor={true}
-              spaceBetween={30}
+              centeredSlides={true}
+              centeredSlidesBounds={true}
+              freeMode={true}
               navigation={true}
-              modules={[Navigation, Virtual]}
+              modules={[FreeMode, Navigation, Virtual]}
               className="mySwiper !p-4"
             >
               {bookSetVideos.map((video, index) => {
                 return (
-                  <SwiperSlide key={index} className="relative cursor-pointer">
+                  <SwiperSlide
+                    key={index}
+                    className="relative h-[150px] w-[300px] cursor-grab"
+                  >
                     <iframe
-                      className="flex h-full w-full bg-cover bg-no-repeat rounded-[5px]"
+                      className="flex h-[150px] w-[300px] bg-cover bg-no-repeat rounded-[5px]"
                       src={`https://www.youtube.com/embed/${video.yt_links}`}
                       title="YouTube video player"
                       allow="accelerometer; 
@@ -461,8 +468,6 @@ const BookRenew = () => {
           </div>
         </div>
       )}
-      {/* <NewSeries /> */}
-
       {Object.keys(authorsBook)?.length !== 0 && (
         <div className="pl-[18px] mt-[50px]">
           <div className="text-[16px] font-bold">
@@ -506,7 +511,6 @@ const BookRenew = () => {
           })}
         </div>
       )}
-      {/* <AuthorSection /> */}
     </section>
   );
 };

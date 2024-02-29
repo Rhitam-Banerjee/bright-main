@@ -1,143 +1,139 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "./styles.scss";
-import { Navigation } from "swiper/modules";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
 import urls from "../../utils/urls";
 
-import { setGenersChosen } from "../../reducers/bookSlice";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { NewBook } from "./";
 import amazon from "../../icons/amazonWhite.svg";
 import bookIcon from "../../icons/bookIcon.svg";
-import seriesImg from "../../icons/series1Img.png";
+import genreImg from "../../icons/genreImg.svg";
+import genreImgSelected from "../../icons/genreImgSelected.svg";
 
-const NewGenre = () => {
-  const { age, genersChosen } = useSelector((store) => store.book);
-  const [geners, setGenre] = useState([]);
-  const [genersBooks, setGenreBooks] = useState({});
-  const [genresLoaded, setGenresLoaded] = useState(false);
-  const [genreReview, setGenreReview] = useState({});
+const NewSeries = () => {
+  const { age } = useSelector((store) => store.book);
+  const [genreTitle, setGenreTitle] = useState([]);
+  const [genreBook, setGenreBook] = useState({});
+  const [genreLoaded, setGenreLoaded] = useState(false);
+  const [genreChosen, setGenreChosen] = useState(null);
 
   function kFormatter(num) {
     return Math.abs(num) > 999
-      ? (Math.abs(num) / 1000).toFixed(1) + "k"
-      : Math.abs(num);
+      ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
+      : Math.sign(num) * Math.abs(num);
   }
 
-  const dispatch = useDispatch();
   const getBooks = async () => {
     const response = await axios
       .get(
         age === "" || age === undefined
-          ? `${urls.getBooksGenre}?start=0&end=10`
-          : `${urls.getBooksGenre}?age=${age}&start=0&end=10`
+          ? `${urls.getAmazonBestsellersGenre}`
+          : `${urls.getAmazonBestsellersGenre}?age=${age}`
       )
       .then((res) => res.data)
       .catch((err) => {
         console.log(err);
       });
-    const title = Object.keys(await response.books_genre);
-    setGenre(title);
-    setGenreBooks(await response.books_genre);
-    setGenresLoaded(true);
-    title.forEach((genre) => {
-      response.books_genre[`${genre}`].sort((a, b) => {
+    delete response.books["Best Seller - Most Popular"];
+    delete response.books["Most Popular Series"];
+    delete response.books["New York Times Bestseller"];
+    delete response.books["Global Bestseller"];
+    delete response.books["Teacher Pick"];
+    const title = Object.keys(await response.books);
+    setGenreTitle(title);
+    setGenreBook(await response.books);
+    title.forEach((serie) => {
+      response.books[`${serie}`].total_books.sort((a, b) => {
         return b.stock_available - a.stock_available;
       });
     });
-    title.forEach((genre, index) => {
-      let totalReview = 0;
-      response.books_genre[`${genre}`].forEach((book) => {
-        totalReview += parseInt(book.review_count);
-      });
-      totalReview = kFormatter(totalReview);
-      setGenreReview((prevState) => ({
-        ...prevState,
-        [genre]: totalReview,
-      }));
-    });
+    setGenreChosen(title[0]);
+    setGenreLoaded(true);
   };
   useEffect(() => {
     getBooks();
   }, [age]);
   return (
-    genresLoaded && (
-      <section className="px-8 md:px-2">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px]">Genre</h1>
+    genreLoaded && (
+      <section className="px-8 md:px-2 ">
+        <h1 className="font-bold md:text-[12px] md:pl-[18px]">
+          Bestseller Genre - Amazon
+        </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          spaceBetween={30}
-          pagination={{
-            clickable: true,
-          }}
+          centeredSlides={true}
+          centeredSlidesBounds={true}
+          freeMode={true}
           navigation={true}
-          modules={[Navigation]}
+          modules={[FreeMode, Navigation, Virtual]}
           className="mySwiper !p-4"
         >
-          {geners.map((genre, index) => {
+          {genreTitle.map((serie, index) => {
             return (
               <SwiperSlide
                 key={index}
-                className={`!max-w-[300px] !h-auto rounded-lg ${
-                  genersChosen === genre ? "!bg-mainColor" : "bg-unHighlight"
+                className={`!max-w-[300px] !h-auto rounded-lg  ${
+                  genreChosen === serie ? "!bg-mainColor" : "bg-mainColorLight"
                 }`}
               >
                 <div
-                  className="relative h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                  className="relative min-w-[280px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                   onClick={() => {
-                    genersChosen === genre
-                      ? dispatch(setGenersChosen(null))
-                      : dispatch(setGenersChosen(genre));
+                    genreChosen === serie
+                      ? setGenreChosen(null)
+                      : setGenreChosen(serie);
                   }}
                 >
                   <div
-                    className={`p-2 pr-[100px] h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
+                    className={`p-2 h-full rounded-lg flex flex-col items-start justify-center authorDetails cursor-pointer`}
                   >
                     <div
-                      className={`${
-                        genersChosen === genre ? "text-white" : ""
-                      }`}
+                      className={`${genreChosen === serie ? "text-white" : ""}`}
                     >
-                      {genre}
+                      {serie.replace(/ *\([^)]*\) */g, "")}
                     </div>
                     <div
                       className={`flex flex-col mt-4 text-[0.8rem] gap-2 ${
-                        genersChosen === genre ? "text-white" : ""
+                        genreChosen === serie ? "text-white" : ""
                       }`}
                     >
                       <div className="flex flex-row items-center justify-start gap-1">
                         <img
                           className={`w-[10px] ${
-                            genersChosen === genre ? "" : "invert"
+                            genreChosen === serie ? "" : "invert"
                           }`}
                           src={bookIcon}
                           alt="BooksCount"
                         />
-                        <p>{genersBooks[`${genre}`].length} Books</p>
+                        <p>{genreBook[`${serie}`].total_books.length} Books</p>
                       </div>
                       <div className="flex flex-row items-center justify-start gap-1">
                         <img
                           className={`w-[10px] ${
-                            genersChosen === genre ? "" : "invert"
+                            genreChosen === serie ? "" : "invert"
                           }`}
                           src={amazon}
                           alt="Amazon"
                         />
-                        <p>{genreReview[`${genre}`]} Reviews</p>
+                        <p>
+                          {kFormatter(genreBook[`${serie}`].total_review)}
+                          Reviews
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div className="">
                     <img
-                      className="absolute !bottom-0 right-0 w-[100px] !z-10 saturate-0"
-                      src={seriesImg}
+                      className="absolute !bottom-0 right-0 w-[73px] !z-10 saturate-0"
+                      src={genreChosen === serie ? genreImgSelected : genreImg}
                       alt=""
                     />
                   </div>
@@ -147,7 +143,7 @@ const NewGenre = () => {
             );
           })}
         </Swiper>
-        {genresLoaded && genersChosen !== null && (
+        {genreLoaded && genreChosen !== null && (
           <Swiper
             slidesPerView={"auto"}
             spaceBetween={30}
@@ -157,9 +153,9 @@ const NewGenre = () => {
             }}
             navigation={true}
             modules={[Navigation]}
-            className="mySwiper !p-4"
+            className="mySwiper bg-transparent !p-4"
           >
-            {genersBooks[`${genersChosen}`]?.map((book, index) => {
+            {genreBook[`${genreChosen}`].total_books?.map((book, index) => {
               return (
                 <SwiperSlide key={index} className="flex flex-col !w-[150px]">
                   <NewBook book={book} />
@@ -168,9 +164,10 @@ const NewGenre = () => {
             })}
           </Swiper>
         )}
+        {/* <div className="my-3 w-[90%] h-[2px] m-auto bg-unHighlight opacity-50" /> */}
       </section>
     )
   );
 };
 
-export default NewGenre;
+export default NewSeries;

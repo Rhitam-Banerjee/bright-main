@@ -5,11 +5,11 @@ module.exports = {
     extend: {
       colors: {
         mainColorLight: "#DAF0FF",
-        mainColor: "#0094FF",
+        mainColor: "#3B72FF",
         secondary: "orange",
         unHighlight: "#ECECEC",
         unHighlightLignt: "#ABABAB",
-        unHighlightDark: "#7A7A7A",
+        unHighlightDark: "#9C9B9B",
       },
       boxShadow: {
         customShadowLight: "0 4px 10px rgba(0,0,0,0.4)",

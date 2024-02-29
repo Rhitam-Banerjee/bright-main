@@ -2,6 +2,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+  .font-outline-1 {
+    /* -webkit-text-stroke: 1px blue; */
+    text-shadow: 0 0 2px blue;
+  }
+  .font-outline-2 {
+    -webkit-text-stroke: 2px blue;
+    /* text-shadow: 0 0 4px black; */
+  }
+}
 * {
   scroll-behavior: smooth;
   box-sizing: border-box;
@@ -41,7 +51,7 @@ html {
   height: 48px;
   display: inline-block;
   position: fixed;
-  top: 8rem;
+  top: 14rem;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 999;
@@ -233,4 +243,8 @@ video {
 .ytp-large-play-button svg,
 .ytp-button svg {
   width: 28px !important;
+}
+.ageSlider > .swiper-button-next,
+.ageSlider > .swiper-button-prev {
+  display: none;
 }

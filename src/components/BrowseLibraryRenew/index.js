@@ -6,6 +6,10 @@ import NewGenre from "./NewGenre";
 import NewSeriesDump from "./NewSeriesDump";
 import NewGenreDump from "./NewGenreDump";
 import MostPopularDump from "./MostPopularDump";
+import AmazonTopBooks from "./AmazonTopBooks";
+import YoutubeTopBooks from "./YoutubeTopBooks";
+import MostSoughtAfter from "./MostSoughtAfter";
+
 export {
   BrowseLibraryRenew,
   AuthorSection,
@@ -15,4 +19,7 @@ export {
   NewSeriesDump,
   NewGenreDump,
   MostPopularDump,
+  AmazonTopBooks,
+  YoutubeTopBooks,
+  MostSoughtAfter,
 };

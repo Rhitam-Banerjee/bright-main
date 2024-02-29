@@ -8,8 +8,6 @@ const initialState = {
   searchQuery: "",
   loading: false,
   searchAges: [],
-  authorChosen: null,
-  seriesChosen: null,
   bookInSeries: "",
   genersChosen: null,
   authors: [],
@@ -24,12 +22,6 @@ export const bookSlice = createSlice({
     },
     setBooksAuthors: (state, { payload }) => {
       state.authors = payload;
-    },
-    setAuthorChosen: (state, { payload }) => {
-      state.authorChosen = payload;
-    },
-    setSeriesChosen: (state, { payload }) => {
-      state.seriesChosen = payload;
     },
     setGenersChosen: (state, { payload }) => {
       state.genersChosen = payload;

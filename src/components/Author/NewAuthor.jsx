@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { aboutAuthor } from "./constants";
-import authorImg from "../../icons/author.png";
+import authorImg from "../../icons/authorImg.svg";
 import axios from "axios";
 import urls from "../../utils/urls";
 import { useParams } from "react-router-dom";
