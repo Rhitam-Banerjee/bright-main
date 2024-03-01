@@ -131,7 +131,7 @@ const NewBook = ({ book }) => {
         >
           <div className="flex flex-row justify-between items-center text-black">
             <p className="text-[9px] font-semibold">
-              {rating.length > 4 ? rating.slice(0, 4) : rating}
+              {rating?.length > 4 ? rating?.slice(0, 4) : rating}
             </p>
             <div className="px-[2px] -translate-y-[1px]">
               <img src={star} alt="Rating" />
@@ -141,7 +141,7 @@ const NewBook = ({ book }) => {
             {/* <img className="!w-[10px] mr-2" src={amazon} alt="amazon" /> */}
             <p className="text-black font-semibold text-[9px]">
               {kFormatter(
-                parseFloat(review_count.toString().replace(/,/g, ""))
+                parseFloat(review_count?.toString()?.replace(/,/g, ""))
               )}
             </p>
             <FaAmazon className="!w-[12px] px-[2px]" />
