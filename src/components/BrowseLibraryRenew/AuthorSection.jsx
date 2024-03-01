@@ -71,7 +71,7 @@ const AuthorSection = () => {
   return (
     <section className="pl-8 md:px-2 mb-[10px]">
       {authorsLoaded && (
-        <h1 className="font-bold md:text-[12px] pb-[10px]">
+        <h1 className="font-bold text-[12px] pb-[10px]">
           Bestseller Authors - Amazon
         </h1>
       )}
@@ -165,7 +165,7 @@ const AuthorSection = () => {
       <div
         className={`${
           authorsBookLoaded ? "mt-0" : "mt-[14px]"
-        } h-[0.5px] w-[calc(100%_-_50px)] mr-auto bg-unHighlight`}
+        } h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
       />
     </section>
   );

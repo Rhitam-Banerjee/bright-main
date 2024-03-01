@@ -64,7 +64,7 @@ const NewSeries = () => {
   return (
     genreLoaded && (
       <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="font-bold md:text-[12px] pb-[10px]">
+        <h1 className="font-bold text-[12px] pb-[10px]">
           Bestseller Genre - Amazon
         </h1>
         <Swiper
@@ -99,7 +99,7 @@ const NewSeries = () => {
                     <div
                       className={`${
                         genreChosen === genre ? "text-white" : ""
-                      } text-[12px]`}
+                      } font-bold text-[12px]`}
                     >
                       {genre?.length <= 18
                         ? `${genre.replace(/ *\([^)]*\) */g, "")}`
@@ -171,7 +171,7 @@ const NewSeries = () => {
         <div
           className={`${
             genreLoaded && genreChosen !== null ? "mt-0" : "mt-[14px]"
-          } h-[0.5px] w-[calc(100%_-_50px)] mr-auto bg-unHighlight`}
+          } h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
         />
       </section>
     )
