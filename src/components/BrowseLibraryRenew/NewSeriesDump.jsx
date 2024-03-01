@@ -34,6 +34,7 @@ const NewSeriesDump = () => {
   const { age, bookSet, loading, bookSetLimit } = useSelector(
     (store) => store.book
   );
+  const { isLoggedIn } = useSelector((store) => store.main);
   const [seriesLoaded, setSeriesLoaded] = useState(false);
   const getBooks = useMemo(
     () => async () => {
@@ -63,9 +64,19 @@ const NewSeriesDump = () => {
         // setSeries(title);
         title.forEach((serie) => {
           response.books_series[`${serie}`].sort((a, b) => {
-            return b.stock_available - a.stock_available;
+            return (
+              parseInt(b.review_count.replace(",", "")) -
+              parseInt(a.review_count.replace(",", ""))
+            );
           });
         });
+        if (isLoggedIn) {
+          title.forEach((serie) => {
+            response.books_series[`${serie}`].sort((a, b) => {
+              return b.stock_available - a.stock_available;
+            });
+          });
+        }
         // setSeriesBook(await response.books_series);
 
         setBookSet(null);
@@ -106,18 +117,18 @@ const NewSeriesDump = () => {
                 className="flex flex-row items-baseline text-[12px]"
                 ref={heightRef}
               >
-                <p className="pl-0" key={index}>
+                <p className="pl-0 font-bold" key={index}>
                   {serie.replace(/\s*\(.*?\)\s*/g, "")}
                 </p>
                 {bookSet[`${serie}`][0].authors?.split(",")[0] && (
-                  <p className="text-[12px] text-unHighlightDark border-l-[0.5px] ml-[10px] pl-[10px] border-secondary">
+                  <p className="text-[12px] font-bold text-unHighlightDark border-l-[0.5px] ml-[10px] pl-[10px] border-secondary">
                     {bookSet[`${serie}`][0].authors?.split(",")[0]}
                   </p>
                 )}
 
                 {bookSet[`${serie}`][0].publisher?.split(",")[0] && (
                   <p
-                    className={`xs:hidden text-unHighlightLight text-[12px] border-l-[0.5px] ml-[10px] pl-[10px] border-secondary`}
+                    className={`xs:hidden font-bold text-unHighlightLight text-[12px] border-l-[0.5px] ml-[10px] pl-[10px] border-secondary`}
                   >
                     {bookSet[`${serie}`][0].publisher?.split(",")[0]}
                   </p>

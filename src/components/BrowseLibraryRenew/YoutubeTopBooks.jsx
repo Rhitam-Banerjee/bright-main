@@ -15,7 +15,6 @@ import NewBook from "./NewBook";
 
 const YoutubeTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [title, setTitle] = useState("");
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
 
@@ -29,6 +28,9 @@ const YoutubeTopBooks = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
+      response.books.sort(() => {
+        return Math.random() - 0.5;
+      });
       setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {

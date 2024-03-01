@@ -17,13 +17,23 @@ import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
 import { FaAmazon } from "react-icons/fa";
 
+function shuffleObject(obj) {
+  const entries = Object.entries(obj);
+  for (let i = entries.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [entries[i], entries[j]] = [entries[j], entries[i]];
+  }
+  return Object.fromEntries(entries);
+}
+
 const AuthorSection = () => {
   const { age } = useSelector((store) => store.book);
+  const { isLoggedIn } = useSelector((store) => store.main);
   const [authors, setAuthors] = useState([]);
   const [authorDetails, setAuthorDetails] = useState({});
   const [authorsLoaded, setAuthorsLoaded] = useState(false);
   const [authorsBookLoaded, setAuthorsBookLoaded] = useState(false);
-  const [authorBooks, setAuthorBooks] = useState({});
+  const [authorBooks, setAuthorBooks] = useState([]);
   const [authorChosen, setAuthorChosen] = useState(null);
 
   const getPopularAuthors = async () => {
@@ -36,6 +46,7 @@ const AuthorSection = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
+      response.popular_author = shuffleObject(response.popular_author);
       setAuthorDetails(response.popular_author);
       setAuthors(Object.keys(await response.popular_author));
       setAuthorsLoaded(true);
@@ -55,8 +66,16 @@ const AuthorSection = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.author_details.books.sort((a, b) => {
-        return b.stock_available - a.stock_available;
+        return (
+          parseInt(b.review_count.replace(",", "")) -
+          parseInt(a.review_count.replace(",", ""))
+        );
       });
+      if (isLoggedIn) {
+        response.author_details.books.sort((a, b) => {
+          return b.stock_available - a.stock_available;
+        });
+      }
       setAuthorBooks(response.author_details.books);
       setAuthorsBookLoaded(true);
     } catch (error) {

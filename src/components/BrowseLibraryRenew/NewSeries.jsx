@@ -20,6 +20,7 @@ import { FaAmazon } from "react-icons/fa";
 
 const NewSeries = () => {
   const { age } = useSelector((store) => store.book);
+  const { isLoggedIn } = useSelector((store) => store.main);
   const [seriesTitle, setSeriesTitle] = useState([]);
   const [seriesBook, setSeriesBook] = useState({});
   const [seriesLoaded, setSeriesLoaded] = useState(false);
@@ -47,14 +48,27 @@ const NewSeries = () => {
     delete response.books["New York Times Bestseller"];
     delete response.books["Global Bestseller"];
     delete response.books["Teacher Pick"];
+    //  = shuffleObject(response.book);
+    response.books = Object.fromEntries(
+      Object.entries(response.books).sort(() => {
+        return Math.random() - 0.5;
+      })
+    );
     const title = Object.keys(await response.books);
-    setSeriesTitle(title);
-    setSeriesBook(await response.books);
     title.forEach((serie) => {
       response.books[`${serie}`].total_books.sort((a, b) => {
-        return b.stock_available - a.stock_available;
+        return b.review_count - a.review_count;
       });
     });
+    if (isLoggedIn) {
+      title.forEach((serie) => {
+        response.books[`${serie}`].total_books.sort((a, b) => {
+          return b.stock_available - a.stock_available;
+        });
+      });
+    }
+    setSeriesTitle(title);
+    setSeriesBook(await response.books);
     setSeriesChosen(title[0]);
     setSeriesLoaded(true);
   };
