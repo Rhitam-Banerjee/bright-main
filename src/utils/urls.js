@@ -3,8 +3,8 @@
 // const newDomain = process.env.REACT_APP_API + "/api_v2_books";
 
 // const newDomainUpdated = process.env.REACT_APP_API + "/api_v2_books";
-// const host = process.env.REACT_APP_API;
-const host = "http://127.0.0.1:5000";
+const host = process.env.REACT_APP_API;
+// const host = "http://127.0.0.1:5000";
 
 const domain = `${host}/api`;
 
