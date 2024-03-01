@@ -11,9 +11,11 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import NewBook from "./NewBook";
+import newyorktimesLogo from "../../icons/newyorkTimesLogo.png";
 
-const YoutubeTopBooks = () => {
+import { NewBook } from "../Book";
+
+const MostPopularDump = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
@@ -23,15 +25,12 @@ const YoutubeTopBooks = () => {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getYoutubeBestsellerBooks}`
-            : `${urls.getYoutubeBestsellerBooks}?age=${age}`
+            ? `${urls.getPopularBooks}`
+            : `${urls.getPopularBooks}?age=${age}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      response.books.sort(() => {
-        return Math.random() - 0.5;
-      });
-      setPopularBooks(response.books);
+      setPopularBooks(response.book_set[0].books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -41,11 +40,17 @@ const YoutubeTopBooks = () => {
     getBooks();
   }, [age]);
   return (
-    !isLoading &&
-    popularBooks?.length > 0 && (
-      <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="font-bold text-[12px] pb-[10px]">
-          Most Popular - Youtube
+    !isLoading && (
+      <section className="pl-8 md:px-2 pb-[14px]">
+        <h1 className="flex font-bold text-[12px] pb-[10px]">
+          Chart Topping -{" "}
+          <span>
+            <img
+              className="pl-2 h-[15px] translate-y-[2px]"
+              src={newyorktimesLogo}
+              alt="amazonLogo"
+            />
+          </span>
         </h1>
         <Swiper
           slidesPerView={"auto"}
@@ -61,13 +66,10 @@ const YoutubeTopBooks = () => {
             return (
               <SwiperSlide
                 key={index}
-                className="relative flex flex-col !w-[150px]"
+                className="flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
                 <NewBook book={book} />
-                <div className="absolute bottom-[20px] left-3 text-[48px] font-bold text-white font-outline-1">
-                  {index + 1}
-                </div>
               </SwiperSlide>
             );
           })}
@@ -78,4 +80,4 @@ const YoutubeTopBooks = () => {
   );
 };
 
-export default YoutubeTopBooks;
+export default MostPopularDump;

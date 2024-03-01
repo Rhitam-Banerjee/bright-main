@@ -16,18 +16,19 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { FaAmazon } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
-import { FaYoutube } from "react-icons/fa6";
 
 import moment from "moment";
 import { setBooksAuthors, setBookInSeries } from "../../reducers/bookSlice";
-import { AuthorSection, NewBook, NewSeries } from "../BrowseLibraryRenew";
+
+import { NewBook } from "./";
+
 import { addToWishlist } from "../../reducers/wishlistSlice";
 import { setAlert } from "../../reducers/mainSlice";
 
 const yt_url_video_link_prefix = "https://www.youtube.com/watch?v=";
 const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
 
-const BookRenew = () => {
+const Book = () => {
   function kFormatter(num) {
     return Math.abs(num) > 999
       ? (Math.abs(num) / 1000).toFixed(1) + "k"
@@ -515,4 +516,4 @@ const BookRenew = () => {
   );
 };
 
-export default BookRenew;
+export default Book;

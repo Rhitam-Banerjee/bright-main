@@ -11,7 +11,9 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import NewBook from "./NewBook";
+import amazonLogo from "../../icons/amazonLogo.png";
+
+import { NewBook } from "../Book";
 
 const AmazonTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +46,16 @@ const AmazonTopBooks = () => {
   return (
     !isLoading && (
       <section className="pl-8 md:px-2 pb-[14px]">
-        <h1 className="font-bold text-[12px] pb-[10px]">Bestseller - Amazon</h1>
+        <h1 className="flex font-bold text-[12px] pb-[10px]">
+          Bestseller -
+          <span>
+            <img
+              className="pl-2 h-[12px] translate-y-[6px]"
+              src={amazonLogo}
+              alt="amazonLogo"
+            />
+          </span>
+        </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}

@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import {
   AmazonTopBooks,
-  MostPopularDump,
+  NewYorkTimes,
   MostSoughtAfter,
-  NewSeriesDump,
+  SeriesDump,
   YoutubeTopBooks,
-} from "./";
-import { AuthorSection, NewSeries, NewGenre } from "./";
+  AmazonAuthors,
+} from ".";
+import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 const BrowseLibraryRenew = () => {
   const [isLoadSeriesGenre, setIsLoadSeriesGenre] = useState(false);
   const loadSeriesGenre = useRef();
@@ -27,16 +28,17 @@ const BrowseLibraryRenew = () => {
   return (
     <div className="mt-[120px]">
       <AmazonTopBooks />
-      <NewSeries />
+      <AmazonSeries />
       <YoutubeTopBooks />
-      <AuthorSection />
+      <AmazonAuthors />
       <div ref={loadSeriesGenre}></div>
       {isLoadSeriesGenre && (
         <>
-          <MostPopularDump />
-          <NewGenre />
+          <NewYorkTimes />
+          <AmazonGenre />
           <MostSoughtAfter />
-          <NewSeriesDump />
+          <PopularAuthors />
+          <SeriesDump />
         </>
       )}
     </div>

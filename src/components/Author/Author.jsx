@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { aboutAuthor } from "./constants";
-import authorImg from "../../icons/authorImg.svg";
+import { useParams } from "react-router-dom";
+
 import axios from "axios";
 import urls from "../../utils/urls";
-import { useParams } from "react-router-dom";
-import { AuthorSection, NewBook } from "../BrowseLibraryRenew";
+
+import { aboutAuthor } from "./constants";
+
+import { PopularAuthors } from "../BrowseLibrary";
+import { NewBook } from "../Book";
+
+import authorImg from "../../icons/authorImg.svg";
+
 const NewAuthor = () => {
   const { desc } = aboutAuthor;
   function kFormatter(num) {
@@ -14,7 +20,6 @@ const NewAuthor = () => {
   }
   const { author } = useParams();
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [authorHasDetails, setAuthorHasDetials] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [authorBooks, setAuthorBooks] = useState([]);
   const [authorSeries, setAuthorSeries] = useState([]);
@@ -91,7 +96,7 @@ const NewAuthor = () => {
           })}
         </div>
       </section>
-      <AuthorSection />
+      <PopularAuthors />
     </>
   ) : (
     <h1 className="text-[1.5rem] text-center text-secondary font-bold">

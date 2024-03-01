@@ -137,7 +137,7 @@ const NewBook = ({ book }) => {
               <img src={star} alt="Rating" />
             </div>
           </div>
-          <div className="w-[76px] flex flex-row items-center justify-between border-l-[0.5px] ml-2 pl-2 border-secondary">
+          <div className="flex flex-row items-center justify-between border-l-[0.5px] ml-2 pl-2 border-secondary">
             {/* <img className="!w-[10px] mr-2" src={amazon} alt="amazon" /> */}
             <p className="text-black font-semibold text-[9px]">
               {kFormatter(
@@ -145,7 +145,7 @@ const NewBook = ({ book }) => {
               )}
             </p>
             <FaAmazon className="!w-[12px] px-[2px]" />
-            <p className="text-black font-semibold text-[9px]">Review</p>
+            <p className="text-black font-semibold text-[9px]">Reviews</p>
             {/* <div className="">
             </div> */}
           </div>

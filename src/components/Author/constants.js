@@ -1,5 +1,4 @@
 const aboutAuthor = {
-  name: "Dan Brown",
   desc: `Dan Brown is the author of numerous #1 bestselling novels, 
   including The Da Vinci Code, which has become one of the best selling novels 
   of all time as well as the subject of intellectual debate among readers and 

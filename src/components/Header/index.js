@@ -57,60 +57,6 @@ const Header = () => {
 
   return (
     <header>
-      <div className="top-header">
-        <Link to="/">
-          <h1>
-            Bright<span>R</span>.Club
-          </h1>
-        </Link>
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search by author, title, age, genre..."
-            value={searchQuery}
-            onChange={({ target: { value } }) =>
-              dispatch(setSearchQuery({ searchQuery: value }))
-            }
-          />
-          <button onClick={search}>
-            <AiOutlineSearch />
-          </button>
-        </div>
-        <div
-          className={`header-actions ${
-            showDropDown ? "show-drop-down" : "hide-drop-down"
-          }`}
-        >
-          <Link to="/browse-library" className="subscribe-button">
-            Browse Series
-          </Link>
-          <Link to="/browse-library-by-genre" className="subscribe-button">
-            Browse Genre
-          </Link>
-          <Link to="/most-popular" className="subscribe-button">
-            Most Popular
-          </Link>
-          <Link to="/must-read" className="subscribe-button">
-            Must Read
-          </Link>
-          {isLoggedIn ? (
-            <Link className="subscribe-button" to="/your-library">
-              Your Library
-            </Link>
-          ) : (
-            <Link className="subscribe-button" to="/login">
-              Sign In
-            </Link>
-          )}
-          {isLoggedIn && (
-            <button onClick={logOut} className="subscribe-button">
-              Log Out
-            </button>
-          )}
-          <img alt="Book" src="/icons/profile.png" />
-        </div>
-        <GiHamburgerMenu onClick={() => setShowDropDown(!showDropDown)} />
-      </div>
       {searchBarPages.includes(location.pathname) && (
         <div className="search-bar mobile-search-bar">
           <input

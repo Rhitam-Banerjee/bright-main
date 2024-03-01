@@ -11,10 +11,11 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 import axios from "axios";
 import urls from "../../utils/urls";
 
-import amazon from "../../icons/amazonWhite.svg";
 import bookIcon from "../../icons/bookIcon.svg";
+import bookIconOrange from "../../icons/bookIconOrange.svg";
 import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
+import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
 
 function shuffleObject(obj) {
@@ -26,7 +27,7 @@ function shuffleObject(obj) {
   return Object.fromEntries(entries);
 }
 
-const AuthorSection = () => {
+const AmazonAuthors = () => {
   const { age } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [authors, setAuthors] = useState([]);
@@ -46,6 +47,12 @@ const AuthorSection = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
+      const authorNames = Object.keys(response.popular_author);
+      authorNames.forEach((name, index) => {
+        if (index < 4) {
+          delete response.popular_author[`${name}`];
+        }
+      });
       response.popular_author = shuffleObject(response.popular_author);
       setAuthorDetails(response.popular_author);
       setAuthors(Object.keys(await response.popular_author));
@@ -90,8 +97,15 @@ const AuthorSection = () => {
   return (
     <section className="pl-8 md:px-2 mb-[10px]">
       {authorsLoaded && (
-        <h1 className="font-bold text-[12px] pb-[10px]">
-          Bestseller Authors - Amazon
+        <h1 className="flex font-bold text-[12px] pb-[10px]">
+          Bestseller Authors -
+          <span>
+            <img
+              className="pl-2 h-[12px] translate-y-[6px]"
+              src={amazonLogo}
+              alt="amazonLogo"
+            />
+          </span>
         </h1>
       )}
       <Swiper
@@ -140,7 +154,7 @@ const AuthorSection = () => {
                           .substring(0, 15)}...`}
                   </div>
                   <div
-                    className={`flex flex-col mt-4 text-[12px] gap-2 ${
+                    className={`flex flex-col mt-4 text-[12px] gap-0 ${
                       authorChosen === author ? "text-white" : ""
                     }`}
                   >
@@ -149,7 +163,9 @@ const AuthorSection = () => {
                         className={`w-[8px] ${
                           authorChosen === author ? "" : "invert"
                         }`}
-                        src={bookIcon}
+                        src={
+                          authorChosen === author ? bookIconOrange : bookIcon
+                        }
                         alt="BooksCount"
                       />
                       <p className="text-[8px]">
@@ -157,7 +173,7 @@ const AuthorSection = () => {
                       </p>
                     </div>
                     <div className="flex flex-row items-center justify-start gap-1">
-                      <FaAmazon className="w-[8px]" />
+                      <FaAmazon className="w-[8px] translate-y-[2px]" />
                       <p>
                         <span className="text-[8px]">
                           {authorDetails[`${author}`].total_review}
@@ -190,4 +206,4 @@ const AuthorSection = () => {
   );
 };
 
-export default AuthorSection;
+export default AmazonAuthors;

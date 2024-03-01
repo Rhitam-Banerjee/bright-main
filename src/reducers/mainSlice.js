@@ -43,13 +43,13 @@ export const mainSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload.user;
     },
-    resetAlert: (state, action) => {
+    resetAlert: (state) => {
       state.alert = initialState.alert;
     },
     setAgeDropDown: (state) => {
       state.ageDropDown = !state.ageDropDown;
     },
-    nextStepRegister: (state, action) => {
+    nextStepRegister: (state) => {
       state.registrationStep = state.registrationStep + 1;
       state.registerDetails.paymentDone = false;
     },
@@ -63,7 +63,7 @@ export const mainSlice = createSlice({
     setRegisterDetails: (state, action) => {
       state.registerDetails = { ...state.registerDetails, ...action.payload };
     },
-    addChildToRegisterDetails: (state, action) => {
+    addChildToRegisterDetails: (state) => {
       state.registerDetails.children = [
         ...state.registerDetails.children,
         {
@@ -106,7 +106,7 @@ export const mainSlice = createSlice({
     updatePreferences: (state, action) => {
       state.childPreferences[action.payload.i] = action.payload.preference;
     },
-    flushRegisterDetails: (state, action) => {
+    flushRegisterDetails: (state) => {
       state.registerDetails = initialState.registerDetails;
       state.registrationStep = 0;
     },

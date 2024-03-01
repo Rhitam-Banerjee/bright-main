@@ -17,7 +17,7 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import { NewBook } from "./";
+import { NewBook } from "../Book";
 import {
   appendBookSet,
   increaseBookSetLimit,

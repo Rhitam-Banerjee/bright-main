@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -11,40 +11,51 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import NewBook from "./NewBook";
-import { load, stopLoad } from "../../reducers/bookSlice";
+import youtubeLogo from "../../icons/youtubeLogo.png";
 
-const MostSoughtAfter = () => {
-  const dispatch = useDispatch();
+import { NewBook } from "../Book";
+
+const YoutubeTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
 
   const getBooks = async () => {
     try {
-      dispatch(load);
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getMostSoughtAfter}`
-            : `${urls.getMostSoughtAfter}?age=${age}`
+            ? `${urls.getYoutubeBestsellerBooks}`
+            : `${urls.getYoutubeBestsellerBooks}?age=${age}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
+      response.books.sort(() => {
+        return Math.random() - 0.5;
+      });
       setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
-    dispatch(stopLoad());
   };
   useEffect(() => {
     getBooks();
   }, [age]);
   return (
-    !isLoading && (
-      <section className="pl-8 md:px-2">
-        <h1 className="font-bold text-[12px]">Highly Sought After</h1>
+    !isLoading &&
+    popularBooks?.length > 0 && (
+      <section className="pl-8 md:px-2 pb-[10px]">
+        <h1 className="flex font-bold text-[12px] pb-[10px]">
+          Most Popular -
+          <span>
+            <img
+              className="pl-2 h-[12px] translate-y-[3px]"
+              src={youtubeLogo}
+              alt="amazonLogo"
+            />
+          </span>
+        </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -53,24 +64,27 @@ const MostSoughtAfter = () => {
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
-          className="mySwiper py-4 no-slider-arrow"
+          className="mySwiper no-slider-arrow"
         >
           {popularBooks?.map((book, index) => {
             return (
               <SwiperSlide
                 key={index}
-                className="flex flex-col !w-[150px]"
+                className="relative flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
                 <NewBook book={book} />
+                <div className="absolute bottom-[20px] left-3 text-[48px] font-bold text-white font-outline-1">
+                  {index + 1}
+                </div>
               </SwiperSlide>
             );
           })}
         </Swiper>
-        <div className="mb-[14px] h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight" />
+        <div className="mt-[14px] h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight" />
       </section>
     )
   );
 };
 
-export default MostSoughtAfter;
+export default YoutubeTopBooks;

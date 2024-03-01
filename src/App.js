@@ -1,36 +1,43 @@
-import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
-import Header from "./components/Header/NewHeader";
-import YourLibrary from "./components/YourLibrary";
-import Landing from "./components/Landing";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import ForgotPassword from "./components/Login/ForgotPassword";
-import Content from "./components/Content";
-import HowItWorks from "./components/Content/HowItWorks";
-import SearchBooks from "./components/BrowseLibrary/SearchBooks";
-import Book from "./components/Book/BookRenew";
-import Pricing from "./components/Pricing";
-import Footer from "./components/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { login, resetAlert } from "./reducers/mainSlice";
+import { Suspense, lazy, useEffect } from "react";
+
 import devUrls from "./utils/devUrls";
 import axios from "axios";
-import Author from "./components/Author/NewAuthor";
+
+import Header from "./components/Header/NewHeader";
+import Landing from "./components/Landing";
+import { Book } from "./components/Book";
+import YourLibrary from "./components/YourLibrary";
+import SearchBooks from "./components/OldBrowseLibrary/SearchBooks";
+import Author from "./components/Author/Author";
+import Footer from "./components/Footer";
+
+import Login from "./components/Login";
+import Register from "./components/Register";
+import ForgotPassword from "./components/Login/ForgotPassword";
+
+import Content from "./components/Content";
+import HowItWorks from "./components/Content/HowItWorks";
+import Pricing from "./components/Pricing";
+
+import { login, resetAlert } from "./reducers/mainSlice";
+
 import { IoIosCloseCircle } from "react-icons/io";
 import "./index.css";
 
 const LazyBrowseLibraryRenew = lazy(() =>
-  import("./components/BrowseLibraryRenew/BrowseLibraryRenew")
+  import("./components/BrowseLibrary/BrowseLibrary")
 );
 
 const App = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+
   const {
     book: { loading },
     main: { alert, isLoggedIn },
   } = useSelector((state) => state);
-  const location = useLocation();
-  const dispatch = useDispatch();
 
   const refresh = async () => {
     try {
