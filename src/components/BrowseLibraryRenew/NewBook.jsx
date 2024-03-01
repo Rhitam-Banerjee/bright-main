@@ -22,7 +22,6 @@ const NewBook = ({ book }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const { isbn, name, rating, review_count, image, stock_available } = book;
-  const newImage = image.replace("_US", "_SY");
 
   function kFormatter(num) {
     return Math.abs(num) > 999
@@ -116,7 +115,7 @@ const NewBook = ({ book }) => {
           <Link to={`/book/${isbn}`} className="m-auto !h-full !w-full">
             <img
               className="h-full !m-auto !max-h-[130px] w-auto !max-w-[130px]"
-              src={newImage}
+              src={image?.replace("_US", "_SY")}
               alt={name}
               loading="lazy"
             />
@@ -131,7 +130,7 @@ const NewBook = ({ book }) => {
           } absolute p-[8px] bottom-0 left-1/2 -translate-x-1/2 h-[28px] mt-auto flex flex-row justify-center items-center w-full rounded-md`}
         >
           <div className="flex flex-row justify-between items-center text-black">
-            <p className="text-[9px]">
+            <p className="text-[9px] font-semibold">
               {rating.length > 4 ? rating.slice(0, 4) : rating}
             </p>
             <div className="px-[2px] -translate-y-[1px]">
@@ -140,13 +139,13 @@ const NewBook = ({ book }) => {
           </div>
           <div className="w-[76px] flex flex-row items-center justify-between border-l-[0.5px] ml-2 pl-2 border-secondary">
             {/* <img className="!w-[10px] mr-2" src={amazon} alt="amazon" /> */}
-            <p className="text-black text-[9px]">
+            <p className="text-black font-semibold text-[9px]">
               {kFormatter(
                 parseFloat(review_count.toString().replace(/,/g, ""))
               )}
             </p>
             <FaAmazon className="!w-[12px] px-[2px]" />
-            <p className="text-black text-[9px]">Review</p>
+            <p className="text-black font-semibold text-[9px]">Review</p>
             {/* <div className="">
             </div> */}
           </div>

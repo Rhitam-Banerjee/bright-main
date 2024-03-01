@@ -93,7 +93,7 @@ html {
 ::-webkit-scrollbar-thumb {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.566);
   border-radius: 0 0 10px 10px;
-  background: #0094ff;
+  background: #ff9f30;
 }
 
 input::-webkit-outer-spin-button,

@@ -173,7 +173,7 @@ const NewSeries = () => {
         <div
           className={`${
             seriesLoaded && seriesChosen !== null ? "mt-0" : "mt-[14px]"
-          } h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
+          } h-[1px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
         />
       </section>
     )
