@@ -40,7 +40,7 @@ const MostPopularDump = () => {
   return (
     !isLoading && (
       <section className="pl-8 md:px-2 pb-[14px]">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px] pb-[10px]">
+        <h1 className="font-bold md:text-[12px] pb-[10px]">
           Chart Topping - NewYork Times
         </h1>
         <Swiper

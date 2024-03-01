@@ -10,10 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import urls from "../../utils/urls";
 import axios from "axios";
 
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation, Virtual } from "swiper/modules";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { NewBook } from "./";
 import {
@@ -96,7 +98,7 @@ const NewSeriesDump = () => {
   }, []);
   return (
     seriesLoaded && (
-      <section className="px-8 md:px-2">
+      <section className="pl-8 md:px-2">
         {Object.keys(bookSet).map((serie, index) => {
           return (
             <div key={index}>
@@ -104,7 +106,7 @@ const NewSeriesDump = () => {
                 className="flex flex-row items-baseline text-[12px]"
                 ref={heightRef}
               >
-                <p className="pl-[18px]" key={index}>
+                <p className="pl-0" key={index}>
                   {serie.replace(/\s*\(.*?\)\s*/g, "")}
                 </p>
                 {bookSet[`${serie}`][0].authors?.split(",")[0] && (
@@ -123,14 +125,13 @@ const NewSeriesDump = () => {
               </div>
               <Swiper
                 slidesPerView={"auto"}
-                spaceBetween={30}
                 grabCursor={true}
-                pagination={{
-                  clickable: true,
-                }}
+                centeredSlides={true}
+                centeredSlidesBounds={true}
+                freeMode={true}
                 navigation={true}
-                modules={[Navigation, Virtual]}
-                className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px] no-slider-arrow"
+                modules={[FreeMode, Navigation, Virtual]}
+                className="mySwiper py-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px] no-slider-arrow"
               >
                 {bookSet[`${serie}`].map((book, index) => {
                   return (

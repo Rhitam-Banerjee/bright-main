@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 import axios from "axios";
-import devUrls from "../../utils/devUrls";
 
 import star from "../../icons/star.svg";
-import amazon from "../../icons/amazon.svg";
 import { FaAmazon } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
@@ -130,17 +128,17 @@ const NewBook = ({ book }) => {
         <div
           className={` ${
             wishClickedMap[book.isbn] ? "bg-mainColorLight" : "bg-lightGrey"
-          } absolute p-[8px] bottom-0 h-[28px] mt-auto flex flex-row justify-between items-center w-full rounded-md`}
+          } absolute p-[8px] bottom-0 left-1/2 -translate-x-1/2 h-[28px] mt-auto flex flex-row justify-center items-center w-full rounded-md`}
         >
-          <div className="flex flex-row justify-between items-center text-black -translate-y-[1px]">
-            <p className="text-[9px] translate-y-[2px]">
+          <div className="flex flex-row justify-between items-center text-black">
+            <p className="text-[9px]">
               {rating.length > 4 ? rating.slice(0, 4) : rating}
             </p>
-            <div className="px-[2px]">
+            <div className="px-[2px] -translate-y-[1px]">
               <img src={star} alt="Rating" />
             </div>
           </div>
-          <div className="w-[76px] mr-auto flex flex-row items-center justify-between border-l-[0.5px] ml-2 pl-2 border-secondary">
+          <div className="w-[76px] flex flex-row items-center justify-between border-l-[0.5px] ml-2 pl-2 border-secondary">
             {/* <img className="!w-[10px] mr-2" src={amazon} alt="amazon" /> */}
             <p className="text-black text-[9px]">
               {kFormatter(

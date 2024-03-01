@@ -56,8 +56,8 @@ const NewHeader = () => {
     if (localStorage.getItem("age")) {
       dispatch(setAge(localStorage.getItem("age")));
     } else {
-      localStorage.setItem("age", "2");
-      dispatch(setAge("2"));
+      localStorage.setItem("age", 2);
+      dispatch(setAge(2));
     }
   }, []);
   return (

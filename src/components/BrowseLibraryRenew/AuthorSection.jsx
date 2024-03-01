@@ -71,7 +71,7 @@ const AuthorSection = () => {
   return (
     <section className="pl-8 md:px-2 mb-[10px]">
       {authorsLoaded && (
-        <h1 className="font-bold md:text-[12px] md:pl-[18px] pb-[10px]">
+        <h1 className="font-bold md:text-[12px] pb-[10px]">
           Bestseller Authors - Amazon
         </h1>
       )}
@@ -112,7 +112,7 @@ const AuthorSection = () => {
                   <div
                     className={`${
                       authorChosen === author ? "text-white" : ""
-                    } text-[12px]`}
+                    } text-[12px] font-bold`}
                   >
                     {author?.length <= 18
                       ? `${author.replace(/ *\([^)]*\) */g, "")}`

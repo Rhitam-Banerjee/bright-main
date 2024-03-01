@@ -30,10 +30,10 @@ const BrowseLibraryRenew = () => {
       <NewSeries />
       <YoutubeTopBooks />
       <AuthorSection />
-      <MostPopularDump />
       <div ref={loadSeriesGenre}></div>
       {isLoadSeriesGenre && (
         <>
+          <MostPopularDump />
           <NewGenre />
           <MostSoughtAfter />
           <NewSeriesDump />

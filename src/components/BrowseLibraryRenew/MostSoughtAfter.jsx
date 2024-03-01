@@ -43,10 +43,8 @@ const MostSoughtAfter = () => {
   }, [age]);
   return (
     !isLoading && (
-      <section className="px-8 md:px-2">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px]">
-          Most Sought After
-        </h1>
+      <section className="pl-8 md:px-2">
+        <h1 className="font-bold md:text-[12px]">Most Sought After</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -55,7 +53,7 @@ const MostSoughtAfter = () => {
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
-          className="mySwiper bg-transparent !p-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px] no-slider-arrow"
+          className="mySwiper py-4 no-slider-arrow"
         >
           {popularBooks?.map((book, index) => {
             return (

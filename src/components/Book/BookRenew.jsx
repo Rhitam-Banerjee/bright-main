@@ -224,15 +224,15 @@ const BookRenew = () => {
     );
   return (
     <section className="px-8 py-2 md:px-4 mt-10 m-auto w-full h-full">
-      <div className="flex flex-row justify-start md:items-end gap-8 max-w-[800px] w-[90%] md:w-full m-auto h-full">
-        <div className="md:!w-[150px] h-full">
+      <div className="flex flex-row md:flex-col justify-center gap-8 w-full m-auto h-full">
+        <div className="w-full h-full">
           <div
-            className={`w-max md:h-[180px] md:!w-full md:!max-w-[150px] relative bg-white flex flex-col`}
+            className={`relative m-auto w-max h-full bg-white flex flex-col`}
           >
-            <div className="relative p-[10px] bg-unHighlight rounded-md w-max md:h-[150px] md:w-[150px]">
-              <div className="m-auto !h-full !w-full">
+            <div className="p-[10px] m-auto w-[320px] bg-unHighlight rounded-md">
+              <div className="m-auto h-max w-full">
                 <img
-                  className="h-full !max-w-[200px] !m-auto md:!max-h-[130px] w-auto md:!max-w-[130px]"
+                  className="w-auto h-full !max-h-[280px] m-auto"
                   src={book.image
                     .replace("US2", "US8")
                     .replace("SX2", "SX8")
@@ -241,7 +241,7 @@ const BookRenew = () => {
                 />
               </div>
             </div>
-            <div className="absolute p-[7px] bottom-0 h-[28px] mt-auto flex flex-row justify-center items-center w-full rounded-md bg-unHighlight">
+            <div className="absolute p-[7px] bottom-[-30px] h-[28px] w-full mt-auto flex flex-row justify-center items-center rounded-md bg-unHighlight">
               <div className="flex flex-row justify-between items-center text-black">
                 <p className="text-[9px] translate-y-[1px] pr-[5px]">
                   {book.rating.length > 4

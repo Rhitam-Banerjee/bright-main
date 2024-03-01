@@ -39,7 +39,8 @@ const YoutubeTopBooks = () => {
     getBooks();
   }, [age]);
   return (
-    !isLoading && (
+    !isLoading &&
+    popularBooks?.length > 0 && (
       <section className="pl-8 md:px-2 pb-[10px]">
         <h1 className="font-bold md:text-[12px] md:pl-[18px] pb-[10px]">
           Most Popular - Youtube

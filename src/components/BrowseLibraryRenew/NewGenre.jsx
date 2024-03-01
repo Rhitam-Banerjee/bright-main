@@ -64,7 +64,7 @@ const NewSeries = () => {
   return (
     genreLoaded && (
       <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="font-bold md:text-[12px] md:pl-[18px] pb-[10px]">
+        <h1 className="font-bold md:text-[12px] pb-[10px]">
           Bestseller Genre - Amazon
         </h1>
         <Swiper
@@ -151,13 +151,12 @@ const NewSeries = () => {
         {genreLoaded && genreChosen !== null && (
           <Swiper
             slidesPerView={"auto"}
-            spaceBetween={30}
             grabCursor={true}
-            pagination={{
-              clickable: true,
-            }}
+            centeredSlides={true}
+            centeredSlidesBounds={true}
+            freeMode={true}
             navigation={true}
-            modules={[Navigation]}
+            modules={[FreeMode, Navigation, Virtual]}
             className="mySwiper !py-4 bg-transparent no-slider-arrow"
           >
             {genreBook[`${genreChosen}`].total_books?.map((book, index) => {
