@@ -88,12 +88,13 @@ const AmazonSeries = () => {
               alt="amazonLogo"
             />
           </span>
+          <span className="font-black">.com</span>
         </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
+          // centeredSlides={true}
+          // centeredSlidesBounds={true}
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
@@ -108,7 +109,7 @@ const AmazonSeries = () => {
                 }`}
               >
                 <div
-                  className="relative w-[180px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                  className="relative w-[180px] h-[80px] flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                   onClick={() => {
                     seriesChosen === serie
                       ? setSeriesChosen(null)
@@ -149,7 +150,7 @@ const AmazonSeries = () => {
                         </p>
                       </div>
                       <div className="flex flex-row items-center justify-start gap-1">
-                        <FaAmazon className="w-[8px]" />
+                        <FaAmazon className="w-[8px] translate-y-[1px]" />
                         <p>
                           <span className="text-[8px]">
                             {kFormatter(seriesBook[`${serie}`].total_review)}
@@ -197,7 +198,7 @@ const AmazonSeries = () => {
         <div
           className={`${
             seriesLoaded && seriesChosen !== null ? "mt-0" : "mt-[14px]"
-          } h-[1px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
+          } h-[1px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
         />
       </section>
     )

@@ -16,7 +16,7 @@ import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import genreImg from "../../icons/genreImg.svg";
 import genreImgSelected from "../../icons/genreImgSelected.svg";
-import amazonLogo from "../../icons/amazonLogo.png";
+// import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
 
 const AmazonGenre = () => {
@@ -78,21 +78,12 @@ const AmazonGenre = () => {
   return (
     genreLoaded && (
       <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Bestseller Genre -
-          <span>
-            <img
-              className="pl-2 h-[12px] translate-y-[6px]"
-              src={amazonLogo}
-              alt="amazonLogo"
-            />
-          </span>
-        </h1>
+        <h1 className="flex font-bold text-[12px] pb-[10px]">Popular Genre</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
+          // centeredSlides={true}
+          // centeredSlidesBounds={true}
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
@@ -107,7 +98,7 @@ const AmazonGenre = () => {
                 }`}
               >
                 <div
-                  className="relative w-[180px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                  className="relative w-[180px] h-[80px] flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                   onClick={() => {
                     genreChosen === genre
                       ? setGenreChosen(null)
@@ -148,7 +139,7 @@ const AmazonGenre = () => {
                         </p>
                       </div>
                       <div className="flex flex-row items-center justify-start gap-1">
-                        <FaAmazon className="w-[8px]" />
+                        <FaAmazon className="w-[8px] translate-y-[2px]" />
                         <p>
                           <span className="text-[8px]">
                             {kFormatter(genreBook[`${genre}`].total_review)}
@@ -194,7 +185,7 @@ const AmazonGenre = () => {
         <div
           className={`${
             genreLoaded && genreChosen !== null ? "mt-0" : "mt-[14px]"
-          } h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
+          } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
         />
       </section>
     )

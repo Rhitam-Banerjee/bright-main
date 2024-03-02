@@ -121,14 +121,14 @@ const NewSeriesDump = () => {
                   {serie.replace(/\s*\(.*?\)\s*/g, "")}
                 </p>
                 {bookSet[`${serie}`][0].authors?.split(",")[0] && (
-                  <p className="text-[12px] font-bold text-unHighlightDark border-l-[0.5px] ml-[10px] pl-[10px] border-secondary">
+                  <p className="text-[12px] font-bold text-unHighlightDark border-l-[1px] ml-[10px] pl-[10px] border-secondary">
                     {bookSet[`${serie}`][0].authors?.split(",")[0]}
                   </p>
                 )}
 
                 {bookSet[`${serie}`][0].publisher?.split(",")[0] && (
                   <p
-                    className={`xs:hidden font-bold text-unHighlightLight text-[12px] border-l-[0.5px] ml-[10px] pl-[10px] border-secondary`}
+                    className={`xs:hidden font-bold text-unHighlightLight text-[12px] border-l-[1px] ml-[10px] pl-[10px] border-secondary`}
                   >
                     {bookSet[`${serie}`][0].publisher?.split(",")[0]}
                   </p>
@@ -137,12 +137,11 @@ const NewSeriesDump = () => {
               <Swiper
                 slidesPerView={"auto"}
                 grabCursor={true}
-                centeredSlides={true}
-                centeredSlidesBounds={true}
+                // centeredSlides={true}
                 freeMode={true}
                 navigation={true}
                 modules={[FreeMode, Navigation, Virtual]}
-                className="mySwiper py-4 border-b-[0.5px] border-unHighlight pb-[14px] mb-[10px] no-slider-arrow"
+                className="mySwiper py-4 border-b-[0.5px] border-secondary pb-[14px] mb-[10px] no-slider-arrow"
               >
                 {bookSet[`${serie}`].map((book, index) => {
                   return (

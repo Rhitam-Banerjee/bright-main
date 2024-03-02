@@ -17,7 +17,6 @@ import { NewBook } from "../Book";
 
 const AmazonTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [title, setTitle] = useState("");
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
 
@@ -55,12 +54,13 @@ const AmazonTopBooks = () => {
               alt="amazonLogo"
             />
           </span>
+          <span className="font-black">.com</span>
         </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
+          // centeredSlides={true}
+          // centeredSlidesBounds={true}
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
@@ -81,7 +81,7 @@ const AmazonTopBooks = () => {
             );
           })}
         </Swiper>
-        <div className="h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight" />
+        <div className="h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto md:mx-auto bg-secondary" />
       </section>
     )
   );

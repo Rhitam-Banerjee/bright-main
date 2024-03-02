@@ -47,9 +47,8 @@ const AmazonAuthors = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      const authorNames = Object.keys(response.popular_author);
-      authorNames.forEach((name, index) => {
-        if (index < 4) {
+      Object.keys(response.popular_author).forEach((name, index) => {
+        if (index < 5) {
           delete response.popular_author[`${name}`];
         }
       });
@@ -106,13 +105,14 @@ const AmazonAuthors = () => {
               alt="amazonLogo"
             />
           </span>
+          <span className="font-black">.com</span>
         </h1>
       )}
       <Swiper
         slidesPerView={"auto"}
         grabCursor={true}
-        centeredSlides={true}
-        centeredSlidesBounds={true}
+        // centeredSlides={true}
+        // centeredSlidesBounds={true}
         freeMode={true}
         navigation={true}
         modules={[FreeMode, Navigation, Virtual]}
@@ -128,7 +128,7 @@ const AmazonAuthors = () => {
               virtualIndex={index}
             >
               <div
-                className="relative w-[180px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                className="relative w-[180px] h-[80px] flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                 onClick={() => {
                   if (authorChosen === author) {
                     setAuthorChosen(null);
@@ -173,7 +173,7 @@ const AmazonAuthors = () => {
                       </p>
                     </div>
                     <div className="flex flex-row items-center justify-start gap-1">
-                      <FaAmazon className="w-[8px] translate-y-[2px]" />
+                      <FaAmazon className="w-[8px] translate-y-[1px]" />
                       <p>
                         <span className="text-[8px]">
                           {authorDetails[`${author}`].total_review}
@@ -190,7 +190,7 @@ const AmazonAuthors = () => {
                     alt=""
                   />
                 </div>
-                <div className="absolute -bottom-[30px] right-[-20px] h-[102px] w-[102px] rounded-full bg-[#ffffff70]" />
+                {/* <div className="absolute -bottom-[30px] right-[-20px] h-[102px] w-[102px] rounded-full bg-[#ffffff70]" /> */}
               </div>
             </SwiperSlide>
           );
@@ -200,7 +200,7 @@ const AmazonAuthors = () => {
       <div
         className={`${
           authorsBookLoaded ? "mt-0" : "mt-[14px]"
-        } h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
+        } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
       />
     </section>
   );

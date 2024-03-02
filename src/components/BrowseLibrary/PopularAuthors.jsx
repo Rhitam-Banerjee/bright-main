@@ -46,8 +46,7 @@ const PopularAuthors = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      const authorNames = Object.keys(response.popular_author);
-      authorNames.forEach((name, index) => {
+      Object.keys(response.popular_author).forEach((name, index) => {
         if (index > 4) {
           delete response.popular_author[`${name}`];
         }
@@ -101,8 +100,8 @@ const PopularAuthors = () => {
       <Swiper
         slidesPerView={"auto"}
         grabCursor={true}
-        centeredSlides={true}
-        centeredSlidesBounds={true}
+        // centeredSlides={true}
+        // centeredSlidesBounds={true}
         freeMode={true}
         navigation={true}
         modules={[FreeMode, Navigation, Virtual]}
@@ -118,7 +117,7 @@ const PopularAuthors = () => {
               virtualIndex={index}
             >
               <div
-                className="relative w-[180px] h-full flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
+                className="relative w-[180px] h-[80px] flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                 onClick={() => {
                   if (authorChosen === author) {
                     setAuthorChosen(null);
@@ -180,7 +179,7 @@ const PopularAuthors = () => {
                     alt=""
                   />
                 </div>
-                <div className="absolute -bottom-[30px] right-[-20px] h-[102px] w-[102px] rounded-full bg-[#ffffff70]" />
+                {/* <div className="absolute -bottom-[30px] right-[-20px] h-[102px] w-[102px] rounded-full bg-[#ffffff70]" /> */}
               </div>
             </SwiperSlide>
           );
@@ -190,7 +189,7 @@ const PopularAuthors = () => {
       <div
         className={`${
           authorsBookLoaded ? "mt-0" : "mt-[14px]"
-        } h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight`}
+        } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
       />
     </section>
   );

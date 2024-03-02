@@ -114,7 +114,7 @@ const NewHeader = () => {
         </div>
       </div>
       {renderAge && (
-        <div className="absolute bottom-0 left-0 !w-full px-8 md:px-3 py-2 flex flex-row items-center justify-start gap-[15px] bg-gradient-to-b from-mainColorLight to-white">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 !w-full px-8 md:px-3 py-2 flex flex-row items-center justify-start gap-[15px] bg-gradient-to-b from-mainColorLight to-white">
           <Swiper
             slidesPerView={"auto"}
             grabCursor={true}
@@ -123,7 +123,7 @@ const NewHeader = () => {
             freeMode={true}
             navigation={true}
             modules={[FreeMode, Navigation, Virtual]}
-            className="mySwiper !ml-0 no-slider-arrow"
+            className="mySwiper no-slider-arrow"
           >
             {Array(maxAge)
               .fill(true)

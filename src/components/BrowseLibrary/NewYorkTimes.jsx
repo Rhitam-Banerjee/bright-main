@@ -55,8 +55,8 @@ const MostPopularDump = () => {
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
+          // centeredSlides={true}
+          // centeredSlidesBounds={true}
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
@@ -74,7 +74,7 @@ const MostPopularDump = () => {
             );
           })}
         </Swiper>
-        <div className="mt-[14px] h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight" />
+        <div className="mt-[14px] h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary" />
       </section>
     )
   );

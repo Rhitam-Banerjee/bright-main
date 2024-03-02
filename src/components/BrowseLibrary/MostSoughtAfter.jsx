@@ -22,7 +22,7 @@ const MostSoughtAfter = () => {
 
   const getBooks = async () => {
     try {
-      dispatch(load);
+      dispatch(load());
       const response = await axios
         .get(
           age === "" || age === undefined
@@ -33,10 +33,10 @@ const MostSoughtAfter = () => {
         .catch((err) => console.log(err));
       setPopularBooks(response.books);
       setIsLoading(false);
+      dispatch(stopLoad());
     } catch (error) {
       console.log(error);
     }
-    dispatch(stopLoad());
   };
   useEffect(() => {
     getBooks();
@@ -48,8 +48,8 @@ const MostSoughtAfter = () => {
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
-          centeredSlides={true}
-          centeredSlidesBounds={true}
+          // centeredSlides={true}
+          // centeredSlidesBounds={true}
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
@@ -67,7 +67,7 @@ const MostSoughtAfter = () => {
             );
           })}
         </Swiper>
-        <div className="mb-[14px] h-[0.5px] w-[calc(100%_-_50px)] mr-auto md:mx-auto bg-unHighlight" />
+        <div className="mb-[14px] h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary" />
       </section>
     )
   );
