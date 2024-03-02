@@ -6,6 +6,7 @@ import {
   SeriesDump,
   YoutubeTopBooks,
   AmazonAuthors,
+  PopularSeries,
 } from ".";
 import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 import { useSelector } from "react-redux";
@@ -54,6 +55,7 @@ const BrowseLibrary = () => {
           <AmazonAuthors />
           <NewYorkTimes />
           <AmazonGenre />
+          <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />
         </>

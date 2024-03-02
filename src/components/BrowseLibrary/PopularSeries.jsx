@@ -19,7 +19,7 @@ import seriesImgSelected from "../../icons/seriesImgSelected.svg";
 import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
 
-const AmazonSeries = () => {
+const PopularSeries = () => {
   const { age } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [seriesTitle, setSeriesTitle] = useState([]);
@@ -51,7 +51,7 @@ const AmazonSeries = () => {
     delete response.books["Teacher Pick"];
     //  = shuffleObject(response.book);
     Object.keys(response.books).forEach((name, index) => {
-      if (index > 4) {
+      if (index < 5) {
         delete response.books[`${name}`];
       }
     });
@@ -210,4 +210,4 @@ const AmazonSeries = () => {
   );
 };
 
-export default AmazonSeries;
+export default PopularSeries;
