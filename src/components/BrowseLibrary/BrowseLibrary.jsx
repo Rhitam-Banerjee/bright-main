@@ -8,30 +8,48 @@ import {
   AmazonAuthors,
 } from ".";
 import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
-const BrowseLibraryRenew = () => {
-  const [isLoadSeriesGenre, setIsLoadSeriesGenre] = useState(false);
-  const loadSeriesGenre = useRef();
-  const loadMore = () => {
-    if (loadSeriesGenre.current)
+import { useSelector } from "react-redux";
+const BrowseLibrary = () => {
+  const { age } = useSelector((store) => store.book);
+  const [isLoadSoughtAfter, setIsLoadSoughtAfter] = useState(false);
+  const [isLoadseries, setIsLoadSeries] = useState(false);
+  const loadSoughtAfter = useRef();
+  const loadSeries = useRef();
+  const loadSoughtAfterBooks = () => {
+    if (loadSoughtAfter.current)
       if (
         window.innerHeight + window.scrollY >=
-        loadSeriesGenre.current.offsetTop - 600
+        loadSoughtAfter.current.offsetTop - 600
       )
-        setIsLoadSeriesGenre(true);
+        setIsLoadSoughtAfter(true);
+  };
+  const loadSeriesBooks = () => {
+    if (loadSeries.current)
+      if (window.innerHeight + window.scrollY >= loadSeries.current.offsetTop)
+        setIsLoadSeries(true);
   };
   useEffect(() => {
-    window.addEventListener("scroll", loadMore);
+    window.addEventListener("scroll", loadSoughtAfterBooks);
     return () => {
-      window.removeEventListener("scroll", loadMore);
+      window.removeEventListener("scroll", loadSoughtAfterBooks);
     };
   }, []);
+  useEffect(() => {
+    window.addEventListener("scroll", loadSeriesBooks);
+    return () => {
+      window.removeEventListener("scroll", loadSeriesBooks);
+    };
+  }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [age]);
   return (
     <div className="mt-[120px]">
       <AmazonTopBooks />
       <AmazonSeries />
       <YoutubeTopBooks />
-      <div ref={loadSeriesGenre}></div>
-      {isLoadSeriesGenre && (
+      <div ref={loadSoughtAfter}></div>
+      {isLoadSoughtAfter && (
         <>
           <AmazonAuthors />
           <NewYorkTimes />
@@ -41,7 +59,9 @@ const BrowseLibraryRenew = () => {
           <SeriesDump />
         </>
       )}
+      <div ref={loadSeries}></div>
+      {isLoadseries && <SeriesDump />}
     </div>
   );
 };
-export default BrowseLibraryRenew;
+export default BrowseLibrary;

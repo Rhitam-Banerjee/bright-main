@@ -12,8 +12,6 @@ const NewSlider = ({ container }) => {
     <Swiper
       slidesPerView={"auto"}
       grabCursor={true}
-      centeredSlides={true}
-      centeredSlidesBounds={true}
       freeMode={true}
       navigation={true}
       modules={[FreeMode, Navigation, Virtual]}

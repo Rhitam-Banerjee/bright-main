@@ -33,10 +33,10 @@ const MostSoughtAfter = () => {
         .catch((err) => console.log(err));
       setPopularBooks(response.books);
       setIsLoading(false);
-      dispatch(stopLoad());
     } catch (error) {
       console.log(error);
     }
+    dispatch(stopLoad());
   };
   useEffect(() => {
     getBooks();
