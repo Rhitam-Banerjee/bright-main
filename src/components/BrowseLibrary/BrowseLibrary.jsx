@@ -56,7 +56,6 @@ const BrowseLibrary = () => {
           <AmazonGenre />
           <MostSoughtAfter />
           <PopularAuthors />
-          <SeriesDump />
         </>
       )}
       <div ref={loadSeries}></div>
