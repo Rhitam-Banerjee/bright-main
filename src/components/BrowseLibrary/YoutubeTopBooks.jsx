@@ -47,8 +47,8 @@ const YoutubeTopBooks = () => {
     popularBooks?.length > 0 && (
       <section className="pl-8 md:px-2 pb-[10px]">
         <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Most Popular -
-          <span>
+          Most Popular
+          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             <img
               className="pl-2 h-[12px] translate-y-[3px]"
               src={youtubeLogo}

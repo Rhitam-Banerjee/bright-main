@@ -43,8 +43,8 @@ const MostPopularDump = () => {
     !isLoading && (
       <section className="pl-8 md:px-2 pb-[14px]">
         <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Chart Topping -{" "}
-          <span>
+          Chart Topping
+          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             <img
               className="pl-2 h-[15px] translate-y-[2px]"
               src={newyorktimesLogo}

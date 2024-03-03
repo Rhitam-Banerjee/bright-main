@@ -133,12 +133,12 @@ const NewHeader = () => {
                     <div
                       key={i}
                       className={`flex flex-col items-center justify-center px-[16px] py-[5px] rounded-md cursor-pointer font-bold ${
-                        age == i.toString()
+                        age.toString() == i.toString()
                           ? "bg-mainColor text-white"
                           : "bg-unHighlight text-unHighlightDark border-[1px] border-unHighlightDark"
                       }`}
                       onClick={() => {
-                        if (age == i.toString()) {
+                        if (age.toString() == i.toString()) {
                           dispatch(setAge(""));
                           localStorage.setItem("age", "");
                         } else {

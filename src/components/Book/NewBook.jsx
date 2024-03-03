@@ -150,17 +150,17 @@ const NewBook = ({ book }) => {
             </div> */}
           </div>
           {isLoggedIn && pathname !== "/your-library" && (
-            <div>
+            <div className="translate-x-1">
               {wishClickedMap[isbn] ? (
                 <FaHeart
                   className="w-[15px] h-[12px]"
-                  fill="blue"
+                  fill="#3B72FF"
                   onClick={() => addToReadList(isbn)}
                 />
               ) : (
                 <CiHeart
-                  className="w-[15px] h-[12px]"
-                  fill="blue"
+                  className="w-[15px] h-[12px] scale-150"
+                  fill="#3B72FF"
                   onClick={() => addToReadList(isbn)}
                 />
               )}

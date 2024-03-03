@@ -84,17 +84,7 @@ const PopularSeries = () => {
   return (
     seriesLoaded && (
       <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Bestseller Series -
-          <span>
-            <img
-              className="pl-2 h-[12px] translate-y-[6px]"
-              src={amazonLogo}
-              alt="amazonLogo"
-            />
-          </span>
-          <span className="font-black">.com</span>
-        </h1>
+        <h1 className="flex font-bold text-[12px] pb-[10px]">Popular Series</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -203,7 +193,7 @@ const PopularSeries = () => {
         <div
           className={`${
             seriesLoaded && seriesChosen !== null ? "mt-0" : "mt-[14px]"
-          } h-[1px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
+          } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
         />
       </section>
     )

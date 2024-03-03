@@ -40,7 +40,6 @@ export const bookSlice = createSlice({
     },
     resetBookSet: (state) => {
       state.bookSetLimit = initialState.bookSetLimit;
-      state.age = initialState.age;
     },
     setAge: (state, { payload }) => {
       state.bookSetLimit = initialState.bookSetLimit;

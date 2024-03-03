@@ -44,7 +44,12 @@ const MostSoughtAfter = () => {
   return (
     !isLoading && (
       <section className="pl-8 md:px-2">
-        <h1 className="font-bold text-[12px]">Highly Sought After</h1>
+        <h1 className="font-bold text-[12px]">
+          Highly Sought After
+          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
+            Our Library
+          </span>
+        </h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}

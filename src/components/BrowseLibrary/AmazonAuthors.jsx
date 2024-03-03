@@ -97,8 +97,8 @@ const AmazonAuthors = () => {
     <section className="pl-8 md:px-2 mb-[10px]">
       {authorsLoaded && (
         <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Bestseller Authors -
-          <span>
+          Bestseller Authors
+          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             <img
               className="pl-2 h-[12px] translate-y-[6px]"
               src={amazonLogo}

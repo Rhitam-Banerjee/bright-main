@@ -26,7 +26,10 @@ const BrowseLibrary = () => {
   };
   const loadSeriesBooks = () => {
     if (loadSeries.current)
-      if (window.innerHeight + window.scrollY >= loadSeries.current.offsetTop)
+      if (
+        window.innerHeight + window.scrollY >=
+        loadSeries.current.offsetTop - 400
+      )
         setIsLoadSeries(true);
   };
   useEffect(() => {
@@ -43,6 +46,7 @@ const BrowseLibrary = () => {
   }, []);
   useEffect(() => {
     window.scrollTo(0, 0);
+    setIsLoadSeries(false);
   }, [age]);
   return (
     <div className="mt-[120px]">
@@ -54,14 +58,18 @@ const BrowseLibrary = () => {
         <>
           <AmazonAuthors />
           <NewYorkTimes />
-          <AmazonGenre />
           <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />
         </>
       )}
       <div ref={loadSeries}></div>
-      {isLoadseries && <SeriesDump />}
+      {isLoadseries && (
+        <>
+          <SeriesDump />
+          <AmazonGenre />
+        </>
+      )}
     </div>
   );
 };
