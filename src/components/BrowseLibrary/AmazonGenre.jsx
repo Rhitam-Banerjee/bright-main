@@ -182,11 +182,11 @@ const AmazonGenre = () => {
             })}
           </Swiper>
         )}
-        <div
+        {/* <div
           className={`${
             genreLoaded && genreChosen !== null ? "mt-0" : "mt-[14px]"
           } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
-        />
+        /> */}
       </section>
     )
   );
