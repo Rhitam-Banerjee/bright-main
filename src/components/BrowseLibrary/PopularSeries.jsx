@@ -35,31 +35,6 @@ const AmazonSeries = () => {
       : Math.sign(num) * Math.abs(num);
   }
 
-  const getBooksOfSeries = async (series_id) => {
-    try {
-      const response = await axios
-        .get(
-          age === "" || age === undefined
-            ? `${urls.getBooksFromSeries}?category_id=${series_id}`
-            : `${urls.getBooksFromSeries}?age=${age}&category_id=${series_id}`
-        )
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-      response.books.sort((a, b) => {
-        return b.review_count - a.review_count;
-      });
-      if (isLoggedIn) {
-        response.books.sort((a, b) => {
-          return b.stocks_available - a.stocks_available;
-        });
-      }
-      setSeriesBook(response.books);
-      setSeriesBookLoaded(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getSeries = async () => {
     const response = await axios
       .get(
@@ -71,8 +46,8 @@ const AmazonSeries = () => {
       .catch((err) => {
         console.log(err);
       });
-    response.book_set.splice(0, 5);
-    response.book_set.sort(() => {
+    response.book_set?.splice(0, 5);
+    response.book_set?.sort(() => {
       return Math.random() - 0.5;
     });
     setSeries(response.book_set);
@@ -80,6 +55,32 @@ const AmazonSeries = () => {
     getBooksOfSeries(response.book_set[0].id);
     setSeriesLoaded(true);
   };
+
+  const getBooksOfSeries = async (series_id) => {
+    try {
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksFromSeries}?category_id=${series_id}`
+            : `${urls.getBooksFromSeries}?age=${age}&category_id=${series_id}`
+        )
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      response.books?.sort((a, b) => {
+        return b.review_count - a.review_count;
+      });
+      if (isLoggedIn) {
+        response.books?.sort((a, b) => {
+          return b.stocks_available - a.stocks_available;
+        });
+      }
+      setSeriesBook(response.books);
+      setSeriesBookLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getSeries();
   }, [age]);

@@ -35,32 +35,6 @@ const AmazonGenre = () => {
       : Math.sign(num) * Math.abs(num);
   }
 
-  const getBooksOfGenre = async (genre_id) => {
-    try {
-      const response = await axios
-        .get(
-          age === "" || age === undefined
-            ? `${urls.getBooksFromGenre}?genre_id=${genre_id}`
-            : `${urls.getBooksFromGenre}?age=${age}&genre_id=${genre_id}`
-        )
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-      response.books.sort((a, b) => {
-        return b.review_count - a.review_count;
-      });
-      if (isLoggedIn) {
-        response.books.sort((a, b) => {
-          return b.stocks_available - a.stocks_available;
-        });
-      }
-      setGenreBook(response.books);
-      setGenreChosen(genre_id);
-      setGenreBookLoaded(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getGenres = async () => {
     const response = await axios
       .get(
@@ -72,7 +46,7 @@ const AmazonGenre = () => {
       .catch((err) => {
         console.log(err);
       });
-    response.book_genres.sort(() => {
+    response.book_genres?.sort(() => {
       return Math.random() - 0.5;
     });
     setGenres(response.book_genres);
@@ -80,6 +54,33 @@ const AmazonGenre = () => {
     getBooksOfGenre(response.book_genres[0].id);
     setGenreLoaded(true);
   };
+
+  const getBooksOfGenre = async (genre_id) => {
+    try {
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksFromGenre}?genre_id=${genre_id}`
+            : `${urls.getBooksFromGenre}?age=${age}&genre_id=${genre_id}`
+        )
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      response.books?.sort((a, b) => {
+        return b.review_count - a.review_count;
+      });
+      if (isLoggedIn) {
+        response.books?.sort((a, b) => {
+          return b.stocks_available - a.stocks_available;
+        });
+      }
+      setGenreBook(response.books);
+      setGenreChosen(genre_id);
+      setGenreBookLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getGenres();
   }, [age]);

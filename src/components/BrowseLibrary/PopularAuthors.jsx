@@ -34,31 +34,6 @@ const AmazonAuthors = () => {
   const [authorsBookLoaded, setAuthorsBookLoaded] = useState(false);
   const [authorChosen, setAuthorChosen] = useState(null);
 
-  const getBooksOfAuthors = async (author_id) => {
-    try {
-      const response = await axios
-        .get(
-          age === "" || age === undefined
-            ? `${urls.getBooksFromAuthor}?author_id=${author_id}`
-            : `${urls.getBooksFromAuthor}?age=${age}&author_id=${author_id}`
-        )
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-      response.books.sort((a, b) => {
-        return b.review_count - a.review_count;
-      });
-      if (isLoggedIn) {
-        response.books.sort((a, b) => {
-          return b.stocks_available - a.stocks_available;
-        });
-      }
-      setAuthorBooks(response.books);
-      setAuthorsBookLoaded(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getAuthors = async () => {
     try {
       const response = await axios
@@ -69,14 +44,39 @@ const AmazonAuthors = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      response.book_authors.splice(0, 5);
-      response.book_authors.sort(() => {
+      response.book_authors?.splice(0, 5);
+      response.book_authors?.sort(() => {
         return Math.random() - 0.5;
       });
       setAuthors(response.book_authors);
       setAuthorChosen(response.book_authors[0].id);
       getBooksOfAuthors(response.book_authors[0].id);
       setAuthorsLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getBooksOfAuthors = async (author_id) => {
+    try {
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksFromAuthor}?author_id=${author_id}`
+            : `${urls.getBooksFromAuthor}?age=${age}&author_id=${author_id}`
+        )
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      response.books?.sort((a, b) => {
+        return b.review_count - a.review_count;
+      });
+      if (isLoggedIn) {
+        response.books?.sort((a, b) => {
+          return b.stocks_available - a.stocks_available;
+        });
+      }
+      setAuthorBooks(response.books);
+      setAuthorsBookLoaded(true);
     } catch (error) {
       console.log(error);
     }
