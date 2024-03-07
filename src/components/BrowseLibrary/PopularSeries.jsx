@@ -18,6 +18,7 @@ import seriesImgSelected from "../../icons/seriesImgSelected.svg";
 import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
 import NewSlider from "../BookSlider/NewSlider";
+import { NewBook } from "../Book";
 
 const AmazonSeries = () => {
   const { age } = useSelector((store) => store.book);
@@ -179,7 +180,27 @@ const AmazonSeries = () => {
           })}
         </Swiper>
         {seriesBookLoaded && seriesChosen && (
-          <NewSlider id={seriesChosen} container={seriesBook} />
+          // <NewSlider id={seriesChosen} container={seriesBook} />
+          <Swiper
+            slidesPerView={"auto"}
+            grabCursor={true}
+            freeMode={true}
+            navigation={true}
+            modules={[FreeMode, Navigation, Virtual]}
+            className="mySwiper !py-4 no-slider-arrow"
+          >
+            {seriesBook.map((book, index) => {
+              return (
+                <SwiperSlide
+                  key={index}
+                  className="flex flex-col !w-[150px]"
+                  virtualIndex={index}
+                >
+                  <NewBook key={index} book={book} />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         )}
         <div
           className={`${

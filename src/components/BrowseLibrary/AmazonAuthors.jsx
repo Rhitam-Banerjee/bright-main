@@ -17,6 +17,7 @@ import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
 import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
+import { NewBook } from "../Book";
 
 function kFormatter(num) {
   return Math.abs(num) > 999
@@ -186,7 +187,27 @@ const AmazonAuthors = () => {
         })}
       </Swiper>
       {authorsBookLoaded && authorChosen && (
-        <NewSlider id={authorChosen} container={authorBooks} />
+        // <NewSlider id={authorChosen} container={authorBooks} />
+        <Swiper
+          slidesPerView={"auto"}
+          grabCursor={true}
+          freeMode={true}
+          navigation={true}
+          modules={[FreeMode, Navigation, Virtual]}
+          className="mySwiper !py-4 no-slider-arrow"
+        >
+          {authorBooks.map((book, index) => {
+            return (
+              <SwiperSlide
+                key={index}
+                className="flex flex-col !w-[150px]"
+                virtualIndex={index}
+              >
+                <NewBook key={index} book={book} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       )}
       <div
         className={`${
