@@ -41,35 +41,27 @@ const NewSeriesDump = () => {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getBooksSeriesMore}?start=${bookSetLimit - 5}&end=${
-                bookSetLimit + 10
+            ? `${urls.getAllSeries}?start=${bookSetLimit - 5}&end=${
+                bookSetLimit + 25
               }`
-            : `${urls.getBooksSeriesMore}?age=${age}&start=${
-                bookSetLimit - 5
-              }&end=${bookSetLimit + 10}`
+            : `${urls.getAllSeries}?age=${age}&start=${bookSetLimit - 5}&end=${
+                bookSetLimit + 25
+              }`
         )
         .then((res) => res.data)
         .catch((err) => {
           console.log(err);
         });
-      delete response.books_series["Best Seller - Most Popular"];
-      delete response.books_series["Most Popular Series"];
-      delete response.books_series["New York Times Bestseller"];
-      delete response.books_series["Global Bestseller"];
-      delete response.books_series["Teacher Pick"];
-      const title = Object.keys(await response.books_series);
+      const title = Object.keys(await response.book_set);
       // setSeries(title);
       title.forEach((serie) => {
-        response.books_series[`${serie}`].sort((a, b) => {
-          return (
-            parseInt(b.review_count.replace(",", "")) -
-            parseInt(a.review_count.replace(",", ""))
-          );
+        response.book_set[`${serie}`].sort((a, b) => {
+          return b.review_count - a.review_count;
         });
       });
       if (isLoggedIn) {
         title.forEach((serie) => {
-          response.books_series[`${serie}`].sort((a, b) => {
+          response.book_set[`${serie}`].sort((a, b) => {
             return b.stock_available - a.stock_available;
           });
         });
@@ -78,8 +70,8 @@ const NewSeriesDump = () => {
 
       setBookSet(null);
       if (bookSetLimit === 5)
-        dispatch(setBookSet({ bookSet: response.books_series }));
-      else dispatch(appendBookSet({ bookSet: response.books_series }));
+        dispatch(setBookSet({ bookSet: response.book_set }));
+      else dispatch(appendBookSet({ bookSet: response.book_set }));
       setSeriesLoaded(true);
       dispatch(stopLoad());
     } catch (err) {
