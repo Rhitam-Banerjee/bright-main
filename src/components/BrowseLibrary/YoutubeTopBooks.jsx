@@ -43,8 +43,7 @@ const YoutubeTopBooks = () => {
     getBooks();
   }, [age]);
   return (
-    !isLoading &&
-    popularBooks?.length > 0 && (
+    !isLoading && (
       <section className="pl-8 md:px-2 pb-[10px]">
         <h1 className="flex font-bold text-[12px] pb-[10px]">
           Most Popular
@@ -52,7 +51,7 @@ const YoutubeTopBooks = () => {
             <img
               className="pl-2 h-[12px] translate-y-[3px]"
               src={youtubeLogo}
-              alt="amazonLogo"
+              alt="Youtube-Logo"
             />
           </span>
         </h1>

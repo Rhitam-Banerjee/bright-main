@@ -52,7 +52,7 @@ const BrowseLibrary = () => {
     <div className="mt-[120px]">
       <AmazonTopBooks />
       <AmazonSeries />
-      {/* <YoutubeTopBooks /> */}
+      <YoutubeTopBooks />
       <AmazonAuthors />
       <div ref={loadSoughtAfter}></div>
       {isLoadSoughtAfter && (
