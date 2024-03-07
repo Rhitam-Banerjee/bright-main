@@ -19,14 +19,19 @@ const YoutubeTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
+  const { isLoggedIn } = useSelector((store) => store.main);
 
   const getBooks = async () => {
     try {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getYoutubeBestsellerBooks}`
-            : `${urls.getYoutubeBestsellerBooks}?age=${age}`
+            ? `${urls.getYoutubeBestsellerBooks}?isLoggedIn=${
+                isLoggedIn ? 1 : 0
+              }`
+            : `${urls.getYoutubeBestsellerBooks}?age=${age}&isLoggedIn=${
+                isLoggedIn ? 1 : 0
+              }`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));

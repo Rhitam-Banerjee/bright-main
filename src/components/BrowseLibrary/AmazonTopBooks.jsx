@@ -28,7 +28,9 @@ const AmazonTopBooks = () => {
             ? `${urls.getAmazonBestsellersBooks}?isLoggedIn=${
                 isLoggedIn ? 1 : 0
               }`
-            : `${urls.getAmazonBestsellersBooks}?age=${age}`
+            : `${urls.getAmazonBestsellersBooks}?age=${age}&isLoggedIn=${
+                isLoggedIn ? 1 : 0
+              }`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
