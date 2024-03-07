@@ -72,17 +72,11 @@ const urls = {
   searchBooks: newDomain + "/search-new-books",
   getMostPopularSet: newDomain + "/get-most-popular-set",
 
-  // getBooksByAuthor: `${newDomainUpdated}/get-books-author`,
-  getPopularAuthor: `${newDomainUpdated}/get-books-author-popular`,
   getBooksByAuthorAll: `${newDomainUpdated}/get-all-books-author`,
   getAuthorNameBook: `${newDomainUpdated}/get-author-from-book`,
 
-  getBooksSeries: `${newDomainUpdated}/get-book-set`,
   getBooksSeriesMore: `${newDomainUpdated}/get-book-set-all`,
   getSeriesNameBook: `${newDomainUpdated}/get-set-from-book`,
-
-  getBooksGenre: `${newDomainUpdated}/get-genre-book`,
-  getBooksGenreMore: `${newDomainUpdated}/get-genre-book-all`,
 
   getPopularBooks: `${newDomainUpdated}/get-newyork-best-seller`,
   getBookYTVideos: `${newDomainUpdated}/get-videos-from-book`,
@@ -91,9 +85,14 @@ const urls = {
   getAmazonBestsellersBooks: `${newDomainUpdated}/get-amazon-bestseller-books`,
   getAmazonBestsellersSets: `${newDomainUpdated}/get-amazon-bestseller-sets`,
   getAmazonBestsellersGenre: `${newDomainUpdated}/get-amazon-bestseller-genres`,
+  getAmazonBestsellersAuthors: `${newDomainUpdated}/get-amazon-bestseller-authors`,
 
   getYoutubeBestsellerBooks: `${newDomainUpdated}/get-youtube-bestseller-books`,
   getMostSoughtAfter: `${newDomainUpdated}/get-most-sought-after`,
+
+  getBooksFromSeries: `${newDomainUpdated}/get-books-from-series`,
+  getBooksFromGenre: `${newDomainUpdated}/get-books-from-genre`,
+  getBooksFromAuthor: `${newDomainUpdated}/get-books-from-author`,
 };
 
 export default urls;
