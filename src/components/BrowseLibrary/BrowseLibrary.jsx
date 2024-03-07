@@ -28,7 +28,7 @@ const BrowseLibrary = () => {
     if (loadSeries.current)
       if (
         window.innerHeight + window.scrollY >=
-        loadSeries.current.offsetTop - 400
+        loadSeries.current.offsetTop - 500
       )
         setIsLoadSeries(true);
   };
@@ -52,12 +52,12 @@ const BrowseLibrary = () => {
     <div className="mt-[120px]">
       <AmazonTopBooks />
       <AmazonSeries />
-      <YoutubeTopBooks />
+      {/* <YoutubeTopBooks /> */}
+      <AmazonAuthors />
       <div ref={loadSoughtAfter}></div>
       {isLoadSoughtAfter && (
         <>
-          <AmazonAuthors />
-          <NewYorkTimes />
+          {/* <NewYorkTimes /> */}
           <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />

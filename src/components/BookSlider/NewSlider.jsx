@@ -7,7 +7,7 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { NewBook } from "../Book";
 
-const NewSlider = ({ container }) => {
+const NewSlider = ({ id, container }) => {
   return (
     <Swiper
       slidesPerView={"auto"}
@@ -24,7 +24,7 @@ const NewSlider = ({ container }) => {
             className="flex flex-col !w-[150px]"
             virtualIndex={index}
           >
-            <NewBook book={book} />
+            <NewBook key={index} book={book} />
           </SwiperSlide>
         );
       })}

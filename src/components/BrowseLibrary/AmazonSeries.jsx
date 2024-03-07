@@ -11,20 +11,21 @@ import "swiper/css/free-mode";
 import "swiper/css/virtual";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import { NewBook } from "../Book";
 import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import seriesImg from "../../icons/seriesImg.svg";
 import seriesImgSelected from "../../icons/seriesImgSelected.svg";
 import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
+import NewSlider from "../BookSlider/NewSlider";
 
 const AmazonSeries = () => {
   const { age } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
-  const [seriesTitle, setSeriesTitle] = useState([]);
-  const [seriesBook, setSeriesBook] = useState({});
+  const [series, setSeries] = useState([]);
+  const [seriesBook, setSeriesBook] = useState([]);
   const [seriesLoaded, setSeriesLoaded] = useState(false);
+  const [seriesBookLoaded, setSeriesBookLoaded] = useState(false);
   const [seriesChosen, setSeriesChosen] = useState(null);
 
   function kFormatter(num) {
@@ -33,7 +34,32 @@ const AmazonSeries = () => {
       : Math.sign(num) * Math.abs(num);
   }
 
-  const getBooks = async () => {
+  const getBooksOfSeries = async (series_id) => {
+    try {
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksFromSeries}?category_id=${series_id}`
+            : `${urls.getBooksFromSeries}?age=${age}&category_id=${series_id}`
+        )
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      response.books.sort((a, b) => {
+        return b.review_count - a.review_count;
+      });
+      if (isLoggedIn) {
+        response.books.sort((a, b) => {
+          return b.stocks_available - a.stocks_available;
+        });
+      }
+      setSeriesBook(response.books);
+      setSeriesBookLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSeries = async () => {
     const response = await axios
       .get(
         age === "" || age === undefined
@@ -44,42 +70,17 @@ const AmazonSeries = () => {
       .catch((err) => {
         console.log(err);
       });
-    delete response.books["Best Seller - Most Popular"];
-    delete response.books["Most Popular Series"];
-    delete response.books["New York Times Bestseller"];
-    delete response.books["Global Bestseller"];
-    delete response.books["Teacher Pick"];
-    //  = shuffleObject(response.book);
-    Object.keys(response.books).forEach((name, index) => {
-      if (index > 4) {
-        delete response.books[`${name}`];
-      }
+    response.book_set.splice(5);
+    response.book_set.sort(() => {
+      return Math.random() - 0.5;
     });
-    response.books = Object.fromEntries(
-      Object.entries(response.books).sort(() => {
-        return Math.random() - 0.5;
-      })
-    );
-    const title = Object.keys(await response.books);
-    title.forEach((serie) => {
-      response.books[`${serie}`].total_books.sort((a, b) => {
-        return b.review_count - a.review_count;
-      });
-    });
-    if (isLoggedIn) {
-      title.forEach((serie) => {
-        response.books[`${serie}`].total_books.sort((a, b) => {
-          return b.stock_available - a.stock_available;
-        });
-      });
-    }
-    setSeriesTitle(title);
-    setSeriesBook(await response.books);
-    setSeriesChosen(title[0]);
+    setSeries(response.book_set);
+    setSeriesChosen(response.book_set[0].id);
+    getBooksOfSeries(response.book_set[0].id);
     setSeriesLoaded(true);
   };
   useEffect(() => {
-    getBooks();
+    getSeries();
   }, [age]);
   return (
     seriesLoaded && (
@@ -105,20 +106,25 @@ const AmazonSeries = () => {
           modules={[FreeMode, Navigation, Virtual]}
           className="mySwiper no-slider-arrow"
         >
-          {seriesTitle.map((serie, index) => {
+          {series.map((serie, index) => {
             return (
               <SwiperSlide
                 key={index}
                 className={`!max-w-[180px] !h-auto rounded-lg  ${
-                  seriesChosen === serie ? "!bg-mainColor" : "bg-mainColorLight"
+                  seriesChosen === serie.id
+                    ? "!bg-mainColor"
+                    : "bg-mainColorLight"
                 }`}
               >
                 <div
                   className="relative w-[180px] h-[80px] flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                   onClick={() => {
-                    seriesChosen === serie
-                      ? setSeriesChosen(null)
-                      : setSeriesChosen(serie);
+                    if (seriesChosen === serie.id) {
+                      setSeriesChosen(null);
+                    } else {
+                      setSeriesChosen(serie.id);
+                      getBooksOfSeries(serie.id);
+                    }
                   }}
                 >
                   <div
@@ -126,39 +132,39 @@ const AmazonSeries = () => {
                   >
                     <div
                       className={`${
-                        seriesChosen === serie ? "text-white" : ""
+                        seriesChosen === serie.id ? "text-white" : ""
                       } font-bold text-[12px]`}
                     >
-                      {serie?.length <= 18
-                        ? `${serie.replace(/ *\([^)]*\) */g, "")}`
-                        : `${serie
+                      {serie.name?.length <= 16
+                        ? `${serie.name.replace(/ *\([^)]*\) */g, "")}`
+                        : `${serie.name
                             .replace(/ *\([^)]*\) */g, "")
-                            .substring(0, 15)}...`}
+                            .substring(0, 13)}...`}
                     </div>
                     <div
                       className={`flex flex-col mt-4 text-[12px] gap-0 ${
-                        seriesChosen === serie ? "text-white" : ""
+                        seriesChosen === serie.id ? "text-white" : ""
                       }`}
                     >
                       <div className="flex flex-row items-center justify-start gap-1">
                         <img
                           className={`w-[8px] ${
-                            seriesChosen === serie ? "" : "invert"
+                            seriesChosen === serie.id ? "" : "invert"
                           }`}
                           src={
-                            seriesChosen === serie ? bookIconOrange : bookIcon
+                            seriesChosen === serie.id
+                              ? bookIconOrange
+                              : bookIcon
                           }
                           alt="BooksCount"
                         />
-                        <p className="text-[8px]">
-                          {seriesBook[`${serie}`].total_books.length} Books
-                        </p>
+                        <p className="text-[8px]">{serie.books} Books</p>
                       </div>
                       <div className="flex flex-row items-center justify-start gap-1">
                         <FaAmazon className="w-[8px] translate-y-[1px]" />
                         <p>
                           <span className="text-[8px]">
-                            {kFormatter(seriesBook[`${serie}`].total_review)}
+                            {kFormatter(serie.review_count)}
                           </span>
                           <span className="pl-[2px] text-[8px]">Reviews</span>
                         </p>
@@ -169,7 +175,9 @@ const AmazonSeries = () => {
                     <img
                       className="absolute !bottom-0 right-[0px] w-[73px] !z-10 saturate-0"
                       src={
-                        seriesChosen === serie ? seriesImgSelected : seriesImg
+                        seriesChosen === serie.id
+                          ? seriesImgSelected
+                          : seriesImg
                       }
                       alt=""
                     />
@@ -180,29 +188,12 @@ const AmazonSeries = () => {
             );
           })}
         </Swiper>
-        {seriesLoaded && seriesChosen !== null && (
-          <Swiper
-            slidesPerView={"auto"}
-            grabCursor={true}
-            centeredSlides={true}
-            centeredSlidesBounds={true}
-            freeMode={true}
-            navigation={true}
-            modules={[FreeMode, Navigation, Virtual]}
-            className="mySwiper py-4 no-slider-arrow"
-          >
-            {seriesBook[`${seriesChosen}`].total_books?.map((book, index) => {
-              return (
-                <SwiperSlide key={index} className="flex flex-col !w-[150px]">
-                  <NewBook book={book} />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+        {seriesBookLoaded && seriesChosen && (
+          <NewSlider id={seriesChosen} container={seriesBook} />
         )}
         <div
           className={`${
-            seriesLoaded && seriesChosen !== null ? "mt-0" : "mt-[14px]"
+            seriesLoaded && seriesChosen ? "mt-0" : "mt-[14px]"
           } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
         />
       </section>

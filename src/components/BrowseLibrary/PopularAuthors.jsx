@@ -15,87 +15,81 @@ import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
+import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
 
-function shuffleObject(obj) {
-  const entries = Object.entries(obj);
-  for (let i = entries.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [entries[i], entries[j]] = [entries[j], entries[i]];
-  }
-  return Object.fromEntries(entries);
+function kFormatter(num) {
+  return Math.abs(num) > 999
+    ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
+    : Math.sign(num) * Math.abs(num);
 }
 
-const PopularAuthors = () => {
+const AmazonAuthors = () => {
   const { age } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [authors, setAuthors] = useState([]);
-  const [authorDetails, setAuthorDetails] = useState({});
+  const [authorBooks, setAuthorBooks] = useState([]);
   const [authorsLoaded, setAuthorsLoaded] = useState(false);
   const [authorsBookLoaded, setAuthorsBookLoaded] = useState(false);
-  const [authorBooks, setAuthorBooks] = useState([]);
   const [authorChosen, setAuthorChosen] = useState(null);
 
-  const getPopularAuthors = async () => {
+  const getBooksOfAuthors = async (author_id) => {
     try {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getPopularAuthor}`
-            : `${urls.getPopularAuthor}?age=${age}`
+            ? `${urls.getBooksFromAuthor}?author_id=${author_id}`
+            : `${urls.getBooksFromAuthor}?age=${age}&author_id=${author_id}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      Object.keys(response.popular_author).forEach((name, index) => {
-        if (index > 4) {
-          delete response.popular_author[`${name}`];
-        }
-      });
-      response.popular_author = shuffleObject(response.popular_author);
-      setAuthorDetails(response.popular_author);
-      setAuthors(Object.keys(await response.popular_author));
-      setAuthorsLoaded(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const loadAuthorBooks = async (author) => {
-    try {
-      const response = await axios
-        .get(
-          age === "" || age === undefined
-            ? `${urls.getBooksByAuthorAll}?author=${author}`
-            : `${urls.getBooksByAuthorAll}?author=${author}&age=${age}`
-        )
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-      response.author_details.books.sort((a, b) => {
-        return (
-          parseInt(b.review_count.replace(",", "")) -
-          parseInt(a.review_count.replace(",", ""))
-        );
+      response.books.sort((a, b) => {
+        return b.review_count - a.review_count;
       });
       if (isLoggedIn) {
-        response.author_details.books.sort((a, b) => {
-          return b.stock_available - a.stock_available;
+        response.books.sort((a, b) => {
+          return b.stocks_available - a.stocks_available;
         });
       }
-      setAuthorBooks(response.author_details.books);
+      setAuthorBooks(response.books);
       setAuthorsBookLoaded(true);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getAuthors = async () => {
+    try {
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getAmazonBestsellersAuthors}`
+            : `${urls.getAmazonBestsellersAuthors}?age=${age}`
+        )
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      response.book_authors.splice(0, 5);
+      response.book_authors.sort(() => {
+        return Math.random() - 0.5;
+      });
+      setAuthors(response.book_authors);
+      setAuthorChosen(response.book_authors[0].id);
+      getBooksOfAuthors(response.book_authors[0].id);
+      setAuthorsLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getPopularAuthors();
-    setAuthorsBookLoaded(false);
+    getAuthors();
   }, [age]);
   return (
-    <section className="pl-8 md:px-2 mb-[10px]">
+    <section className="pl-8 md:px-2 pb-[10px]">
       {authorsLoaded && (
-        <h1 className="font-bold text-[12px] pb-[10px]">Popular Authors</h1>
+        <h1 className="flex font-bold text-[12px] pb-[10px]">
+          Popular Authors
+        </h1>
       )}
       <Swiper
         slidesPerView={"auto"}
@@ -111,20 +105,21 @@ const PopularAuthors = () => {
           return (
             <SwiperSlide
               key={author}
-              className={`!max-w-[300px] !h-auto rounded-lg ${
-                authorChosen === author ? "!bg-mainColor" : "bg-mainColorLight"
+              className={`!max-w-[180px] !h-auto rounded-lg ${
+                authorChosen === author.id
+                  ? "!bg-mainColor"
+                  : "bg-mainColorLight"
               }`}
               virtualIndex={index}
             >
               <div
                 className="relative w-[180px] h-[80px] flex flex-row justify-start items-center gap-2 overflow-hidden rounded-md"
                 onClick={() => {
-                  if (authorChosen === author) {
+                  if (authorChosen === author.id) {
                     setAuthorChosen(null);
-                    setAuthorsBookLoaded(false);
                   } else {
-                    loadAuthorBooks(author);
-                    setAuthorChosen(author);
+                    setAuthorChosen(author.id);
+                    getBooksOfAuthors(author.id);
                   }
                 }}
               >
@@ -133,39 +128,37 @@ const PopularAuthors = () => {
                 >
                   <div
                     className={`${
-                      authorChosen === author ? "text-white" : ""
+                      authorChosen === author.id ? "text-white" : ""
                     } text-[12px] font-bold`}
                   >
-                    {author?.length <= 18
-                      ? `${author.replace(/ *\([^)]*\) */g, "")}`
-                      : `${author
+                    {author.name?.length <= 16
+                      ? `${author.name.replace(/ *\([^)]*\) */g, "")}`
+                      : `${author.name
                           .replace(/ *\([^)]*\) */g, "")
-                          .substring(0, 15)}...`}
+                          .substring(0, 13)}...`}
                   </div>
                   <div
                     className={`flex flex-col mt-4 text-[12px] gap-0 ${
-                      authorChosen === author ? "text-white" : ""
+                      authorChosen === author.id ? "text-white" : ""
                     }`}
                   >
                     <div className="flex flex-row items-center justify-start gap-1">
                       <img
                         className={`w-[8px] ${
-                          authorChosen === author ? "" : "invert"
+                          authorChosen === author.id ? "" : "invert"
                         }`}
                         src={
-                          authorChosen === author ? bookIconOrange : bookIcon
+                          authorChosen === author.id ? bookIconOrange : bookIcon
                         }
                         alt="BooksCount"
                       />
-                      <p className="text-[8px]">
-                        {authorDetails[`${author}`].books_count} Books
-                      </p>
+                      <p className="text-[8px]">{author.books} Books</p>
                     </div>
                     <div className="flex flex-row items-center justify-start gap-1">
-                      <FaAmazon className="w-[8px] translate-y-[2px]" />
+                      <FaAmazon className="w-[8px] translate-y-[1px]" />
                       <p>
                         <span className="text-[8px]">
-                          {authorDetails[`${author}`].total_review}
+                          {kFormatter(author.review_count)}
                         </span>
                         <span className="pl-[2px] text-[8px]">Reviews</span>
                       </p>
@@ -179,20 +172,21 @@ const PopularAuthors = () => {
                     alt=""
                   />
                 </div>
-                {/* <div className="absolute -bottom-[30px] right-[-20px] h-[102px] w-[102px] rounded-full bg-[#ffffff70]" /> */}
               </div>
             </SwiperSlide>
           );
         })}
       </Swiper>
-      {authorsBookLoaded && <NewSlider container={authorBooks} />}
+      {authorsBookLoaded && authorChosen && (
+        <NewSlider id={authorChosen} container={authorBooks} />
+      )}
       <div
         className={`${
-          authorsBookLoaded ? "mt-0" : "mt-[14px]"
+          authorsBookLoaded && authorChosen ? "mt-0" : "mt-[14px]"
         } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
       />
     </section>
   );
 };
 
-export default PopularAuthors;
+export default AmazonAuthors;

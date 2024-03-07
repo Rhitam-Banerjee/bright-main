@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
 import urls from "../../utils/urls";
@@ -11,40 +11,41 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import { NewBook } from "../Book";
-import { load, stopLoad } from "../../reducers/bookSlice";
+import amazonLogo from "../../icons/amazonLogo.png";
 
-const MostSoughtAfter = () => {
-  const dispatch = useDispatch();
+import { NewBook } from "../Book";
+
+const AmazonTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
-
+  const { isLoggedIn } = useSelector((store) => store.main);
   const getBooks = async () => {
     try {
-      dispatch(load());
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getMostSoughtAfter}`
+            ? `${urls.getMostSoughtAfter}?isLoggedIn=${isLoggedIn ? 1 : 0}`
             : `${urls.getMostSoughtAfter}?age=${age}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
+      response.books.sort(() => {
+        return Math.random() - 0.5;
+      });
       setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
-    dispatch(stopLoad());
   };
   useEffect(() => {
     getBooks();
   }, [age]);
   return (
     !isLoading && (
-      <section className="pl-8 md:px-2">
-        <h1 className="font-bold text-[12px]">
+      <section className="pl-8 md:px-2 pb-[14px]">
+        <h1 className="flex font-bold text-[12px] pb-[10px]">
           Highly Sought After
           <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             Our Library
@@ -58,24 +59,27 @@ const MostSoughtAfter = () => {
           freeMode={true}
           navigation={true}
           modules={[FreeMode, Navigation, Virtual]}
-          className="mySwiper py-4 no-slider-arrow"
+          className="mySwiper pb-[14px] no-slider-arrow"
         >
           {popularBooks?.map((book, index) => {
             return (
               <SwiperSlide
                 key={index}
-                className="flex flex-col !w-[150px]"
+                className="relative flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
                 <NewBook book={book} />
+                <div className="absolute bottom-[20px] left-3 text-[48px] font-bold text-white font-outline-1">
+                  {index + 1}
+                </div>
               </SwiperSlide>
             );
           })}
         </Swiper>
-        <div className="mb-[14px] h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary" />
+        <div className="h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto md:mx-auto bg-secondary" />
       </section>
     )
   );
 };
 
-export default MostSoughtAfter;
+export default AmazonTopBooks;

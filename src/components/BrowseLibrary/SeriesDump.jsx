@@ -31,66 +31,61 @@ const NewSeriesDump = () => {
   const loadMoreRef = useRef(null);
   const heightRef = useRef(null);
   const dispatch = useDispatch();
-  const { age, bookSet, loading, bookSetLimit } = useSelector(
-    (store) => store.book
-  );
+  const { age, bookSet, bookSetLimit } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [seriesLoaded, setSeriesLoaded] = useState(false);
-  const getBooks = useMemo(
-    () => async () => {
-      if (loading) return;
-      try {
-        dispatch(load());
-        const response = await axios
-          .get(
-            age === "" || age === undefined
-              ? `${urls.getBooksSeriesMore}?start=${bookSetLimit - 5}&end=${
-                  bookSetLimit + 10
-                }`
-              : `${urls.getBooksSeriesMore}?age=${age}&start=${
-                  bookSetLimit - 5
-                }&end=${bookSetLimit + 10}`
-          )
-          .then((res) => res.data)
-          .catch((err) => {
-            console.log(err);
-          });
-        delete response.books_series["Best Seller - Most Popular"];
-        delete response.books_series["Most Popular Series"];
-        delete response.books_series["New York Times Bestseller"];
-        delete response.books_series["Global Bestseller"];
-        delete response.books_series["Teacher Pick"];
-        const title = Object.keys(await response.books_series);
-        // setSeries(title);
+  const getBooks = async () => {
+    // if (loading) return;
+    try {
+      dispatch(load());
+      const response = await axios
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksSeriesMore}?start=${bookSetLimit - 5}&end=${
+                bookSetLimit + 10
+              }`
+            : `${urls.getBooksSeriesMore}?age=${age}&start=${
+                bookSetLimit - 5
+              }&end=${bookSetLimit + 10}`
+        )
+        .then((res) => res.data)
+        .catch((err) => {
+          console.log(err);
+        });
+      delete response.books_series["Best Seller - Most Popular"];
+      delete response.books_series["Most Popular Series"];
+      delete response.books_series["New York Times Bestseller"];
+      delete response.books_series["Global Bestseller"];
+      delete response.books_series["Teacher Pick"];
+      const title = Object.keys(await response.books_series);
+      // setSeries(title);
+      title.forEach((serie) => {
+        response.books_series[`${serie}`].sort((a, b) => {
+          return (
+            parseInt(b.review_count.replace(",", "")) -
+            parseInt(a.review_count.replace(",", ""))
+          );
+        });
+      });
+      if (isLoggedIn) {
         title.forEach((serie) => {
           response.books_series[`${serie}`].sort((a, b) => {
-            return (
-              parseInt(b.review_count.replace(",", "")) -
-              parseInt(a.review_count.replace(",", ""))
-            );
+            return b.stock_available - a.stock_available;
           });
         });
-        if (isLoggedIn) {
-          title.forEach((serie) => {
-            response.books_series[`${serie}`].sort((a, b) => {
-              return b.stock_available - a.stock_available;
-            });
-          });
-        }
-        // setSeriesBook(await response.books_series);
-
-        setBookSet(null);
-        if (bookSetLimit === 5)
-          dispatch(setBookSet({ bookSet: response.books_series }));
-        else dispatch(appendBookSet({ bookSet: response.books_series }));
-        setSeriesLoaded(true);
-      } catch (err) {
-        console.log(err);
       }
+      // setSeriesBook(await response.books_series);
+
+      setBookSet(null);
+      if (bookSetLimit === 5)
+        dispatch(setBookSet({ bookSet: response.books_series }));
+      else dispatch(appendBookSet({ bookSet: response.books_series }));
+      setSeriesLoaded(true);
       dispatch(stopLoad());
-    },
-    [age, bookSetLimit]
-  );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const loadMore = () => {
     if (loadMoreRef.current)
       if (window.innerHeight + window.scrollY >= loadMoreRef.current.offsetTop)
@@ -99,7 +94,7 @@ const NewSeriesDump = () => {
   useEffect(() => {
     appendBookSet(null);
     getBooks();
-  }, [getBooks]);
+  }, [age, bookSetLimit]);
   useEffect(() => {
     dispatch(resetBookSet());
     window.addEventListener("scroll", loadMore);

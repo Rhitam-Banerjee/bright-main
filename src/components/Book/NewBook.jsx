@@ -21,7 +21,7 @@ const NewBook = ({ book }) => {
   const [wishListBooks, setWishListBooks] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const { isbn, name, rating, review_count, image, stock_available } = book;
+  const { isbn, name, rating, review_count, image, stocks_available } = book;
 
   function kFormatter(num) {
     return Math.abs(num) > 999
@@ -120,7 +120,7 @@ const NewBook = ({ book }) => {
               loading="lazy"
             />
           </Link>
-          {isLoggedIn && stock_available === 0 && (
+          {isLoggedIn && stocks_available === 0 && (
             <div className="absolute top-0 left-0 h-full w-full bg-unHighlightLight rounded-md opacity-80 z-10 pointer-events-none" />
           )}
         </div>

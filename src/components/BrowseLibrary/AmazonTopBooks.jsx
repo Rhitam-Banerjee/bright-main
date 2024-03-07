@@ -19,13 +19,15 @@ const AmazonTopBooks = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [popularBooks, setPopularBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
-
+  const { isLoggedIn } = useSelector((store) => store.main);
   const getBooks = async () => {
     try {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getAmazonBestsellersBooks}`
+            ? `${urls.getAmazonBestsellersBooks}?isLoggedIn=${
+                isLoggedIn ? 1 : 0
+              }`
             : `${urls.getAmazonBestsellersBooks}?age=${age}`
         )
         .then((res) => res.data)
@@ -73,7 +75,7 @@ const AmazonTopBooks = () => {
                 className="relative flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
-                <NewBook book={book} />
+                <NewBook key={index} book={book} />
                 <div className="absolute bottom-[20px] left-3 text-[48px] font-bold text-white font-outline-1">
                   {index + 1}
                 </div>
