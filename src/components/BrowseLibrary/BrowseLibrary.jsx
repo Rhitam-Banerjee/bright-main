@@ -57,7 +57,7 @@ const BrowseLibrary = () => {
       <div ref={loadSoughtAfter}></div>
       {isLoadSoughtAfter && (
         <>
-          {/* <NewYorkTimes /> */}
+          <NewYorkTimes />
           <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />

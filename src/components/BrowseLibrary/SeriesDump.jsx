@@ -109,7 +109,7 @@ const NewSeriesDump = () => {
                 </p>
                 {bookSet[`${serie}`][0].authors?.split(",")[0] && (
                   <p className="text-[12px] font-bold text-unHighlightDark border-l-[1px] ml-[10px] pl-[10px] border-secondary">
-                    {bookSet[`${serie}`][0].authors?.split(",")[0]}
+                    {bookSet[`${serie}`][0].author?.split(",")[0]}
                   </p>
                 )}
 

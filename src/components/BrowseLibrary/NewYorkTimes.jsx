@@ -30,7 +30,7 @@ const MostPopularDump = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      setPopularBooks(response.book_set[0].books);
+      setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
