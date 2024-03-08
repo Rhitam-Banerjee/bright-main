@@ -14,7 +14,7 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import { FaAmazon } from "react-icons/fa";
+import { FaAmazon, FaHeart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 
 import moment from "moment";
@@ -24,6 +24,7 @@ import { NewBook } from "./";
 
 import { addToWishlist } from "../../reducers/wishlistSlice";
 import { setAlert } from "../../reducers/mainSlice";
+import { CiHeart } from "react-icons/ci";
 
 const yt_url_video_link_prefix = "https://www.youtube.com/watch?v=";
 const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
@@ -37,43 +38,41 @@ const Book = () => {
 
   const { isbn } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { bookInSeries, authors } = useSelector((store) => store.book);
+  // const navigate = useNavigate();
+  const { age, authors } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [hasBookVideos, setHasBookVideos] = useState(false);
   const [hasBookSetVideos, setHasBookSetVideos] = useState(false);
-
-  const [removeOverlayFor, setRemoveOverlayFor] = useState("");
 
   const [book, setBook] = useState(null);
   const [bookVideos, setBookVideos] = useState([]);
   const [bookViews, setTotalViews] = useState(0);
   const [bookSetVideos, setBookSetVideos] = useState([]);
   const [bookSetViews, setTotalSetViews] = useState(0);
-  const [seriesBook, setSeriesBook] = useState({});
+  const [seriesName, setSeriesName] = useState(null);
+  const [seriesBook, setSeriesBook] = useState([]);
   const [authorsBook, setAuthorsBook] = useState({});
   const [authorReview, setAuthorReview] = useState({});
   const [seriesReview, setSeriesReview] = useState("");
 
-  const [videoToPlay, setVideoToPlay] = useState("");
-
   const getseriesBooks = async () => {
     try {
       const response = await axios
-        .get(urls.getSeriesNameBook, {
-          params: { book_search_id: String(isbn) },
-        })
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBookSeries}?isbn=${isbn}`
+            : `${urls.getBookSeries}?isbn=${isbn}&age=${age}`
+        )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      const title = Object.keys(await response.books)[0];
-      response.books[`${title}`].sort((a, b) => {
+      response.books.books.sort((a, b) => {
         return b.stock_available - a.stock_available;
       });
-      setSeriesBook(await response.books);
-      dispatch(setBookInSeries(title));
+      setSeriesName(response.books.name);
+      setSeriesBook(response.books.books);
       let totalReview = 0;
-      await response.books[`${title}`].forEach((book) => {
-        totalReview += parseInt(book.review_count);
+      response.books.books.forEach((book) => {
+        totalReview += book.review_count;
       });
       setSeriesReview(kFormatter(totalReview));
     } catch (err) {
@@ -84,28 +83,10 @@ const Book = () => {
   const getBook = async () => {
     try {
       const response = await axios
-        .get(urls.getBooks, {
-          params: { search_query: String(isbn) },
-        })
+        .get(`${urls.getBookDetails}?isbn=${isbn}`)
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      const newBook = await response.books[0];
-      setBook({
-        ...newBook,
-        stars: !isNaN(Number(newBook.rating))
-          ? Math.round(Number(newBook.rating))
-          : 0,
-        pages: newBook.pages && `${newBook.pages}`,
-        price: newBook.price && `₹ ${newBook.price}/-`,
-        for_age:
-          newBook.for_age || `${newBook.min_age} - ${newBook.max_age} years`,
-        publication_date:
-          newBook.publication_date &&
-          moment(newBook.publication_date).format("MMM Do YY"),
-        paperbackprice: newBook.paperbackprice,
-        boardbookprice: newBook.boardbookprice,
-        hardcoverprice: newBook.hardcoverprice,
-      });
+      setBook(response.book);
     } catch (err) {
       console.log(err);
     }
@@ -191,6 +172,41 @@ const Book = () => {
     } catch (err) {
       console.log(err);
     }
+    // try {
+    //   const response = await axios
+    //     .get(`${urls.getBookAuthors}?isbn=${isbn}`)
+    //     .then((res) => res.data)
+    //     .catch((err) => console.log(err));
+    //   const title = [];
+    //   if (response.status) {
+    //     response.authors.sort((a, b) => {
+    //       return b.author_books.length - a.author_books.length;
+    //     });
+    //     response.authors.forEach((author) => {
+    //       title.push(author.name);
+    //     });
+    //     response.authors.forEach((author) => {
+    //       let totalReview = 0;
+    //       author.author_books.forEach((book) => {
+    //         totalReview += book.review_count;
+    //       });
+    //       totalReview = kFormatter(totalReview);
+    //       setAuthorReview((prevState) => ({
+    //         ...prevState,
+    //         [author]: totalReview,
+    //       }));
+    //     });
+    //     response.authors.forEach((author, index) => {
+    //       setAuthorsBook((prevState) => ({
+    //         ...prevState,
+    //         [author]: response.authors[index].author_books,
+    //       }));
+    //     });
+    //     dispatch(setBooksAuthors(title));
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const wishlistAdd = async (book) => {
@@ -224,16 +240,65 @@ const Book = () => {
       </h1>
     );
   return (
-    <section className="px-8 py-2 md:px-4 mt-10 m-auto w-full h-full">
-      <div className="flex flex-row md:flex-col justify-center gap-8 w-full m-auto h-full">
+    <section className="px-8 py-2 md:px-4 mt-[70px] m-auto w-full h-full">
+      <div className="flex flex-col justify-center gap-8 w-full max-w-[600px] m-auto h-full">
+        <div className="flex flex-col w-full">
+          {seriesName && (
+            <div className="!p-0 flex flex-row items-center">
+              <div className="text-[12px] md:text-[10px] text-mainColor md:max-w-full !w-max font-bold">
+                {seriesName}
+              </div>
+              <div className="text-[12px] md:text-[10px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                {seriesBook?.length} Books
+              </div>
+              <div className="text-[12px] md:text-[10px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                {seriesReview} Reviews
+              </div>
+            </div>
+          )}
+          <div className="relative w-full flex flex-row justify-between py-[11px] text-[16px] md:text-[12px] font-bold">
+            <span className="text-[15px] font-bold">{book.name}</span>
+            <span className="flex flex-row items-center">
+              {kFormatter(book.review_count)} <FaAmazon className="mx-[4px]" />
+              Reviews
+            </span>
+            <span className="absolute -bottom-[17px] right-0 w-[35px] h-[20px] flex flex-row items-center">
+              {book.rating}
+              <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
+            </span>
+          </div>
+          {authors.map((author, index) => {
+            return (
+              authorsBook[`${author}`]?.length > 0 && (
+                <div
+                  className="!p-0 mb-2 flex flex-row items-center"
+                  key={index}
+                >
+                  <Link
+                    to={`/author/${author}`}
+                    className="text-[12px] md:text-[10px] md:max-w-full !w-max font-bold text-mainColor"
+                  >
+                    {author}
+                  </Link>
+                  <div className="text-[12px] md:text-[10px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                    {authorsBook[`${author}`]?.length} Books
+                  </div>
+                  <div className="text-[12px] md:text-[10px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                    {authorReview[author]} Reviews
+                  </div>
+                </div>
+              )
+            );
+          })}
+        </div>
         <div className="w-full h-full">
           <div
             className={`relative m-auto w-max h-full bg-white flex flex-col`}
           >
-            <div className="p-[10px] m-auto w-[320px] bg-unHighlight rounded-md">
+            <div className="grid place-items-center p-[30px] m-auto h-[340px] w-[340px] bg-lightGrey rounded-md">
               <div className="m-auto h-max w-full">
                 <img
-                  className="w-auto h-full !max-h-[280px] m-auto"
+                  className="w-auto h-[280px] !max-h-[280px] m-auto"
                   src={book.image
                     .replace("US2", "US8")
                     .replace("SX2", "SX8")
@@ -242,65 +307,26 @@ const Book = () => {
                 />
               </div>
             </div>
-            <div className="absolute p-[7px] bottom-[-30px] h-[28px] w-full mt-auto flex flex-row justify-center items-center rounded-md bg-unHighlight">
-              <div className="flex flex-row justify-between items-center text-black">
-                <p className="text-[9px] translate-y-[1px] pr-[5px]">
-                  {book.rating.length > 4
-                    ? book.rating.slice(0, 4)
-                    : book.rating}
-                </p>
-                <FaStar className="text-secondary w-[9px] -translate-y-[1px] pr" />
-              </div>
-              <div className="flex flex-row items-center justify-center border-l-[0.5px] ml-2 pl-2 border-secondary">
-                <FaAmazon className="!w-[9px] mr-2" />
-                <div className="text-[9px] w-full text-black flex flex-row">
-                  <span className="">
-                    {kFormatter(
-                      parseFloat(book.review_count.replace(/,/g, ""))
-                    )}
-                  </span>
-                  <span className="pl-[4px]">Reviews</span>
-                </div>
-              </div>
+            <div className="absolute grid place-items-center top-0 right-0 w-[100px] h-[27px] bg-mainColor rounded-tr-[5px] rounded-bl-[5px] shadow-lg">
+              <span className="text-[12px] font-medium text-white">
+                {book.min_age}
+                <em className="text-secondary px-[2px]">-</em>
+                {book.max_age} Years
+              </span>
             </div>
           </div>
         </div>
         <div className="flex flex-col h-full">
+          {isLoggedIn && (
+            <div
+              className="flex flex-row justify-center items-center text-[12px] text-mainColor font-bold h-[45px] w-full max-w-[340px] m-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
+              onClick={() => wishlistAdd(book)}
+            >
+              <CiHeart className="w-[22px] h-[22px]" />
+              Add To Wishlist
+            </div>
+          )}
           <div className="mb-auto">
-            <div className="!p-0 flex flex-row items-center">
-              <div className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold">
-                {bookInSeries}
-              </div>
-              <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                {seriesBook[bookInSeries]?.length} Books
-              </div>
-              <div className="text-[12px] md:text-[8px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                {seriesReview} Reviews
-              </div>
-            </div>
-            <div className="py-[11px] text-[16px] md:text-[12px] font-bold">
-              {book.name}
-            </div>
-            {authors.map((author, index) => {
-              return (
-                authorsBook[`${author}`]?.length > 0 && (
-                  <div className="!p-0 flex flex-row items-center" key={index}>
-                    <Link
-                      to={`/author/${author}`}
-                      className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold"
-                    >
-                      {author}
-                    </Link>
-                    <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                      {authorsBook[`${author}`]?.length} Books
-                    </div>
-                    <div className="text-[12px] md:text-[8px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                      {authorReview[author]} Reviews
-                    </div>
-                  </div>
-                )
-              );
-            })}
             {book.description && (
               <div className="pt-[13px] pb-[23px] font-medium text-[10px] md:text-[9px]">
                 <span className="line-clamp-4">{book.description}</span>
@@ -321,19 +347,12 @@ const Book = () => {
               </div>
             )}
           </div>
-          {isLoggedIn && (
-            <div
-              className="text-[12px] md:text-[10px] text-center font-bold px-[50px] py-[3px] h-[22px] w-full max-w-[200px] mr-auto bg-unHighlight cursor-pointer rounded-[5px]"
-              onClick={() => wishlistAdd(book)}
-            >
-              Add To Wishlist
-            </div>
-          )}
+          {/* {book.book_type && <div>{book.book_type}</div>} */}
         </div>
       </div>
       {hasBookVideos && bookVideos.length > 0 && (
         <div className="mt-[50px]">
-          <div className="pl-[18px] text-[16px] md:text-[12px] font-bold">
+          <div className="text-[16px] md:text-[12px] font-bold">
             <span className="text-unHighlightDark">Book Videos</span>
             <span className="text-unHighlightDark opacity-50 border-l-[0.5px] border-secondary ml-2 pl-2">
               {bookVideos.length} Videos
@@ -351,7 +370,7 @@ const Book = () => {
               freeMode={true}
               navigation={true}
               modules={[FreeMode, Navigation, Virtual]}
-              className="mySwiper !p-4"
+              className="mySwiper py-2"
             >
               {bookVideos.map((video, index) => {
                 return (
@@ -382,12 +401,12 @@ const Book = () => {
           </div>
         </div>
       )}
-      {Object.keys(seriesBook)?.length !== 0 && (
-        <div className="pl-[18px] mt-[50px]">
+      {seriesBook?.length !== 0 && (
+        <div className="mt-[50px]">
           <div className="text-[16px] md:text-[12px] font-bold">
             <span className="text-unHighlightDark">Books in This series</span>
             <span className="text-unHighlightDark opacity-50 border-l-[0.5px] border-secondary ml-2 pl-2">
-              {seriesBook[bookInSeries]?.length} Books
+              {seriesBook?.length} Books
             </span>
             <span className="text-unHighlightDark opacity-50 border-l-[0.5px] border-secondary ml-2 pl-2">
               {seriesReview} Reviews
@@ -401,7 +420,7 @@ const Book = () => {
             modules={[Navigation, Virtual]}
             className="mySwiper py-4 no-slider-arrow"
           >
-            {seriesBook[`${bookInSeries}`]?.map((book, index) => {
+            {seriesBook?.map((book, index) => {
               return (
                 <SwiperSlide key={index} className="flex flex-col !w-[150px]">
                   <NewBook book={book} />
@@ -411,10 +430,10 @@ const Book = () => {
           </Swiper>
         </div>
       )}
-      {hasBookSetVideos && bookSetVideos.length > 0 && (
+      {seriesName && hasBookSetVideos && bookSetVideos.length > 0 && (
         <div className="mt-[50px]">
-          <div className="pl-[18px] text-[16px] md:text-[12px] font-bold">
-            <span className="text-[12px] font-bold">{bookInSeries}</span>
+          <div className="text-[16px] md:text-[12px] font-bold">
+            <span className="text-[12px] font-bold">{seriesName}</span>
             <span className="text-[12px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
               {bookSetVideos.length} Videos
             </span>
@@ -431,7 +450,7 @@ const Book = () => {
               freeMode={true}
               navigation={true}
               modules={[FreeMode, Navigation, Virtual]}
-              className="mySwiper !p-4"
+              className="mySwiper !py-2"
             >
               {bookSetVideos.map((video, index) => {
                 return (
@@ -469,8 +488,8 @@ const Book = () => {
           </div>
         </div>
       )}
-      {Object.keys(authorsBook)?.length !== 0 && (
-        <div className="pl-[18px] mt-[50px]">
+      {authorsBook && Object.keys(authorsBook)?.length !== 0 && (
+        <div className="mt-[50px]">
           <div className="text-[16px] font-bold">
             <span className="text-black">More Books by Authors</span>
           </div>
@@ -493,7 +512,7 @@ const Book = () => {
                     spaceBetween={30}
                     navigation={true}
                     modules={[Navigation, Virtual]}
-                    className="mySwiper py-4 no-slider-arrow"
+                    className="mySwiper py-2 no-slider-arrow"
                   >
                     {authorsBook[`${author}`]?.map((book, index) => {
                       return (

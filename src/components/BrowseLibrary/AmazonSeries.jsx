@@ -22,7 +22,8 @@ import { NewBook } from "../Book";
 
 const AmazonSeries = () => {
   const { age } = useSelector((store) => store.book);
-  const { isLoggedIn } = useSelector((store) => store.main);
+  const { isLoggedIn, isMobile } = useSelector((store) => store.main);
+
   const [series, setSeries] = useState([]);
   const [seriesBook, setSeriesBook] = useState([]);
   const [seriesLoaded, setSeriesLoaded] = useState(false);
@@ -35,18 +36,20 @@ const AmazonSeries = () => {
       : Math.sign(num) * Math.abs(num);
   }
 
-  const getSeries = async () => {
+  const getSeries = async (isMobile) => {
     const response = await axios
       .get(
         age === "" || age === undefined
-          ? `${urls.getAmazonBestsellersSets}`
-          : `${urls.getAmazonBestsellersSets}?age=${age}`
+          ? `${urls.getAmazonBestsellersSets}?isMobile=${isMobile ? 1 : 0}`
+          : `${urls.getAmazonBestsellersSets}?age=${age}&isMobile=${
+              isMobile ? 1 : 0
+            }`
       )
       .then((res) => res.data)
       .catch((err) => {
         console.log(err);
       });
-    response.book_set?.splice(5);
+    response.book_set?.splice(response.book_set.length / 2);
     response.book_set?.sort(() => {
       return Math.random() - 0.5;
     });
@@ -82,7 +85,8 @@ const AmazonSeries = () => {
   };
 
   useEffect(() => {
-    getSeries();
+    const window_width = window.innerWidth < 968;
+    getSeries(window_width);
   }, [age]);
   return (
     seriesLoaded && (

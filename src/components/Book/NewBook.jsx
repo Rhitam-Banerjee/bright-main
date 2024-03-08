@@ -115,7 +115,7 @@ const NewBook = ({ book }) => {
           <Link to={`/book/${isbn}`} className="m-auto !h-full !w-full">
             <img
               className="h-full !m-auto !max-h-[130px] w-auto !max-w-[130px]"
-              src={image?.replace("_US", "_SY")}
+              src={image?.replace("_US", "_SY").replace(".pg", ".jpg")}
               alt={name}
               loading="lazy"
             />

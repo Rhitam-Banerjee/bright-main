@@ -34,17 +34,19 @@ const AmazonAuthors = () => {
   const [authorsBookLoaded, setAuthorsBookLoaded] = useState(false);
   const [authorChosen, setAuthorChosen] = useState(null);
 
-  const getAuthors = async () => {
+  const getAuthors = async (isMobile) => {
     try {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getAmazonBestsellersAuthors}`
-            : `${urls.getAmazonBestsellersAuthors}?age=${age}`
+            ? `${urls.getAmazonBestsellersAuthors}?isMobile=${isMobile ? 1 : 0}`
+            : `${urls.getAmazonBestsellersAuthors}?age=${age}&isMobile=${
+                isMobile ? 1 : 0
+              }`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      response.book_authors?.splice(0, 5);
+      response.book_authors?.splice(0, response.book_authors.length / 2);
       response.book_authors?.sort(() => {
         return Math.random() - 0.5;
       });
@@ -83,7 +85,8 @@ const AmazonAuthors = () => {
   };
 
   useEffect(() => {
-    getAuthors();
+    const window_width = window.innerWidth < 968;
+    getAuthors(window_width);
   }, [age]);
   return (
     <section className="pl-8 md:px-2 pb-[10px]">

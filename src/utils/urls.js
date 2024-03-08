@@ -72,6 +72,9 @@ const urls = {
   searchBooks: newDomain + "/search-new-books",
   getMostPopularSet: newDomain + "/get-most-popular-set",
 
+  getBookDetails: `${newDomainUpdated}/get-book-details`,
+  getBookAuthors: `${newDomainUpdated}/get-book-authors`,
+  getBookSeries: `${newDomainUpdated}/get-book-series`,
   getBooksByAuthorAll: `${newDomainUpdated}/get-all-books-author`,
   getAuthorNameBook: `${newDomainUpdated}/get-author-from-book`,
 

@@ -10,6 +10,7 @@ import {
 } from ".";
 import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 import { useSelector } from "react-redux";
+import { setIsMobile } from "../../reducers/mainSlice";
 const BrowseLibrary = () => {
   const { age } = useSelector((store) => store.book);
   const [isLoadSoughtAfter, setIsLoadSoughtAfter] = useState(false);
