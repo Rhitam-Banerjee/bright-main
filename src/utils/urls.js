@@ -79,7 +79,7 @@ const urls = {
   getAuthorNameBook: `${newDomainUpdated}/get-author-from-book`,
 
   getAllSeries: `${newDomainUpdated}/get-all-sets`,
-
+  getGenreAll: `${newDomainUpdated}/get-genres`,
   getSeriesNameBook: `${newDomainUpdated}/get-set-from-book`,
 
   getPopularBooks: `${newDomainUpdated}/get-newyork-best-seller`,

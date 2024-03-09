@@ -7,6 +7,7 @@ import {
   YoutubeTopBooks,
   AmazonAuthors,
   PopularSeries,
+  PopularGenre,
 } from ".";
 import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 import { useSelector } from "react-redux";
@@ -62,13 +63,14 @@ const BrowseLibrary = () => {
           <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />
+          <AmazonGenre />
         </>
       )}
       <div ref={loadSeries}></div>
       {isLoadseries && (
         <>
           <SeriesDump />
-          <AmazonGenre />
+          <PopularGenre />
         </>
       )}
     </div>

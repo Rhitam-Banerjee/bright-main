@@ -9,6 +9,7 @@ import YoutubeTopBooks from "./YoutubeTopBooks";
 import MostSoughtAfter from "./MostSoughtAfter";
 import AmazonAuthors from "./AmazonAuthors";
 import PopularSeries from "./PopularSeries";
+import PopularGenre from "./PopularGenre";
 
 export {
   BrowseLibrary,
@@ -22,4 +23,5 @@ export {
   MostSoughtAfter,
   AmazonAuthors,
   PopularSeries,
+  PopularGenre,
 };

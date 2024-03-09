@@ -17,10 +17,9 @@ import genreImg from "../../icons/genreImg.svg";
 import genreImgSelected from "../../icons/genreImgSelected.svg";
 import amazonLogo from "../../icons/amazonLogo.png";
 import { FaAmazon } from "react-icons/fa";
-import NewSlider from "../BookSlider/NewSlider";
 import { NewBook } from "../Book";
 
-const AmazonGenre = () => {
+const PopularGenre = () => {
   const { age } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [genres, setGenres] = useState([]);
@@ -39,8 +38,8 @@ const AmazonGenre = () => {
     const response = await axios
       .get(
         age === "" || age === undefined
-          ? `${urls.getAmazonBestsellersGenre}`
-          : `${urls.getAmazonBestsellersGenre}?age=${age}`
+          ? `${urls.getGenreAll}`
+          : `${urls.getGenreAll}?age=${age}`
       )
       .then((res) => res.data)
       .catch((err) => {
@@ -87,17 +86,7 @@ const AmazonGenre = () => {
   return (
     genreLoaded && (
       <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Bestseller Genre
-          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
-            <img
-              className="pl-2 h-[12px] translate-y-[6px]"
-              src={amazonLogo}
-              alt="amazonLogo"
-            />
-          </span>
-          <span className="font-black">.com</span>
-        </h1>
+        <h1 className="flex font-bold text-[12px] pb-[10px]">All Genres</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -209,14 +198,14 @@ const AmazonGenre = () => {
             })}
           </Swiper>
         )}
-        <div
+        {/* <div
           className={`${
             genreLoaded && genreChosen !== null ? "mt-0" : "mt-[14px]"
           } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
-        />
+        /> */}
       </section>
     )
   );
 };
 
-export default AmazonGenre;
+export default PopularGenre;
