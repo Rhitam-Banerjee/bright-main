@@ -35,12 +35,14 @@ const AmazonGenre = () => {
       : Math.sign(num) * Math.abs(num);
   }
 
-  const getGenres = async () => {
+  const getGenres = async (isMobile) => {
     const response = await axios
       .get(
         age === "" || age === undefined
-          ? `${urls.getAmazonBestsellersGenre}`
-          : `${urls.getAmazonBestsellersGenre}?age=${age}`
+          ? `${urls.getAmazonBestsellersGenre}?isMobile=${isMobile ? 1 : 0}`
+          : `${urls.getAmazonBestsellersGenre}?age=${age}&isMobile=${
+              isMobile ? 1 : 0
+            }`
       )
       .then((res) => res.data)
       .catch((err) => {
@@ -82,7 +84,8 @@ const AmazonGenre = () => {
   };
 
   useEffect(() => {
-    getGenres();
+    const window_width = window.innerWidth < 968;
+    getGenres(window_width);
   }, [age]);
   return (
     genreLoaded && (
