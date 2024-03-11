@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import ReactPlayer from "react-player/youtube";
 
 import devUrls from "../../utils/devUrls";
 import urls from "../../utils/urls";
@@ -14,7 +13,7 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import { FaAmazon, FaHeart } from "react-icons/fa";
+import { FaAmazon, FaHeart, FaYoutube } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 
 import moment from "moment";
@@ -25,6 +24,8 @@ import { NewBook } from "./";
 import { addToWishlist } from "../../reducers/wishlistSlice";
 import { setAlert } from "../../reducers/mainSlice";
 import { CiHeart } from "react-icons/ci";
+import clockIcon from "../../icons/clock.svg";
+import bookIconOrange from "../../icons/bookIconOrange.svg";
 
 const yt_url_video_link_prefix = "https://www.youtube.com/watch?v=";
 const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
@@ -54,6 +55,9 @@ const Book = () => {
   const [authorsBook, setAuthorsBook] = useState({});
   const [authorReview, setAuthorReview] = useState({});
   const [seriesReview, setSeriesReview] = useState("");
+
+  const [wishClickedMap, setWishClickedMap] = useState({});
+  const [wishListBooks, setWishListBooks] = useState([]);
 
   const getseriesBooks = async () => {
     try {
@@ -225,6 +229,61 @@ const Book = () => {
     }
   };
 
+  const addToReadList = async (isbn) => {
+    const isbnData = { isbn: isbn };
+
+    try {
+      const isBookInWishlist = wishListBooks.some((book) => book.isbn === isbn);
+      if (!isBookInWishlist) {
+        // If the book is not in the wishlist, add it
+        const response = await axios
+          .post(
+            `https://server.brightr.club/api_v2/add-to-wishlist`,
+            isbnData,
+            { withCredentials: true }
+          )
+          .then((res) => res.data);
+        if (response.status === "success") {
+          setWishListBooks((prevBooks) => [...prevBooks, book]);
+          setWishClickedMap((prevMap) => {
+            const updatedMap = { ...prevMap };
+            updatedMap[isbn] = true;
+            return updatedMap;
+          });
+          dispatch(setAlert({ text: `Added to wishlist`, color: "#33A200" }));
+        } else {
+          dispatch(setAlert({ text: `There was an error`, color: "#F75549" }));
+        }
+      } else {
+        // If the book is already in the wishlist, remove it
+        const response = await axios
+          .post(
+            `https://server.brightr.club/api_v2/wishlist-remove`,
+            isbnData,
+            { withCredentials: true }
+          )
+          .then((res) => res.data);
+        if (response.status === "success") {
+          setWishListBooks((prevBooks) =>
+            prevBooks.filter((book) => book.isbn !== isbn)
+          );
+          setWishClickedMap((prevMap) => {
+            const updatedMap = { ...prevMap };
+            updatedMap[isbn] = false;
+            return updatedMap;
+          });
+          dispatch(
+            setAlert({ text: `Removed from wishlist`, color: "#F75549" })
+          );
+        } else {
+          dispatch(setAlert({ text: `There was an error`, color: "#F75549" }));
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getBook();
     getseriesBooks();
@@ -375,25 +434,42 @@ const Book = () => {
               {bookVideos.map((video, index) => {
                 return (
                   <SwiperSlide key={index} className="h-full w-full">
-                    {/* <div
-                        className={`${
-                          videoToPlay === video.yt_links ? "!hidden" : "!flex"
-                        } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/4 w-full h-full flex-col justify-center items-center z-[1] pointer-events-none`}
-                      >
-                        <div className="mt-[10px] text-[10px] flex flex-row items-center justify-center bg-white w-full">
-                          <div className="pl-[15px]">{video.duration}</div>
-                          <div className="ml-[5px] pl-[5px] border-l-[0.5px] border-secondary">
-                            {kFormatter(video.views)} Views
-                          </div>
-                        </div>
-                      </div> */}
-                    <iframe
-                      className="h-[150px] w-[300px] flex bg-cover bg-no-repeat rounded-[5px] z-0"
-                      src={`https://www.youtube.com/embed/${video.yt_links}?wmode=opaque`}
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen={true}
-                    ></iframe>
+                    <div className="h-[150px]">
+                      <iframe
+                        className="h-[150px] w-[300px] flex bg-cover bg-no-repeat rounded-[5px] z-0"
+                        src={`https://www.youtube.com/embed/${video.yt_links}?wmode=opaque`}
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen={true}
+                      ></iframe>
+                    </div>
+                    <div className="mt-[9px] px-[24px] py-[7px] flex flex-row text-[9px] font-semibold justify-center items-center bg-lightGrey rounded-[5px]">
+                      <span className="flex flex-row items-center">
+                        <img
+                          className="mr-[8px]"
+                          src={bookIconOrange}
+                          alt="bookIcon"
+                        />
+                        {`${book.name
+                          .replace(/ *\([^)]*\) */g, "")
+                          .substring(0, 16)}...`}
+                      </span>
+                      <span className="px-2 mx-2 border-l-[1px] border-r-[1px] border-secondary flex flex-row items-center">
+                        <img
+                          className="-translate-y-[1px] mr-[8px]"
+                          src={clockIcon}
+                          alt="Clock"
+                        />
+                        {video.duration.includes(":")
+                          ? video.duration
+                          : "0:" + video.duration}
+                      </span>
+                      <span className="flex flex-row items-center">
+                        {kFormatter(video.views)}
+                        <FaYoutube className="w-[12px] -translate-y-[1px] mx-[5px] text-[#ff0000]" />{" "}
+                        Views
+                      </span>
+                    </div>
                   </SwiperSlide>
                 );
               })}
@@ -450,27 +526,77 @@ const Book = () => {
               freeMode={true}
               navigation={true}
               modules={[FreeMode, Navigation, Virtual]}
-              className="mySwiper !py-2"
+              className="mySwiper !py-2 no-slider-arrow"
             >
               {bookSetVideos.map((video, index) => {
                 return (
                   <SwiperSlide
                     key={index}
-                    className="relative h-[150px] w-[300px] cursor-grab"
+                    className="relative w-[300px] cursor-grab"
                   >
-                    <iframe
-                      className="flex h-[150px] w-[300px] bg-cover bg-no-repeat rounded-[5px]"
-                      src={`https://www.youtube.com/embed/${video.yt_links}`}
-                      title="YouTube video player"
-                      allow="accelerometer; 
+                    <div className=" h-[150px]">
+                      <iframe
+                        className="flex h-[150px] w-[300px] bg-cover bg-no-repeat rounded-[5px]"
+                        src={`https://www.youtube.com/embed/${video.yt_links}`}
+                        title="YouTube video player"
+                        allow="accelerometer; 
                         autoplay; 
                         clipboard-write; 
                         encrypted-media; 
                         gyroscope; 
                         fullscreen;
                         web-share"
-                      allowFullScreen={true}
-                    ></iframe>
+                        allowFullScreen={true}
+                      ></iframe>
+                    </div>
+                    <div className="mt-[9px] p-[7px] flex flex-row text-[9px] font-semibold justify-between items-center bg-lightGrey rounded-[5px]">
+                      <div className="flex-1 flex flex-row justify-center items-center">
+                        <span className="flex flex-row items-center">
+                          <img
+                            className="mr-[8px] -translate-y-[1px]"
+                            src={bookIconOrange}
+                            alt="bookIcon"
+                          />
+                          {`${video.name
+                            .replace(/ *\([^)]*\) */g, "")
+                            .substring(0, 16)}...`}
+                        </span>
+                        <span className="px-2 mx-2 border-l-[1px] border-r-[1px] border-secondary flex flex-row items-center">
+                          <img
+                            className="-translate-y-[2px] mr-[8px]"
+                            src={clockIcon}
+                            alt="Clock"
+                          />
+                          {video.duration.includes(":")
+                            ? video.duration
+                            : "0:" + video.duration}
+                        </span>
+                        <span className="flex flex-row items-center">
+                          {kFormatter(video.views)}
+                          <FaYoutube className="w-[12px] -translate-y-[1px] mx-[5px] text-[#ff0000]" />{" "}
+                          Views
+                        </span>
+                      </div>
+                      <div>
+                        {isLoggedIn && (
+                          <span className="ml-">
+                            {wishClickedMap[video.isbn] ? (
+                              <FaHeart
+                                className="w-[15px] h-[12px]"
+                                fill="#3B72FF"
+                                onClick={() => addToReadList(video.isbn)}
+                              />
+                            ) : (
+                              <CiHeart
+                                className="w-[15px] h-[12px] scale-150"
+                                fill="#3B72FF"
+                                onClick={() => addToReadList(video.isbn)}
+                              />
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                     {/* <div
                       className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col justify-center items-center z-10`}
                     >
