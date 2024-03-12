@@ -30,6 +30,9 @@ const MostPopularDump = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
+      response.books.sort((b, a) => {
+        return b.stocks_available - a.stocks_available;
+      });
       setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {

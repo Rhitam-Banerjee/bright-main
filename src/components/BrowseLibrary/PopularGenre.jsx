@@ -45,9 +45,11 @@ const PopularGenre = () => {
       .catch((err) => {
         console.log(err);
       });
-    response.book_genres?.sort(() => {
-      return Math.random() - 0.5;
-    });
+    if (!isLoggedIn) {
+      response.book_genres?.sort(() => {
+        return Math.random() - 0.5;
+      });
+    }
     setGenres(response.book_genres);
     setGenreChosen(response.book_genres[0].id);
     getBooksOfGenre(response.book_genres[0].id);

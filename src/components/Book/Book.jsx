@@ -50,11 +50,15 @@ const Book = () => {
   const [bookViews, setTotalViews] = useState(0);
   const [bookSetVideos, setBookSetVideos] = useState([]);
   const [bookSetViews, setTotalSetViews] = useState(0);
+
   const [seriesName, setSeriesName] = useState(null);
   const [seriesBook, setSeriesBook] = useState([]);
+  const [seriesReview, setSeriesReview] = useState("");
+  const [seriesIds, setSeriesIds] = useState({});
+
   const [authorsBook, setAuthorsBook] = useState({});
   const [authorReview, setAuthorReview] = useState({});
-  const [seriesReview, setSeriesReview] = useState("");
+  const [authorIds, setAuthorIds] = useState({});
 
   const [wishClickedMap, setWishClickedMap] = useState({});
   const [wishListBooks, setWishListBooks] = useState([]);
@@ -144,23 +148,28 @@ const Book = () => {
   const getAuthorBooks = async () => {
     try {
       const response = await axios
-        .get(urls.getAuthorNameBook, {
-          params: { book_search_id: String(isbn) },
-        })
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBookAuthors}?isbn=${isbn}`
+            : `${urls.getBookAuthors}?isbn=${isbn}&age=${age}`
+        )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      const title = Object.keys(await response.book);
-      title.forEach((author) => {
-        response.book[`${author}`].sort((a, b) => {
-          return b.stock_available - a.stock_available;
+
+      const title = response.authors.map((author) => {
+        return author.name;
+      });
+      response.authors.forEach((author) => {
+        author.author_books.sort((a, b) => {
+          return b.stocks_available - a.stocks_available;
         });
       });
-      setAuthorsBook(response.book);
-
-      title.forEach((author) => {
+      const responseAuthorBooks = {};
+      response.authors.forEach((author) => {
         let totalReview = 0;
-        response.book[`${author}`].forEach((book) => {
-          totalReview += parseInt(book.review_count);
+        responseAuthorBooks[author.name] = author.author_books;
+        author.author_books.forEach((book) => {
+          totalReview += book.review_count;
         });
         totalReview = kFormatter(totalReview);
         setAuthorReview((prevState) => ({
@@ -169,48 +178,22 @@ const Book = () => {
         }));
       });
       title.sort((a, b) => {
-        return response.book[`${b}`].length - response.book[`${a}`].length;
+        return (
+          responseAuthorBooks[b].author_books -
+          responseAuthorBooks[a].author_books
+        );
       });
-
+      setAuthorsBook(responseAuthorBooks);
+      response.authors.forEach((author) => {
+        setAuthorIds((prev) => ({
+          ...prev,
+          [author.name]: author.id,
+        }));
+      });
       dispatch(setBooksAuthors(title));
     } catch (err) {
       console.log(err);
     }
-    // try {
-    //   const response = await axios
-    //     .get(`${urls.getBookAuthors}?isbn=${isbn}`)
-    //     .then((res) => res.data)
-    //     .catch((err) => console.log(err));
-    //   const title = [];
-    //   if (response.status) {
-    //     response.authors.sort((a, b) => {
-    //       return b.author_books.length - a.author_books.length;
-    //     });
-    //     response.authors.forEach((author) => {
-    //       title.push(author.name);
-    //     });
-    //     response.authors.forEach((author) => {
-    //       let totalReview = 0;
-    //       author.author_books.forEach((book) => {
-    //         totalReview += book.review_count;
-    //       });
-    //       totalReview = kFormatter(totalReview);
-    //       setAuthorReview((prevState) => ({
-    //         ...prevState,
-    //         [author]: totalReview,
-    //       }));
-    //     });
-    //     response.authors.forEach((author, index) => {
-    //       setAuthorsBook((prevState) => ({
-    //         ...prevState,
-    //         [author]: response.authors[index].author_books,
-    //       }));
-    //     });
-    //     dispatch(setBooksAuthors(title));
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
   };
 
   const wishlistAdd = async (book) => {
@@ -334,7 +317,7 @@ const Book = () => {
                   key={index}
                 >
                   <Link
-                    to={`/author/${author}`}
+                    to={`/author/${authorIds[author]}`}
                     className="text-[12px] md:text-[10px] md:max-w-full !w-max font-bold text-mainColor"
                   >
                     {author}
@@ -361,7 +344,8 @@ const Book = () => {
                   src={book.image
                     .replace("US2", "US8")
                     .replace("SX2", "SX8")
-                    .replace("_US", "_SY")}
+                    .replace("_US", "_SY")
+                    .replace(".pg", ".jpg")}
                   alt="BookImage"
                 />
               </div>
@@ -429,7 +413,7 @@ const Book = () => {
               freeMode={true}
               navigation={true}
               modules={[FreeMode, Navigation, Virtual]}
-              className="mySwiper py-2"
+              className="mySwiper py-2 no-slider-arrow"
             >
               {bookVideos.map((video, index) => {
                 return (

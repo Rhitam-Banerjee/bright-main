@@ -35,9 +35,11 @@ const YoutubeTopBooks = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      response.books.sort(() => {
-        return Math.random() - 0.5;
-      });
+      if (!isLoggedIn) {
+        response.books.sort(() => {
+          return Math.random() - 0.5;
+        });
+      }
       setPopularBooks(response.books);
       setIsLoading(false);
     } catch (error) {

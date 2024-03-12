@@ -30,8 +30,13 @@ const AmazonTopBooks = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      response.books.sort(() => {
-        return Math.random() - 0.5;
+      if (!isLoggedIn) {
+        response.books.sort(() => {
+          return Math.random() - 0.5;
+        });
+      }
+      response.books.sort((b, a) => {
+        return b.stocks_available - a.stocks_available;
       });
       setPopularBooks(response.books);
       setIsLoading(false);

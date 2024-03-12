@@ -76,7 +76,6 @@ const urls = {
   getBookAuthors: `${newDomainUpdated}/get-book-authors`,
   getBookSeries: `${newDomainUpdated}/get-book-series`,
   getBooksByAuthorAll: `${newDomainUpdated}/get-all-books-author`,
-  getAuthorNameBook: `${newDomainUpdated}/get-author-from-book`,
 
   getAllSeries: `${newDomainUpdated}/get-all-sets`,
   getGenreAll: `${newDomainUpdated}/get-genres`,
@@ -97,6 +96,8 @@ const urls = {
   getBooksFromSeries: `${newDomainUpdated}/get-books-from-series`,
   getBooksFromGenre: `${newDomainUpdated}/get-books-from-genre`,
   getBooksFromAuthor: `${newDomainUpdated}/get-books-from-author`,
+
+  getAuthorDetails: `${newDomainUpdated}/get-author-details`,
 };
 
 export default urls;

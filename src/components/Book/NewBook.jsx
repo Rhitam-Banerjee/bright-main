@@ -8,6 +8,7 @@ import star from "../../icons/star.svg";
 import { FaAmazon } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
+import amazonLogo from "../../icons/amazonblack.svg";
 
 import { setAlert } from "../../reducers/mainSlice";
 
@@ -21,7 +22,16 @@ const NewBook = ({ book }) => {
   const [wishListBooks, setWishListBooks] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const { isbn, name, rating, review_count, image, stocks_available } = book;
+  const {
+    isbn,
+    name,
+    rating,
+    review_count,
+    image,
+    stocks_available,
+    book_order,
+    total_books,
+  } = book;
 
   function kFormatter(num) {
     return Math.abs(num) > 999
@@ -123,6 +133,16 @@ const NewBook = ({ book }) => {
           {isLoggedIn && stocks_available === 0 && (
             <div className="absolute top-0 left-0 h-full w-full bg-unHighlightLight rounded-md opacity-80 z-10 pointer-events-none" />
           )}
+
+          {book_order && (
+            <div className="absolute flex flex-row items-center justify-center bottom-[5px] right-0 h-[15px] w-[40px] bg-mainColorLight text-[9px] rounded-tl-[5px] rounded-bl-[5px]">
+              <span className="translate-y-[1px]">{book_order}</span>
+              <span className="text-secondary px-[2px] translate-y-[1px]">
+                /
+              </span>
+              <span className="translate-y-[1px]">{total_books}</span>
+            </div>
+          )}
         </div>
         <div
           className={` ${
@@ -144,7 +164,8 @@ const NewBook = ({ book }) => {
                 parseFloat(review_count?.toString()?.replace(/,/g, ""))
               )}
             </p>
-            <FaAmazon className="!w-[12px] px-[2px]" />
+            {/* <FaAmazon className="!w-[12px] px-[2px]" /> */}
+            <img src={amazonLogo} alt="AmazonLogo" />
             <p className="text-black font-semibold text-[9px]">Reviews</p>
             {/* <div className="">
             </div> */}

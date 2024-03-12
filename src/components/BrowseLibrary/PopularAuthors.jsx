@@ -47,9 +47,11 @@ const AmazonAuthors = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.book_authors?.splice(0, response.book_authors.length / 2);
-      response.book_authors?.sort(() => {
-        return Math.random() - 0.5;
-      });
+      if (!isLoggedIn) {
+        response.book_authors?.sort(() => {
+          return Math.random() - 0.5;
+        });
+      }
       setAuthors(response.book_authors);
       setAuthorChosen(response.book_authors[0].id);
       getBooksOfAuthors(response.book_authors[0].id);

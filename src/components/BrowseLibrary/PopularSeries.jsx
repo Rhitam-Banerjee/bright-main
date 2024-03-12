@@ -49,9 +49,11 @@ const AmazonSeries = () => {
         console.log(err);
       });
     response.book_set?.splice(0, response.book_set.length / 2);
-    response.book_set?.sort(() => {
-      return Math.random() - 0.5;
-    });
+    if (!isLoggedIn) {
+      response.book_set?.sort(() => {
+        return Math.random() - 0.5;
+      });
+    }
     setSeries(response.book_set);
     setSeriesChosen(response.book_set[0].id);
     getBooksOfSeries(response.book_set[0].id);

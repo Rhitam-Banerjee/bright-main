@@ -12,8 +12,12 @@ import {
 import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 import { useSelector } from "react-redux";
 import { setIsMobile } from "../../reducers/mainSlice";
+import { useLocation } from "react-router-dom";
 const BrowseLibrary = () => {
   const { age } = useSelector((store) => store.book);
+  const location = useLocation();
+  const { pathname } = location;
+  // const [scrollPos,setScrollPos] = useState()
   const [isLoadSoughtAfter, setIsLoadSoughtAfter] = useState(false);
   const [isLoadseries, setIsLoadSeries] = useState(false);
   const loadSoughtAfter = useRef();
@@ -34,6 +38,17 @@ const BrowseLibrary = () => {
       )
         setIsLoadSeries(true);
   };
+
+  const scrollToPage = () => {
+    if (pathname === "/browse-library") {
+      const getScrollPos = sessionStorage.getItem("scrollPosition");
+      if (getScrollPos) {
+        window.scrollTo(0, parseInt(getScrollPos));
+        sessionStorage.setItem("scrollPosition", 0);
+      }
+    }
+  };
+
   useEffect(() => {
     window.addEventListener("scroll", loadSoughtAfterBooks);
     return () => {
@@ -50,6 +65,23 @@ const BrowseLibrary = () => {
     window.scrollTo(0, 0);
     setIsLoadSeries(false);
   }, [age]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem("scrollPosition", window.scrollY);
+    };
+    window.addEventListener("scroll", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("scroll", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("load", scrollToPage);
+    return () => {
+      window.removeEventListener("load", scrollToPage);
+    };
+  }, []);
   return (
     <div className="mt-[120px]">
       <AmazonTopBooks />

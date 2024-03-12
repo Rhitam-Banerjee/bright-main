@@ -25,6 +25,7 @@ import { login, resetAlert } from "./reducers/mainSlice";
 
 import { IoIosCloseCircle } from "react-icons/io";
 import "./index.css";
+import Series from "./components/Series/Series";
 
 const LazyBrowseLibraryRenew = lazy(() =>
   import("./components/BrowseLibrary/BrowseLibrary")
@@ -89,6 +90,7 @@ const App = () => {
         />
         <Route path="/book/:isbn" element={<Book />} />
         <Route path="/author/:author" element={<Author />} />
+        <Route path="/series/:series" element={<Series />} />
         <Route path="/search-books" element={<SearchBooks />} />
         <Route
           path="/your-library"
