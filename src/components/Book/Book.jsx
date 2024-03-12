@@ -26,6 +26,9 @@ import { setAlert } from "../../reducers/mainSlice";
 import { CiHeart } from "react-icons/ci";
 import clockIcon from "../../icons/clock.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
+import genreIcon from "../../icons/genreIcon.svg";
+import bookIconDetails from "../../icons/bookIconBookDetaills.svg";
+import pageIcon from "../../icons/pagesIcon.svg";
 
 const yt_url_video_link_prefix = "https://www.youtube.com/watch?v=";
 const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
@@ -304,7 +307,7 @@ const Book = () => {
     );
   return (
     <section className="px-8 py-2 md:px-4 mt-[70px] m-auto w-full h-full">
-      <div className="flex flex-col justify-center gap-8 w-full max-w-[600px] m-auto h-full">
+      <div className="hidden md:flex flex-col justify-center gap-8 w-full max-w-[600px] m-auto h-full">
         <div className="flex flex-col w-full">
           {seriesName && (
             <div className="!p-0 flex flex-row items-center">
@@ -415,6 +418,162 @@ const Book = () => {
             )}
           </div>
           {/* {book.book_type && <div>{book.book_type}</div>} */}
+        </div>
+      </div>
+      <div className="flex md:hidden flex-row justify-between items-center w-full h-[370px] max-w-[1021px] m-auto gap-[50px]">
+        <div className="w-[370px] h-full">
+          <div
+            className={`relative m-auto w-max h-full bg-white flex flex-col`}
+          >
+            <div className="grid place-items-center p-[30px] m-auto h-[370px] w-[370px] bg-lightGrey rounded-md">
+              <div className="m-auto h-max w-full">
+                <img
+                  className="w-auto h-[300px] !max-h-[300px] m-auto"
+                  src={book.image
+                    .replace("US2", "US8")
+                    .replace("SX2", "SX8")
+                    .replace("_US", "_SY")
+                    .replace(".pg", ".jpg")}
+                  alt="BookImage"
+                />
+              </div>
+            </div>
+            <div className="absolute grid place-items-center top-0 right-0 w-[100px] h-[27px] bg-mainColor rounded-tr-[5px] rounded-bl-[5px] shadow-lg">
+              <span className="text-[12px] font-medium text-white">
+                {book.min_age}
+                <em className="text-secondary px-[2px]">-</em>
+                {book.max_age} Years
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="w-full !h-full flex flex-col justify-between gap-[20px]">
+          <div className="flex flex-col h-1/2 w-full">
+            {seriesName && (
+              <div className="!p-0 flex flex-row items-center">
+                <Link
+                  to={`/series/${seriesIds[seriesName]}`}
+                  className="text-[12px] md:text-[10px] text-mainColor md:max-w-full !w-max font-bold"
+                >
+                  {seriesName}
+                </Link>
+                <div className="text-[12px] md:text-[10px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                  {seriesBook?.length} Books
+                </div>
+                <div className="text-[12px] md:text-[10px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                  {seriesReview} Reviews
+                </div>
+              </div>
+            )}
+            <div className="w-full flex flex-row justify-between py-[11px] text-[16px] md:text-[12px] font-bold">
+              <span className="text-[20px] font-bold">{book.name}</span>
+              <span className="flex flex-row">
+                <span className="flex flex-row items-center text-[14px] pr-2">
+                  {book.rating}
+                  <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
+                </span>
+                <span className="h-[15px] w-[0.5px] bg-secondary translate-y-[7px]" />
+                <span className="flex flex-row items-center text-[14px] pl-2">
+                  {kFormatter(book.review_count)}
+                  <FaAmazon className="mx-[4px]" />
+                  Reviews
+                </span>
+              </span>
+            </div>
+            {authors.map((author, index) => {
+              return (
+                authorsBook[`${author}`]?.length > 0 && (
+                  <div
+                    className="!p-0 mb-2 flex flex-row items-center"
+                    key={index}
+                  >
+                    <Link
+                      to={`/author/${authorIds[author]}`}
+                      className="text-[12px] md:text-[10px] md:max-w-full !w-max font-bold text-mainColor"
+                    >
+                      {author}
+                    </Link>
+                    <div className="text-[12px] md:text-[10px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                      {authorsBook[`${author}`]?.length} Books
+                    </div>
+                    <div className="text-[12px] md:text-[10px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                      {authorReview[author]} Reviews
+                    </div>
+                  </div>
+                )
+              );
+            })}
+          </div>
+          <div className="flex flex-col justify-start gap-[20px]">
+            <div className="">
+              {book.description && (
+                <div className="pt-[13px] pb-[23px] font-medium text-[10px] md:text-[9px]">
+                  <span className="line-clamp-[6]">{book.description}</span>
+                  <span className="text-[10px] font-bold">view more</span>
+                </div>
+              )}
+              {book.publisher && book.language && book.pages && (
+                <div className="mt-auto !p-0 mb-4 flex flex-row items-center">
+                  <div className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold">
+                    {book.publisher}
+                  </div>
+                  <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                    {book.language}
+                  </div>
+                  <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                    {book.pages} Pages
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-row justify-start items-center gap-[33px]">
+              {book.genre && (
+                <div className="flex flex-row items-start text-[12px]">
+                  <img
+                    className="h-[16px] w-[16px]"
+                    src={genreIcon}
+                    alt="GenreIcon"
+                  />
+                  <span className="px-[7px]">Genre</span>
+                  <span className="text-mainColor font-bold">{book.genre}</span>
+                  {/* <Link to={`/genre/${book.genre_id}`}>{book.genre}</Link> */}
+                </div>
+              )}
+              {book.book_type && (
+                <div className="flex flex-row items-start text-[12px]">
+                  <img
+                    className="h-[16px] w-[16px]"
+                    src={bookIconDetails}
+                    alt="BookIcon"
+                  />
+                  <span className="px-[7px]">Book Type</span>
+                  <span className="text-mainColor font-bold">
+                    {book.book_type}
+                  </span>
+                </div>
+              )}
+              <div className="flex flex-row items-start text-[12px]">
+                <img
+                  className="h-[16px] w-[16px]"
+                  src={pageIcon}
+                  alt="PageIcon"
+                />
+                <span className="px-[7px]">Pages</span>
+                <span className="text-mainColor font-bold">216</span>
+                {/* <span>{book.pages}</span> */}
+              </div>
+            </div>
+            {isLoggedIn && (
+              <div
+                className="flex flex-row justify-center items-center text-[12px] text-mainColor font-bold h-[45px] w-full max-w-[340px] mr-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
+                onClick={() => wishlistAdd(book)}
+              >
+                <CiHeart className="w-[22px] h-[22px]" />
+                Add To Wishlist
+              </div>
+            )}
+            {/* {book.book_type && <div>{book.book_type}</div>} */}
+          </div>
         </div>
       </div>
       {hasBookVideos && bookVideos.length > 0 && (
