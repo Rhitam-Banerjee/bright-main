@@ -62,7 +62,7 @@ const NewSeriesDump = () => {
       if (isLoggedIn) {
         title.forEach((serie) => {
           response.book_set[`${serie}`].sort((a, b) => {
-            return b.stock_available - a.stock_available;
+            return b.stocks_available - a.stocks_available;
           });
         });
       }
