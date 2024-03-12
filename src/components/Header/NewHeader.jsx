@@ -23,7 +23,7 @@ import devUrls from "../../utils/devUrls";
 import urls from "../../utils/urls";
 import axios from "axios";
 
-import logo from "../../icons/BrightR.Club.png";
+import logo from "../../icons/BrightR.svg";
 // import { FaRegUser } from "react-icons/fa";
 
 const maxAge = 13;
@@ -68,7 +68,7 @@ const NewHeader = () => {
     >
       <div className="w-full flex flex-row justify-between items-center">
         <Link to={"/"} className="flex items-center justify-center mr-4">
-          <img src={logo} alt="Logo" />
+          <img className="w-[100px]" src={logo} alt="Logo" />
         </Link>
         <div className="flex-1 max-w-[500px] ml-auto flex flex-row items-center justify-between">
           {searchBarLinks.map((link, index) => {

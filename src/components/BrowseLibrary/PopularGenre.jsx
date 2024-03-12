@@ -15,7 +15,7 @@ import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import genreImg from "../../icons/genreImg.svg";
 import genreImgSelected from "../../icons/genreImgSelected.svg";
-import amazonLogo from "../../icons/amazonLogo.png";
+
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
 

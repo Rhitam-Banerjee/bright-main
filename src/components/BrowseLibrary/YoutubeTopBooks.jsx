@@ -11,7 +11,7 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import youtubeLogo from "../../icons/youtubeLogo.png";
+import youtubeLogo from "../../icons/youtube.svg";
 
 import { NewBook } from "../Book";
 
@@ -56,7 +56,7 @@ const YoutubeTopBooks = () => {
           Most Popular
           <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             <img
-              className="pl-2 h-[12px] translate-y-[3px]"
+              className="pl-2 h-[16px] w-[70px] translate-y-[2px] object-cover"
               src={youtubeLogo}
               alt="Youtube-Logo"
             />

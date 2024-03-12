@@ -11,8 +11,6 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import amazonLogo from "../../icons/amazonLogo.png";
-
 import { NewBook } from "../Book";
 
 const AmazonTopBooks = () => {

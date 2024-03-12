@@ -11,7 +11,7 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import amazonLogo from "../../icons/amazonLogo.png";
+import amazonLogo from "../../icons/amazoncom.svg";
 
 import { NewBook } from "../Book";
 
@@ -55,12 +55,11 @@ const AmazonTopBooks = () => {
           Bestseller
           <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             <img
-              className="pl-2 h-[12px] translate-y-[6px]"
+              className="pl-2 h-[14px] w-[70px] translate-y-[6px] object-cover"
               src={amazonLogo}
               alt="amazonLogo"
             />
           </span>
-          <span className="font-black">.com</span>
         </h1>
         <Swiper
           slidesPerView={"auto"}

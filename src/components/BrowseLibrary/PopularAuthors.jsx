@@ -15,7 +15,7 @@ import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
-import amazonLogo from "../../icons/amazonLogo.png";
+
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
 

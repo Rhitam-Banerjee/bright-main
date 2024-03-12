@@ -90,7 +90,7 @@ const App = () => {
         />
         <Route path="/book/:isbn" element={<Book />} />
         <Route path="/author/:author" element={<Author />} />
-        <Route path="/series/:series" element={<Series />} />
+        <Route path="/series/:series_id" element={<Series />} />
         <Route path="/search-books" element={<SearchBooks />} />
         <Route
           path="/your-library"

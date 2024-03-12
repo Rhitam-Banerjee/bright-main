@@ -63,6 +63,21 @@ const Book = () => {
   const [wishClickedMap, setWishClickedMap] = useState({});
   const [wishListBooks, setWishListBooks] = useState([]);
 
+  const [currentVideo, setCurrentVideo] = useState(null);
+
+  const handlePlay = (videoId) => {
+    if (currentVideo && currentVideo !== videoId) {
+      const prevVideo = document.getElementById(currentVideo);
+      if (prevVideo) {
+        prevVideo.contentWindow.postMessage(
+          '{"event":"command","func":"pauseVideo","args":""}',
+          "*"
+        );
+      }
+    }
+    setCurrentVideo(videoId);
+  };
+
   const getseriesBooks = async () => {
     try {
       const response = await axios
@@ -73,13 +88,17 @@ const Book = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      response.books.books.sort((a, b) => {
+      response.books.books?.sort((a, b) => {
         return b.stock_available - a.stock_available;
       });
       setSeriesName(response.books.name);
       setSeriesBook(response.books.books);
+      setSeriesIds((prev) => ({
+        ...prev,
+        [response.books.name]: response.books.id,
+      }));
       let totalReview = 0;
-      response.books.books.forEach((book) => {
+      response.books.books?.forEach((book) => {
         totalReview += book.review_count;
       });
       setSeriesReview(kFormatter(totalReview));
@@ -166,15 +185,17 @@ const Book = () => {
       });
       const responseAuthorBooks = {};
       response.authors.forEach((author) => {
-        let totalReview = 0;
         responseAuthorBooks[author.name] = author.author_books;
+      });
+      response.authors.forEach((author) => {
+        let totalReview = 0;
         author.author_books.forEach((book) => {
           totalReview += book.review_count;
         });
         totalReview = kFormatter(totalReview);
         setAuthorReview((prevState) => ({
           ...prevState,
-          [author]: totalReview,
+          [author.name]: totalReview,
         }));
       });
       title.sort((a, b) => {
@@ -287,9 +308,12 @@ const Book = () => {
         <div className="flex flex-col w-full">
           {seriesName && (
             <div className="!p-0 flex flex-row items-center">
-              <div className="text-[12px] md:text-[10px] text-mainColor md:max-w-full !w-max font-bold">
+              <Link
+                to={`/series/${seriesIds[seriesName]}`}
+                className="text-[12px] md:text-[10px] text-mainColor md:max-w-full !w-max font-bold"
+              >
                 {seriesName}
-              </div>
+              </Link>
               <div className="text-[12px] md:text-[10px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
                 {seriesBook?.length} Books
               </div>
@@ -304,7 +328,7 @@ const Book = () => {
               {kFormatter(book.review_count)} <FaAmazon className="mx-[4px]" />
               Reviews
             </span>
-            <span className="absolute -bottom-[17px] right-0 w-[35px] h-[20px] flex flex-row items-center">
+            <span className="absolute -bottom-[17px] right-0 w-[45px] h-[20px] flex flex-row items-center">
               {book.rating}
               <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
             </span>
@@ -520,6 +544,7 @@ const Book = () => {
                   >
                     <div className=" h-[150px]">
                       <iframe
+                        id={`${video.yt_links}`}
                         className="flex h-[150px] w-[300px] bg-cover bg-no-repeat rounded-[5px]"
                         src={`https://www.youtube.com/embed/${video.yt_links}`}
                         title="YouTube video player"
@@ -529,8 +554,10 @@ const Book = () => {
                         encrypted-media; 
                         gyroscope; 
                         fullscreen;
-                        web-share"
+                        web-share;
+                        enablejsapi;"
                         allowFullScreen={true}
+                        onClick={() => handlePlay(`${video.yt_links}`)}
                       ></iframe>
                     </div>
                     <div className="mt-[9px] p-[7px] flex flex-row text-[9px] font-semibold justify-between items-center bg-lightGrey rounded-[5px]">

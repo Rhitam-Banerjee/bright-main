@@ -15,7 +15,7 @@ import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import authorImg from "../../icons/authorImg.svg";
 import NewSlider from "../BookSlider/NewSlider";
-import amazonLogo from "../../icons/amazonLogo.png";
+import amazonLogo from "../../icons/amazoncom.svg";
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
 
@@ -95,12 +95,11 @@ const AmazonAuthors = () => {
           Bestseller Authors
           <span className="ml-2 pl-1 border-l-[1px] border-secondary">
             <img
-              className="pl-2 h-[12px] translate-y-[6px]"
+              className="pl-2 h-[14px] w-[70px] translate-y-[6px] object-cover"
               src={amazonLogo}
               alt="amazonLogo"
             />
           </span>
-          <span className="font-black">.com</span>
         </h1>
       )}
       <Swiper

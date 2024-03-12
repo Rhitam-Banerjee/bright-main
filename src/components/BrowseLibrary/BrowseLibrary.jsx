@@ -96,13 +96,13 @@ const BrowseLibrary = () => {
           <MostSoughtAfter />
           <PopularAuthors />
           <AmazonGenre />
+          <PopularGenre />
         </>
       )}
       <div ref={loadSeries}></div>
       {isLoadseries && (
         <>
           <SeriesDump />
-          <PopularGenre />
         </>
       )}
     </div>

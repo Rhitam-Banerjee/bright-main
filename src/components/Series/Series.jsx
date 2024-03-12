@@ -6,9 +6,9 @@ import urls from "../../utils/urls";
 
 import { PopularSeries } from "../BrowseLibrary";
 import { NewBook } from "../Book";
-import seriesImage from "../../icons/seriesImgSelected.svg";
+import seriesImage from "../../icons/seriesImg.svg";
 
-const NewAuthor = () => {
+const Series = () => {
   function kFormatter(num) {
     return Math.abs(num) > 999
       ? (Math.abs(num) / 1000).toFixed(1) + "k"
@@ -21,7 +21,7 @@ const NewAuthor = () => {
 
   const getSeriesDetails = async () => {
     const response = await axios
-      .get(`${urls.getAuthorDetails}?category_id=${series_id}`)
+      .get(`${urls.getSeriesDetails}?category_id=${series_id}`)
       .then((res) => res.data)
       .catch((err) => console.log(err));
     setSeriesDetails(response.category_details);
@@ -31,7 +31,7 @@ const NewAuthor = () => {
   const getBooksInSeries = async () => {
     try {
       const response = await axios
-        .get(`${urls.getBooksFromAuthor}?category_id=${series_id}`)
+        .get(`${urls.getBooksFromSeries}?category_id=${series_id}`)
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.books.sort((a, b) => {
@@ -50,7 +50,7 @@ const NewAuthor = () => {
   }, [series_id]);
   return hasLoaded ? (
     <>
-      <section className="mt-[50px] px-8 py-2 md:px-4 xs:px-2 mb-10 w-full m-auto flex flex-col justify-center items-center">
+      <section className="mt-[70px] px-8 py-2 md:px-4 xs:px-2 mb-10 w-full m-auto flex flex-col justify-center items-center">
         <div className="flex flex-row md:flex-col-reverse max-w-[800px] m-auto">
           <div>
             <h2 className="font-semibold text-[2rem] text-unHighlightDark md:text-center my-7">
@@ -98,4 +98,4 @@ const NewAuthor = () => {
   );
 };
 
-export default NewAuthor;
+export default Series;

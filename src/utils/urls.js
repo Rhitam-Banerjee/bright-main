@@ -98,6 +98,7 @@ const urls = {
   getBooksFromAuthor: `${newDomainUpdated}/get-books-from-author`,
 
   getAuthorDetails: `${newDomainUpdated}/get-author-details`,
+  getSeriesDetails: `${newDomainUpdated}/get-series-details`,
 };
 
 export default urls;

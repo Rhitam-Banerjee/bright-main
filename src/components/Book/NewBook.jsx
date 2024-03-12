@@ -8,7 +8,8 @@ import star from "../../icons/star.svg";
 import { FaAmazon } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
-import amazonLogo from "../../icons/amazonblack.svg";
+import heartOutline from "../../icons/heartstroke.svg";
+import heartFill from "../../icons/heartfill.svg";
 
 import { setAlert } from "../../reducers/mainSlice";
 
@@ -147,41 +148,41 @@ const NewBook = ({ book }) => {
         <div
           className={` ${
             wishClickedMap[book.isbn] ? "bg-mainColorLight" : "bg-lightGrey"
-          } absolute p-[8px] bottom-0 left-1/2 -translate-x-1/2 h-[28px] mt-auto flex flex-row justify-center items-center w-full rounded-md`}
+          } absolute p-[7px] bottom-0 left-1/2 -translate-x-1/2 h-[28px] mt-auto flex flex-row justify-center items-center w-full rounded-md gap-[10px]`}
         >
-          <div className="flex flex-row justify-between items-center text-black">
-            <p className="text-[9px] font-semibold">
-              {rating?.length > 4 ? rating?.slice(0, 4) : rating}
-            </p>
-            <div className="px-[2px] -translate-y-[1px]">
-              <img src={star} alt="Rating" />
+          <div className="flex-1 flex flex-row items-center justify-center">
+            <div className="flex flex-row justify-between items-center text-black">
+              <p className="text-[9px] font-semibold">
+                {rating?.length > 4 ? rating?.slice(0, 4) : rating}
+              </p>
+              <div className="pl-[2px] -translate-y-[1px]">
+                <img src={star} alt="Rating" />
+              </div>
+            </div>
+            <div className="flex flex-row items-center justify-between border-l-[0.5px] ml-[5px] pl-[5px] border-secondary">
+              <p className="text-black font-semibold text-[9px]">
+                {kFormatter(
+                  parseFloat(review_count?.toString()?.replace(/,/g, ""))
+                )}
+              </p>
+              <FaAmazon className="!w-[12px] px-[2px]" />
+              <p className="text-black font-semibold text-[9px]">Reviews</p>
             </div>
           </div>
-          <div className="flex flex-row items-center justify-between border-l-[0.5px] ml-2 pl-2 border-secondary">
-            {/* <img className="!w-[10px] mr-2" src={amazon} alt="amazon" /> */}
-            <p className="text-black font-semibold text-[9px]">
-              {kFormatter(
-                parseFloat(review_count?.toString()?.replace(/,/g, ""))
-              )}
-            </p>
-            {/* <FaAmazon className="!w-[12px] px-[2px]" /> */}
-            <img src={amazonLogo} alt="AmazonLogo" />
-            <p className="text-black font-semibold text-[9px]">Reviews</p>
-            {/* <div className="">
-            </div> */}
-          </div>
           {isLoggedIn && pathname !== "/your-library" && (
-            <div className="translate-x-1">
+            <div className="cursor-pointer">
               {wishClickedMap[isbn] ? (
-                <FaHeart
+                <img
+                  src={heartFill}
+                  alt="heartFill"
                   className="w-[15px] h-[12px]"
-                  fill="#3B72FF"
                   onClick={() => addToReadList(isbn)}
                 />
               ) : (
-                <CiHeart
-                  className="w-[15px] h-[12px] scale-150"
-                  fill="#3B72FF"
+                <img
+                  src={heartOutline}
+                  alt="heartFill"
+                  className="w-[15px] h-[12px]"
                   onClick={() => addToReadList(isbn)}
                 />
               )}
