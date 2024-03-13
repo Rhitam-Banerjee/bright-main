@@ -2,17 +2,37 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import devUrls from "../../utils/devUrls";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/free-mode";
+import "swiper/css/virtual";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Virtual } from "swiper/modules";
+
 import {
   flushRegisterDetails,
   setAlert,
   setRegisterDetails,
 } from "../../reducers/mainSlice";
 
-import bookInfo from "../../icons/bookQuestionIcon.svg";
 import { FaArrowRightLong } from "react-icons/fa6";
+
 import heroBg from "../../icons/Hero.png";
+
+import bookInfo from "../../icons/bookQuestionIcon.svg";
+import userIconHero from "../../icons/createAccountIcon.svg";
+import readingListIcon from "../../icons/readingListIcon.svg";
+import deliveryIconHero from "../../icons/deliveryIconHero.svg";
+
+import bookIcon from "../../icons/bookIconOrange.svg";
+
+import videoIcon from "../../icons/videoIcon.svg";
+
+import BookScroll from "./BookScroll";
+import VideoScroll from "./VideoScroll";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -81,12 +101,12 @@ const Landing = () => {
           </div>
           <div className="text-[15px] font-bold text-unHighlightDark">
             <span>World class books</span>
-            <span className="ml-2 pl-2 border-l-[1px] border-secondary">
+            <span className="ml-2 pl-2 border-l-[2px] border-secondary">
               Doorstep Delivery
             </span>
           </div>
           {!isLoggedIn && (
-            <form className="mt-[25px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] font-semibold border-mainColor rounded-[5px] p-[4px]">
+            <form className="mt-[25px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor rounded-[5px] p-[4px]">
               <input
                 className="flex-1 bg-transparent"
                 type="number"
@@ -107,7 +127,99 @@ const Landing = () => {
           )}
         </div>
       </section>
-      <section></section>
+      <section className="p-[30px] flex flex-col justify-center items-center gap-[10px] bg-mainColor w-full">
+        <div>
+          <img src={bookInfo} alt="BookIconInfo" />
+        </div>
+        <div className="text-[15px] text-white font-bold">
+          <span>How It Works</span>
+        </div>
+        <div className="text-[13px] text-white font-semibold">
+          <span>Unlocking the worls of books simplified!</span>
+        </div>
+        <div className="mt-[20px] w-full max-w-[400px] m-auto flex flex-row justify-between items-center gap-[10px]">
+          <div className="flex flex-col justify-center items-center gap-[11px] text-white text-[11px]">
+            <img src={userIconHero} alt="heroIconUser" />
+            <span>Create Account</span>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-[11px] text-white text-[11px]">
+            <img src={readingListIcon} alt="heroIconReading" />
+            <span>Build Readinglist</span>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-[11px] text-white text-[11px]">
+            <img src={deliveryIconHero} alt="heroIconDelivery" />
+            <span>Doorstep Delivery</span>
+          </div>
+        </div>
+      </section>
+      <section className="p-[30px] flex flex-col justify-center items-center gap-[10px]">
+        <div>
+          <img className="w-[24px]" src={bookIcon} alt="BookIcon" />
+        </div>
+        <p className="text-[15px] font-bold text-mainColor">
+          Explore our extensive library
+        </p>
+        <p className="text-center text-[13px] font-bold">
+          Keep track of chat toppers across <br />
+          Amazon, Goodreads, New York Times
+        </p>
+      </section>
+      <BookScroll />
+      <div className="mt-[30px] h-[36px] w-[108px] mx-auto bg-secondary rounded-[5px] flex items-center justify-center">
+        <Link
+          to={"/browse-library"}
+          className="text-white text-[12px] font-bold"
+        >
+          Browse Library
+        </Link>
+      </div>
+      <section className="mt-[30px] p-[30px] pb-[12px] flex flex-col justify-center items-center gap-[10px] bg-mainColor w-full">
+        <div>
+          <img className="w-[24px]" src={videoIcon} alt="BookIcon" />
+        </div>
+        <p className="text-[15px] font-bold text-white">
+          Explore books through glimpses
+        </p>
+        <p className="text-center text-[13px] font-bold text-white">
+          Discover through video summaries before you dive in!
+        </p>
+      </section>
+      <VideoScroll />
+      <section className="mt-[16px] pb-[12px] flex flex-col justify-center items-center gap-[10px] w-full">
+        <span className="text-[13px] font-semibold">
+          Select a plan based on the books you reed per week
+        </span>
+        <div className="flex flex-row justify-center items-center gap-[8px]">
+          <div className="flex flex-col justify-center items-center w-[100px] h-[100px] text-white bg-mainColor rounded-[5px]">
+            <span className="text-[30px] font-extrabold">1</span>
+            <span className="text-[10px] font-semibold">Book/Week</span>
+            <span className="text-[13px] font-bold pt-[14px] ">Rs.2,399</span>
+          </div>
+          <div className="flex flex-col justify-center items-center w-[100px] h-[100px] bg-[#D5E1FF] rounded-[5px]">
+            <span className="text-[30px] font-extrabold">2</span>
+            <span className="text-[10px] font-semibold">Books/Week</span>
+            <span className="text-[13px] font-bold pt-[14px] ">Rs.3,499</span>
+          </div>
+          <div className="flex flex-col justify-center items-center w-[100px] h-[100px] bg-[#D5E1FF] rounded-[5px]">
+            <span className="text-[30px] font-extrabold">4</span>
+            <span className="text-[10px] font-semibold">Books/Week</span>
+            <span className="text-[13px] font-bold pt-[14px] ">Rs.4,599</span>
+          </div>
+        </div>
+      </section>
+      <div className="mt-[30px] h-[36px] w-[108px] mx-auto bg-secondary rounded-[5px] flex items-center justify-center">
+        <Link to={"/register"} className="text-white text-[12px] font-bold">
+          Explore Pricing
+        </Link>
+      </div>
+      <section className="mt-[20px] px-[30px] pb-[12px] flex flex-col justify-center items-center gap-[10px] w-full">
+        <p className="text-[15px] font-bold text-mainColor">
+          Answers to your questions
+        </p>
+        <p className="text-center text-[13px] font-bold">
+          Find your solutions here
+        </p>
+      </section>
     </main>
   );
 };
