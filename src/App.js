@@ -6,7 +6,7 @@ import devUrls from "./utils/devUrls";
 import axios from "axios";
 
 import Header from "./components/Header/NewHeader";
-import Landing from "./components/Landing";
+import Landing from "./components/Landing/Landing";
 import { Book } from "./components/Book";
 import YourLibrary from "./components/YourLibrary";
 import SearchBooks from "./components/OldBrowseLibrary/SearchBooks";
