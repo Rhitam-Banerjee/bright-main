@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import devUrls from "../../utils/devUrls";
 
@@ -26,21 +26,39 @@ import bookInfo from "../../icons/bookQuestionIcon.svg";
 import userIconHero from "../../icons/createAccountIcon.svg";
 import readingListIcon from "../../icons/readingListIcon.svg";
 import deliveryIconHero from "../../icons/deliveryIconHero.svg";
-
 import bookIcon from "../../icons/bookIconOrange.svg";
-
 import videoIcon from "../../icons/videoIcon.svg";
 
 import BookScroll from "./BookScroll";
 import VideoScroll from "./VideoScroll";
 
+import { planDetails, allFaqs } from "./constants";
+
+import FAQ from "./FAQ";
+
 const Landing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const {
     isLoggedIn,
     registerDetails: { mobileNumber },
   } = useSelector((store) => store.main);
+
+  const [faqs, setFaqs] = useState(allFaqs);
+  const toggleFAQ = (index) => {
+    setFaqs(
+      faqs.map((faq, i) => {
+        if (i === index) {
+          faq.open = !faq.open;
+        } else {
+          faq.open = false;
+        }
+
+        return faq;
+      })
+    );
+  };
 
   const goToRegister = async (event) => {
     event.preventDefault();
@@ -82,7 +100,7 @@ const Landing = () => {
 
   return (
     <main className="mt-[50px]">
-      <section className="relative h-[380px] w-full">
+      <section className="relative h-[570px] w-full">
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full"
           style={{
@@ -185,33 +203,51 @@ const Landing = () => {
         </p>
       </section>
       <VideoScroll />
-      <section className="mt-[16px] pb-[12px] flex flex-col justify-center items-center gap-[10px] w-full">
-        <span className="text-[13px] font-semibold">
+      <section className="mt-[16px] py-[30px] flex flex-col justify-center items-center gap-[10px] w-full bg-mainColor">
+        <span className="text-[13px] text-white font-semibold">
           Select a plan based on the books you reed per week
         </span>
         <div className="flex flex-row justify-center items-center gap-[8px]">
-          <div className="flex flex-col justify-center items-center w-[100px] h-[100px] text-white bg-mainColor rounded-[5px]">
-            <span className="text-[30px] font-extrabold">1</span>
-            <span className="text-[10px] font-semibold">Book/Week</span>
-            <span className="text-[13px] font-bold pt-[14px] ">Rs.2,399</span>
-          </div>
-          <div className="flex flex-col justify-center items-center w-[100px] h-[100px] bg-[#D5E1FF] rounded-[5px]">
-            <span className="text-[30px] font-extrabold">2</span>
-            <span className="text-[10px] font-semibold">Books/Week</span>
-            <span className="text-[13px] font-bold pt-[14px] ">Rs.3,499</span>
-          </div>
-          <div className="flex flex-col justify-center items-center w-[100px] h-[100px] bg-[#D5E1FF] rounded-[5px]">
-            <span className="text-[30px] font-extrabold">4</span>
-            <span className="text-[10px] font-semibold">Books/Week</span>
-            <span className="text-[13px] font-bold pt-[14px] ">Rs.4,599</span>
-          </div>
+          {planDetails.map((plan, index) => {
+            return (
+              <div
+                key={index}
+                className={`relative flex flex-col justify-center items-center w-[100px] h-[100px] rounded-[5px] ${
+                  plan.popular
+                    ? "text-mainColor bg-white"
+                    : "text-unHighlightDark bg-mainColorLight"
+                }`}
+              >
+                <span className="text-[30px] font-extrabold">{plan.books}</span>
+                <span className="text-[10px] font-semibold">Book/Week</span>
+                <span className="text-[13px] font-bold pt-[14px] ">
+                  Rs.{plan.price}
+                </span>
+                <div
+                  className={`${
+                    plan.popular ? "" : "hidden"
+                  } absolute -top-[2px] -right-[5px] w-[45px] h-[15px] flex items-center justify-center bg-secondary text-white rounded-[2px] rounded-br-none text-[8px] z-[2]`}
+                >
+                  Popular
+                </div>
+                <div
+                  className={`${
+                    plan.popular ? "" : "hidden"
+                  } absolute top-[13px] -right-[5px] bg-[#db8726] w-[5px] h-[7px] `}
+                  style={{
+                    clipPath: "polygon(0% 0%, 100% 0%, 0% 100%)",
+                  }}
+                ></div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-[30px] h-[36px] w-[108px] mx-auto bg-secondary rounded-[5px] flex items-center justify-center">
+          <Link to={"/register"} className="text-white text-[12px] font-bold">
+            Explore Pricing
+          </Link>
         </div>
       </section>
-      <div className="mt-[30px] h-[36px] w-[108px] mx-auto bg-secondary rounded-[5px] flex items-center justify-center">
-        <Link to={"/register"} className="text-white text-[12px] font-bold">
-          Explore Pricing
-        </Link>
-      </div>
       <section className="mt-[20px] px-[30px] pb-[12px] flex flex-col justify-center items-center gap-[10px] w-full">
         <p className="text-[15px] font-bold text-mainColor">
           Answers to your questions
@@ -219,6 +255,11 @@ const Landing = () => {
         <p className="text-center text-[13px] font-bold">
           Find your solutions here
         </p>
+      </section>
+      <section className="w-full mx-auto">
+        {faqs.map((faq, index) => (
+          <FAQ faq={faq} index={index} key={index} toggleFAQ={toggleFAQ} />
+        ))}
       </section>
     </main>
   );
