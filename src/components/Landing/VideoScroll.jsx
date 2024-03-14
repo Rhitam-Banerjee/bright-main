@@ -1,10 +1,11 @@
 import React from "react";
 
 import "swiper/css";
-import "swiper/css/autoplay";
+// import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+// import { Navigation, Autoplay } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import clockIcon from "../../icons/clock.svg";
@@ -17,13 +18,14 @@ const VideoScroll = () => {
     <div className="pb-[30px] bg-mainColor">
       <Swiper
         slidesPerView={"auto"}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: true,
-        }}
+        // autoplay={{
+        //   delay: 3000,
+        //   disableOnInteraction: true,
+        // }}
         loop={true}
         navigation={true}
-        modules={[Navigation, Autoplay]}
+        modules={[Navigation]}
+        // modules={[Navigation, Autoplay]}
         className="mySwiper pb-[14px] no-slider-arrow"
       >
         {bookVideos.map((book, index) => {
