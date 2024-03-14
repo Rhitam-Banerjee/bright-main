@@ -18,7 +18,7 @@ import {
   setRegisterDetails,
 } from "../../reducers/mainSlice";
 
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowRightLong, FaStar } from "react-icons/fa6";
 
 import heroBg from "../../icons/Hero.png";
 
@@ -35,6 +35,7 @@ import VideoScroll from "./VideoScroll";
 import { planDetails, allFaqs } from "./constants";
 
 import FAQ from "./FAQ";
+import GoogleReviews from "./GoogleReviews";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -203,6 +204,29 @@ const Landing = () => {
         </p>
       </section>
       <VideoScroll />
+      <section className="flex flex-col pb-[12px] justify-center items-center bg-mainColor">
+        <p className="text-[15px] font-bold text-white">
+          Hear from our community
+        </p>
+        <p className="text-center text-[13px] font-bold text-white">
+          Discover what users love about BrightR.club!
+        </p>
+        <div className="flex flex-row justify-center items-center gap-[10px]">
+          <div className="flex flex-row justify-start items-center gap-[1px] mb-[20px] translate-y-[8.5px]">
+            {Array(parseInt(5))
+              .fill(true)
+              .map((_, i) => {
+                return (
+                  <FaStar key={i} className="text-secondary text-[10px]" />
+                );
+              })}
+          </div>
+          <span className="text-[13px] text-white font-semibold">
+            4.9 rating of 204 Reviews
+          </span>
+        </div>
+      </section>
+      <GoogleReviews />
       <section className="mt-[16px] py-[30px] flex flex-col justify-center items-center gap-[10px] w-full bg-mainColor">
         <span className="text-[13px] text-white font-semibold">
           Select a plan based on the books you reed per week

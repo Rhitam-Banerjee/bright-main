@@ -295,3 +295,287 @@ export const allFaqs = [
     open: false,
   },
 ];
+export const reviewsAll = [
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a/ACg8ocKDK6rM4N1bbdtKJd3IGLEcIMJvb1gcg_3TvKrK_4Fh=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Arti Sharma",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/103385452219305258809/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/103385452219305258809/reviews/",
+    review_date_time: "2024-03-12T18:42:36+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_103385452219305258809",
+    review_text:
+      "My son is an avid reader n this club have met all the possibilities according to his age and bright club give ample amount of books in a very reasonable price, my suggestion to go through this club  n explore your journey of reading 📚 …",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "103385452219305258809",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjVlEd1qmJwXAZcYBh5hGeimFcW1qva_O5XxvX-FPPzWqMA=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Neha Aneja",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/118168525927830066610/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/118168525927830066610/reviews/",
+    review_date_time: "2024-02-14T18:42:38+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_118168525927830066610",
+    review_text:
+      "My experience with BrightR Library has been great. They are so good with the follow ups on deliveries. All the books are in very good condition & the whole process of ordering books is very smooth",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "118168525927830066610",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjW1spYmBkWx6LEpwV2273vcf9xsCd6LlmDp1O0EK8rY4xZW=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Puja Das",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/110491198853921302099/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/110491198853921302099/reviews/",
+    review_date_time: "2024-02-14T18:42:38+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_110491198853921302099",
+    review_text:
+      "I absolutely love BrightR Club as a concept and a service. I loved to buy a lot of books for my daughters but not all were loved by the kids. Ever since I came across BrightR, we have a steady flow of new books every week and I buy only the ones which my kids love. Moreover, the wide collection along with ratings on the books as well as categorisation as per age are all quite useful features.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "110491198853921302099",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a/ACg8ocJ5GuVINA7t9Rwlp6dgY-G-8ib8tqniB5ifFniVGgDE=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Pratibha Gupta",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/100482968769382729225/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/100482968769382729225/reviews/",
+    review_date_time: "2024-02-14T18:42:38+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_100482968769382729225",
+    review_text:
+      "BrightR.Club has been a big relief to me, now I dont have to buy books and then worry about where to keep them. Brightr club has wide range of books which comes at affordable price. Home delivery service makes it super convenient for book exchange.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "100482968769382729225",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjW27OSIGeRO-yUrTlK7dJ-lUVMAKJxpkmhhip6zRxJ6HkVf=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Nisha Chauhan",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/114657040248572644963/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/114657040248572644963/reviews/",
+    review_date_time: "2024-02-14T18:42:38+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_114657040248572644963",
+    review_text:
+      "We have had a wonderful experience with bright club. We have been getting books for past 6 months and I must say they have the best collection.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "114657040248572644963",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a/ACg8ocLHR1rkoGhiZhPSkPtMnVa3oRI8ZWZ28wttQvn0BiZaxg=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Yuvragi Rathore",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/101219830919715920187/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/101219830919715920187/reviews/",
+    review_date_time: "2024-02-14T18:42:37+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_101219830919715920187",
+    review_text:
+      "It’s one of the most wonderful and enriching experience to get new books every week without having to store them. My girls are voracious readers and here at BrightR.Club there are so many options for all girls age 7, 11 and 12. The children look forward to receiving new books every week . They get variety and get to choose. I would highly recommend it to every parent who want their children to start reading. The idea of getting a new book is a great motivator for children to start reading.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "101219830919715920187",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjUFZ3qqSJpv8oBa_zDjem-M6AP_B1hlCGeacX2xdKB23OAY=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: [
+      "https://lh5.googleusercontent.com/p/AF1QipOkY4dd50ySf6tniy3V7Q4uaiD-qrfk923nDLQE=p",
+    ],
+    reviewer_name: "Pallavi Jain",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/101130168670050262589/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/101130168670050262589/reviews/",
+    review_date_time: "2024-02-14T18:42:37+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_101130168670050262589",
+    review_text:
+      "Both my kids enjoys Bright.R books. It has become a bed time ritual to read 20-30 mins daily. Thank you Bright R Club. Very timely delivery and good selection of books",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "101130168670050262589",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a/ACg8ocIM-S5Me42joSrzNg1o1GXdvQ2LHnWr68eUghR-o_FW=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Dee",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/106140893880163874295/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/106140893880163874295/reviews/",
+    review_date_time: "2024-02-14T18:42:37+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_106140893880163874295",
+    review_text:
+      "A good experience of library for kids with convenient service of pick n drop of books.They offer a variety of books to choose from. My kid is enjoying reading the books and I am enjoying a hassle free selection of books & door step delivery of books. Happy with Bukrent and look forward to expansion of their library bringing books of diverse languages.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "106140893880163874295",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a/ACg8ocLLUHUyGz0jWlhw1LLxEmCizP6NyJafdbkkY2Seeuhe=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Aditi Mittal",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/106362402981648419795/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/106362402981648419795/reviews/",
+    review_date_time: "2024-02-14T18:42:37+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_106362402981648419795",
+    review_text:
+      "I absolutely love this service , I have access to most of the international authors and honestly the amount of books I could introduce to my child with the help of bright club I wouldn’t have otherwise ! I strongly recommend bright club to all the parents !",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "106362402981648419795",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjX0IQQL1eCMHCoRej3wAyMainHEPiyFlr3ifkFVgeqxnyX1=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "pooja pannu",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/103229108433343440139/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/103229108433343440139/reviews/",
+    review_date_time: "2024-02-14T18:42:37+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_103229108433343440139",
+    review_text:
+      "BrightR.Club has a wide collection of books and all the books are in very nice condition. Plus their home delivery makes the ordering experience all the more convenient ! Highly recommended 👍 …",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "103229108433343440139",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a/ACg8ocKm7UdLpZ2zYRSK7rdHSKX0bULEgl7UYYH7e0YMxKl8=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "pranati goswami",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/117070971742294509837/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/117070971742294509837/reviews/",
+    review_date_time: "2024-02-14T18:42:37+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_117070971742294509837",
+    review_text:
+      "My child loves the collection of books. The concept is not just environment friendly it is  also a great way to develop reading skills. The service has been great have been a customer for almost a year now",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "117070971742294509837",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjVFdf7THKys_YRabc0N61c9rMKtmyASih5Y6aWDzofkSQ=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Sampada Aggarwal",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/104089960889641114368/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/104089960889641114368/reviews/",
+    review_date_time: "2024-02-14T18:42:36+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_104089960889641114368",
+    review_text:
+      "Fantastic online library! Easy navigation, vast collection, speedy delivery, and quality books. My go-to place for satisfying all the reading cravings!",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "104089960889641114368",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjUUNj5dJ0iRXlzWD98DM1mrzSb5x031c403D5PR6FxC0w=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "Kanika Kathuria",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/110770178007775306943/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/110770178007775306943/reviews/",
+    review_date_time: "2024-02-14T18:42:36+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_110770178007775306943",
+    review_text:
+      "It is such a smooth process right from the registering till the doorstep delivery of books. Deliveries are always on time, they have plethora of books which my kid is thoroughly enjoying. We are extremely delighted by BrightR Club. It is an amaing initiation to indulge kids in world of books.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "110770178007775306943",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+  {
+    created_time: "",
+    reviewer_photo_link:
+      "https://lh3.googleusercontent.com/a-/ALV-UjXFBFMGABVT3XgrOS-ZcdMBWmuKCgIGOEQZPaod98vnRLU=w36-h36-p-rp-mo-br100",
+    reviewer_images_link: "",
+    reviewer_name: "jyoti maurya",
+    reviewer_link:
+      "https://www.google.com/maps/contrib/100486739488762447773/place/ChIJcTa5oxf9DDkRW29iAVGpD3I",
+    reviewer_contributor_link:
+      "https://www.google.com/maps/contrib/100486739488762447773/reviews/",
+    review_date_time: "2024-01-14T18:42:38+08:00",
+    rating: "5",
+    id: "ChIJcTa5oxf9DDkRW29iAVGpD3I_100486739488762447773",
+    review_text:
+      "I took this subscription for my 2 months old baby and it’s worthy enough. Now he is 5 months old and continuing his journey of reading.\nHe shows his interest by watching colorful pictures letters and sounds in book.",
+    review_text_raw: "",
+    owners_response: "",
+    contributor_id: "100486739488762447773",
+    google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+];
