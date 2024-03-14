@@ -28,6 +28,7 @@ import readingListIcon from "../../icons/readingListIcon.svg";
 import deliveryIconHero from "../../icons/deliveryIconHero.svg";
 import bookIcon from "../../icons/bookIconOrange.svg";
 import videoIcon from "../../icons/videoIcon.svg";
+import communityIcon from "../../icons/communityIcon.svg";
 
 import BookScroll from "./BookScroll";
 import VideoScroll from "./VideoScroll";
@@ -36,6 +37,7 @@ import { planDetails, allFaqs } from "./constants";
 
 import FAQ from "./FAQ";
 import GoogleReviews from "./GoogleReviews";
+import InstagramEmbed from "./InstagramEmbed";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -204,7 +206,8 @@ const Landing = () => {
         </p>
       </section>
       <VideoScroll />
-      <section className="flex flex-col pb-[12px] justify-center items-center bg-mainColor">
+
+      <section className="mt-[20px] py-[30px] flex flex-col pb-[12px] justify-center items-center bg-mainColor">
         <p className="text-[15px] font-bold text-white">
           Hear from our community
         </p>
@@ -227,6 +230,16 @@ const Landing = () => {
         </div>
       </section>
       <GoogleReviews />
+      <section className="mt-[30px] px-[30px] py-[12px] flex flex-col justify-center items-center gap-[10px] w-full">
+        <div>
+          <img className="w-[24px]" src={communityIcon} alt="BookIcon" />
+        </div>
+        <p className="text-[15px] font-bold">Tales from our community</p>
+        <p className="text-center text-[13px] font-bold ">
+          Embark on journeys shared by fellow members
+        </p>
+      </section>
+      <InstagramEmbed />
       <section className="mt-[16px] py-[30px] flex flex-col justify-center items-center gap-[10px] w-full bg-mainColor">
         <span className="text-[13px] text-white font-semibold">
           Select a plan based on the books you reed per week

@@ -1,0 +1,4 @@
+.rsme-embed > iframe {
+  height: 350px !important;
+  min-width: 0 !important;
+}
