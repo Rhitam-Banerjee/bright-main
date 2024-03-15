@@ -83,7 +83,7 @@ const BrowseLibrary = () => {
     };
   }, []);
   return (
-    <main className="mt-[120px]">
+    <main className="mt-[140px]">
       <AmazonTopBooks />
       <AmazonSeries />
       <YoutubeTopBooks />
