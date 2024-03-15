@@ -403,19 +403,18 @@ const Book = () => {
                 <span className="text-[10px] font-bold">view more</span>
               </div>
             )}
-            {book.publisher && book.language && book.pages && (
-              <div className="mt-auto !p-0 mb-4 flex flex-row items-center">
-                <div className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold">
-                  {book.publisher}
+            <div className="mt-auto !p-0 mb-4 flex flex-row items-center">
+              {book.genre && (
+                <div className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold border-r-[0.5px] border-secondary mr-2 pr-2">
+                  {book.genre}
                 </div>
-                <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                  {book.language}
+              )}
+              {book.book_type && (
+                <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold">
+                  {book.book_type}
                 </div>
-                <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                  {book.pages} Pages
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           {/* {book.book_type && <div>{book.book_type}</div>} */}
         </div>
