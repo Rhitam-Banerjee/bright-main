@@ -7,7 +7,7 @@ export const searchBarPages = [
 ];
 export const searchBarLinks = [
   {
-    title: "Browse Series",
+    title: "Browse Library",
     link: "/browse-library",
   },
 ];

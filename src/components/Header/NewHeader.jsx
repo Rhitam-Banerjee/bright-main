@@ -24,6 +24,8 @@ import urls from "../../utils/urls";
 import axios from "axios";
 
 import logo from "../../icons/BrightR.svg";
+import badgeIcon from "../../icons/badgeIcon.svg";
+import bookIcon from "../../icons/bookIconOutline.svg";
 // import { FaRegUser } from "react-icons/fa";
 
 const maxAge = 13;
@@ -63,8 +65,8 @@ const NewHeader = () => {
   return (
     <nav
       className={`fixed ${
-        renderAge ? "h-[110px]" : "h-[50px]"
-      } top-0 left-0 w-full mb-16 px-8 py-2 flex flex-col justify-start items-center bg-mainColor z-[999]`}
+        renderAge ? "h-[130px]" : "h-max"
+      } top-0 left-0 w-full mb-16 px-8 py-[14px] flex flex-col justify-start items-center bg-mainColor z-[999]`}
     >
       <div className="w-full flex flex-row justify-between items-center">
         <Link to={"/"} className="flex items-center justify-center mr-4">
@@ -95,15 +97,18 @@ const NewHeader = () => {
               } text-white`}
               to={"/your-library"}
             >
-              Your Library
+              <img className="w-[18px] h-[18px]" src={bookIcon} alt="" />
             </Link>
           )}
           {!isLoggedIn && (
             <Link
-              className={`bg-white font-bold rounded-md px-4 py-1`}
+              className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-md px-[7px] py-[10px] gap-[7px]`}
               to={"/login"}
             >
-              Sign In
+              <span>
+                <img src={badgeIcon} alt="Badge" />
+              </span>
+              <span>Subscribe</span>
             </Link>
           )}
           {isLoggedIn && (

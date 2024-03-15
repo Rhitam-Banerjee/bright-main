@@ -313,7 +313,7 @@ const Landing = () => {
           Find your solutions here
         </p>
       </section>
-      <section className="w-full mx-auto">
+      <section className="w-[95%] max-w-[760px] mx-auto">
         {faqs.map((faq, index) => (
           <FAQ faq={faq} index={index} key={index} toggleFAQ={toggleFAQ} />
         ))}

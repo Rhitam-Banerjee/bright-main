@@ -98,9 +98,13 @@ export const allFaqs = [
         <h1 className="text-[10px] font-bold">Step 3:</h1>
         <p className="text-[10px] text-unHighlightDark pl-2">
           Magical Delivery Our speedy delivery heroes bring books to your
-          doorstep within 24 hours. Step 4: Weekly Book Exchange Get reminders
-          from our WhatsApp team for a weekly book exchange. Build the best
-          reading habit with new adventures each week!
+          doorstep within 24 hours.
+        </p>
+        <h1 className="text-[10px] font-bold">Step 4:</h1>
+        <p className="text-[10px] text-unHighlightDark pl-2">
+          Weekly Book Exchange Get reminders from our WhatsApp team for a weekly
+          book exchange. Build the best reading habit with new adventures each
+          week!
         </p>
       </html>
     ),
