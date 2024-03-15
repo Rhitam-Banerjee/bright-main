@@ -38,6 +38,7 @@ import { planDetails, allFaqs } from "./constants";
 import FAQ from "./FAQ";
 import GoogleReviews from "./GoogleReviews";
 import InstagramEmbed from "./InstagramEmbed";
+import Segregation from "./Segregation";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -206,7 +207,26 @@ const Landing = () => {
         </p>
       </section>
       <VideoScroll />
-
+      <section className="mt-[30px] pb-[30px] pt-0 flex flex-col justify-center items-center">
+        <div>
+          <img className="w-[24px]" src={bookIcon} alt="BookIcon" />
+        </div>
+        <p className="text-[15px] font-bold text-mainColor">
+          Smart Segregation
+        </p>
+        <p className="text-[13px] font-bold">
+          Find your next read from our diverse collection!
+        </p>
+      </section>
+      <Segregation />
+      <div className="mt-[30px] h-[36px] w-[108px] mx-auto bg-secondary rounded-[5px] flex items-center justify-center">
+        <Link
+          to={"/browse-library"}
+          className="text-white text-[12px] font-bold"
+        >
+          Browse Library
+        </Link>
+      </div>
       <section className="mt-[20px] py-[30px] flex flex-col pb-[12px] justify-center items-center bg-mainColor">
         <p className="text-[15px] font-bold text-white">
           Hear from our community

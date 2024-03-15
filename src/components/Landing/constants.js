@@ -1,3 +1,6 @@
+import authorImg from "../../icons/authorImg.svg";
+import seriesImage from "../../icons/seriesImgSelected.svg";
+import genreImage from "../../icons/genreImg.svg";
 export const planDetails = [
   {
     books: 1,
@@ -77,7 +80,6 @@ export const bookVideos = [
     views: "570.5k",
   },
 ];
-
 export const allFaqs = [
   {
     ques: "How does BrightR.club work ?",
@@ -102,7 +104,7 @@ export const allFaqs = [
         </p>
       </html>
     ),
-    open: true,
+    open: false,
   },
   {
     ques: "What is the process for borrowing books ?",
@@ -577,5 +579,70 @@ export const reviewsAll = [
     owners_response: "",
     contributor_id: "100486739488762447773",
     google_place_id: "ChIJcTa5oxf9DDkRW29iAVGpD3I",
+  },
+];
+export const segregation = [
+  {
+    name: "Beginner Books",
+    books: "29",
+    reviews: "128.7k",
+    icon: seriesImage,
+    circleVisible: true,
+  },
+  {
+    name: "Julia Donaldson",
+    books: "42",
+    reviews: "211.2k",
+    icon: authorImg,
+    circleVisible: false,
+  },
+  {
+    name: "Epic Fantasy",
+    books: "89",
+    reviews: "142.9k",
+    icon: genreImage,
+    circleVisible: true,
+  },
+  {
+    name: "Elephant & Piggie",
+    books: "24",
+    reviews: "56k",
+    icon: seriesImage,
+    circleVisible: true,
+  },
+  {
+    name: "Eric Carle",
+    books: "28",
+    reviews: "174.3k",
+    icon: authorImg,
+    circleVisible: false,
+  },
+  {
+    name: "Early Learning",
+    books: "79",
+    reviews: "75.4k",
+    icon: genreImage,
+    circleVisible: true,
+  },
+  {
+    name: "Byonton on Board",
+    books: "15",
+    reviews: "46.2k",
+    icon: seriesImage,
+    circleVisible: true,
+  },
+  {
+    name: "Dav Pilkey",
+    books: "37",
+    reviews: "348.9k",
+    icon: authorImg,
+    circleVisible: false,
+  },
+  {
+    name: "Diary Fiction",
+    books: "57",
+    reviews: "528.8k",
+    icon: genreImage,
+    circleVisible: true,
   },
 ];
