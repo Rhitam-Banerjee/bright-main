@@ -177,7 +177,11 @@ const Book = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-
+      // response.authors.forEach((author, index) => {
+      //   if (author.author_books.length === 0) {
+      //     delete response.author[index];
+      //   }
+      // });
       const title = response.authors.map((author) => {
         return author.name;
       });
@@ -403,20 +407,43 @@ const Book = () => {
                 <span className="text-[10px] font-bold">view more</span>
               </div>
             )}
-            <div className="mt-auto !p-0 mb-4 flex flex-row items-center">
+            <div className="flex flex-row justify-start items-center gap-[33px]">
               {book.genre && (
-                <div className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold border-r-[0.5px] border-secondary mr-2 pr-2">
-                  {book.genre}
+                <div className="flex flex-row items-start text-[12px]">
+                  <img
+                    className="h-[16px] w-[16px]"
+                    src={genreIcon}
+                    alt="GenreIcon"
+                  />
+                  <span className="px-[7px]">Genre</span>
+                  <span className="text-mainColor font-bold">{book.genre}</span>
+                  {/* <Link to={`/genre/${book.genre_id}`}>{book.genre}</Link> */}
                 </div>
               )}
               {book.book_type && (
-                <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold">
-                  {book.book_type}
+                <div className="flex flex-row items-start text-[12px]">
+                  <img
+                    className="h-[16px] w-[16px]"
+                    src={bookIconDetails}
+                    alt="BookIcon"
+                  />
+                  <span className="px-[7px]">Book Type</span>
+                  <span className="text-mainColor font-bold">
+                    {book.book_type}
+                  </span>
                 </div>
               )}
+              {/* <div className="flex flex-row items-start text-[12px]">
+                <img
+                  className="h-[16px] w-[16px]"
+                  src={pageIcon}
+                  alt="PageIcon"
+                />
+                <span className="px-[7px]">Pages</span>
+                <span>{book.pages}</span>
+              </div> */}
             </div>
           </div>
-          {/* {book.book_type && <div>{book.book_type}</div>} */}
         </div>
       </div>
       <div className="flex md:hidden flex-row justify-between items-center w-full h-[370px] max-w-[1021px] m-auto gap-[50px]">
@@ -643,7 +670,7 @@ const Book = () => {
           </div>
         </div>
       )}
-      {seriesBook?.length !== 0 && (
+      {seriesBook?.length > 0 && (
         <div className="mt-[50px]">
           <div className="text-[16px] md:text-[12px] font-bold">
             <span className="text-unHighlightDark">Books in This series</span>
@@ -657,10 +684,10 @@ const Book = () => {
           <Swiper
             slidesPerView={"auto"}
             grabCursor={true}
-            spaceBetween={30}
+            freeMode={true}
             navigation={true}
-            modules={[Navigation, Virtual]}
-            className="mySwiper py-4 no-slider-arrow"
+            modules={[FreeMode, Navigation, Virtual]}
+            className="mySwiper py-2 no-slider-arrow"
           >
             {seriesBook?.map((book, index) => {
               return (
@@ -783,49 +810,52 @@ const Book = () => {
           </div>
         </div>
       )}
-      {authorsBook && Object.keys(authorsBook)?.length !== 0 && (
-        <div className="mt-[50px]">
-          <div className="text-[16px] font-bold">
-            <span className="text-black">More Books by Authors</span>
-          </div>
-          {authors.map((author, index) => {
-            return (
-              authorsBook[`${author}`]?.length > 0 && (
-                <div key={index} className="mt-4">
-                  <div className="text-[16px] font-bold">
-                    <span className="text-[12px] font-bold">{author}</span>
-                    <span className="text-[12px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                      {authorsBook[`${author}`]?.length} Books
-                    </span>
-                    <span className="text-[12px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                      {authorReview[`${author}`]} Reviews
-                    </span>
+      {authorsBook !== null &&
+        Object.keys(authorsBook)?.length > 0 &&
+        authorsBook[0]?.length !== 0 && (
+          <div className="mt-[50px]">
+            {authors.map((author, index) => {
+              return (
+                authorsBook[`${author}`]?.length > 0 && (
+                  <div key={index} className="mt-4">
+                    <div className="flex flex-row text-[16px] font-bold">
+                      <span className="flex flex-row items-center text-[12px] font-bold">
+                        {/* Author
+                        <span className="mx-[5px] flex w-[10px] h-[2px] bg-mainColor rounded-[1px]"></span> */}
+                        {author}
+                      </span>
+                      <span className="text-[12px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                        {authorsBook[`${author}`]?.length} Books
+                      </span>
+                      <span className="text-[12px] text-unHighlightLight font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
+                        {authorReview[`${author}`]} Reviews
+                      </span>
+                    </div>
+                    <Swiper
+                      slidesPerView={"auto"}
+                      grabCursor={true}
+                      freeMode={true}
+                      navigation={true}
+                      modules={[FreeMode, Navigation, Virtual]}
+                      className="mySwiper py-2 no-slider-arrow"
+                    >
+                      {authorsBook[`${author}`]?.map((book, index) => {
+                        return (
+                          <SwiperSlide
+                            key={index}
+                            className="flex flex-col !w-[150px]"
+                          >
+                            <NewBook book={book} />
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
                   </div>
-                  <Swiper
-                    slidesPerView={"auto"}
-                    grabCursor={true}
-                    spaceBetween={30}
-                    navigation={true}
-                    modules={[Navigation, Virtual]}
-                    className="mySwiper py-2 no-slider-arrow"
-                  >
-                    {authorsBook[`${author}`]?.map((book, index) => {
-                      return (
-                        <SwiperSlide
-                          key={index}
-                          className="flex flex-col !w-[150px]"
-                        >
-                          <NewBook book={book} />
-                        </SwiperSlide>
-                      );
-                    })}
-                  </Swiper>
-                </div>
-              )
-            );
-          })}
-        </div>
-      )}
+                )
+              );
+            })}
+          </div>
+        )}
     </section>
   );
 };
