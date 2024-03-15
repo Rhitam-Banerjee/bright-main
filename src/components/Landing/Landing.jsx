@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import devUrls from "../../utils/devUrls";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import "swiper/css";
@@ -43,7 +43,7 @@ import Segregation from "./Segregation";
 const Landing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const location = useLocation();
   const {
     isLoggedIn,
     registerDetails: { mobileNumber },
@@ -102,6 +102,16 @@ const Landing = () => {
     dispatch(flushRegisterDetails());
   }, []);
 
+  useEffect(() => {
+    if (location.hash) {
+      let elem = document.getElementById(location.hash.slice(1));
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  }, []);
   return (
     <main className="mt-[50px]">
       <section className="relative h-[570px] w-full">
@@ -313,7 +323,7 @@ const Landing = () => {
           Find your solutions here
         </p>
       </section>
-      <section className="w-[95%] max-w-[760px] mx-auto">
+      <section id="faqs" className="w-[95%] max-w-[760px] mx-auto">
         {faqs.map((faq, index) => (
           <FAQ faq={faq} index={index} key={index} toggleFAQ={toggleFAQ} />
         ))}

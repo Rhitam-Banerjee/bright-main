@@ -26,6 +26,10 @@ import { login, resetAlert } from "./reducers/mainSlice";
 import { IoIosCloseCircle } from "react-icons/io";
 import "./index.css";
 import Series from "./components/Series/Series";
+import Disclaimer from "./components/Content/Disclaimer";
+import PrivacyPolicy from "./components/Content/PrivacyPolicy";
+import RefundPolicy from "./components/Content/RefundPolicy";
+import TermsAndConditions from "./components/Content/TermsAndConditions";
 
 const LazyBrowseLibraryRenew = lazy(() =>
   import("./components/BrowseLibrary/BrowseLibrary")
@@ -112,19 +116,10 @@ const App = () => {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/about-us" element={<Content type="About Us" />} />
         <Route path="/contact-us" element={<Content type="Contact Us" />} />
-        <Route path="/disclaimer" element={<Content type="Disclaimer" />} />
-        <Route
-          path="/privacy-policy"
-          element={<Content type="Privacy Policy" />}
-        />
-        <Route
-          path="/refund-policy"
-          element={<Content type="Refund Policy" />}
-        />
-        <Route
-          path="/terms-and-conditions"
-          element={<Content type="Terms and Conditions" />}
-        />
+        <Route path="/disclaimer" element={<Disclaimer />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/" element={<Landing />} />
       </Routes>
       <Footer />

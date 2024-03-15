@@ -10,7 +10,7 @@ import "swiper/css/free-mode";
 import "swiper/css/virtual";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import { searchBarLinks } from "./constants";
+import { mobileNavLinks, searchBarLinks } from "./constants";
 import {
   load,
   stopLoad,
@@ -26,7 +26,9 @@ import axios from "axios";
 import logo from "../../icons/BrightR.svg";
 import badgeIcon from "../../icons/badgeIcon.svg";
 import bookIcon from "../../icons/bookIconOutline.svg";
+
 // import { FaRegUser } from "react-icons/fa";
+import { IoClose, IoMenu } from "react-icons/io5";
 
 const maxAge = 13;
 
@@ -35,10 +37,12 @@ const NewHeader = () => {
   const { pathname } = location;
   const dispatch = useDispatch();
   const [renderAge, setRenderAge] = useState(false);
+  const [hamburgerClicked, setHamburgerClicked] = useState(false);
   const {
     main: { isLoggedIn },
     book: { age, searchQuery },
   } = useSelector((state) => state);
+
   const logOut = async () => {
     try {
       await axios.post(devUrls.logout, {}, { withCredentials: true });
@@ -47,6 +51,20 @@ const NewHeader = () => {
       console.log(err);
     }
   };
+
+  const handleHamburgerclick = () => {
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("hamburger")) {
+        if (!hamburgerClicked) {
+          setHamburgerClicked(true);
+          return true;
+        }
+      }
+      setHamburgerClicked(false);
+      return true;
+    });
+  };
+
   useEffect(() => {
     if (pathname === "/browse-library") {
       setRenderAge(true);
@@ -62,23 +80,84 @@ const NewHeader = () => {
       dispatch(setAge(2));
     }
   }, []);
+
+  useEffect(() => {
+    if (location.hash) {
+      let elem = document.getElementById(location.hash.slice(1));
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  }, []);
+
   return (
     <nav
       className={`fixed ${
         renderAge ? "h-[130px]" : "h-max"
-      } top-0 left-0 w-full mb-16 px-8 py-[14px] flex flex-col justify-start items-center bg-mainColor z-[999]`}
+      } top-0 left-0 w-full mb-16 px-[13px] py-[14px] flex flex-col justify-start items-center bg-mainColor z-[99]`}
     >
       <div className="w-full flex flex-row justify-between items-center">
-        <Link to={"/"} className="flex items-center justify-center mr-4">
-          <img className="w-[100px]" src={logo} alt="Logo" />
+        <div
+          className="hamburger relative hidden md:block mr-[20px] text-[30px] text-white transition-all z-[999] cursor-pointer"
+          onClick={() => handleHamburgerclick()}
+        >
+          {hamburgerClicked ? (
+            <IoClose className="text-secondary pointer-events-none" />
+          ) : (
+            <IoMenu className="pointer-events-none" />
+          )}
+        </div>
+        <div
+          className={` ${
+            hamburgerClicked
+              ? "[clip-path:circle(100%)]"
+              : "[clip-path:circle(0%_at_30px_33px)]"
+          } hidden md:flex flex-col fixed top-0 left-0 h-max w-[50%] bg-white z-[990] gap-[20px] transition-all duration-300 pt-[70px] shadow-2xl`}
+        >
+          {mobileNavLinks.map((items, index) => {
+            return (
+              <Link key={index} to={`${items.link}`} className="w-full">
+                <div className="w-full pb-[20px] text-mainColor border-b-[1px] border-secondary">
+                  <span className="p-[20px] text-[14px] font-bold">
+                    {items.title}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+          {isLoggedIn ? (
+            <div
+              className="p-[20px] pt-0 text-[14px] font-bold w-full text-mainColor"
+              onClick={logOut}
+            >
+              Log-Out
+            </div>
+          ) : (
+            <Link
+              to={"/login"}
+              className="p-[20px] pt-0 text-[14px] font-bold w-full text-mainColor"
+            >
+              Sign In
+            </Link>
+          )}
+        </div>
+        <Link
+          to={"/"}
+          className="flex md:flex-1 mr-auto items-center justify-center"
+        >
+          <img className="w-[100px] mr-auto" src={logo} alt="Logo" />
         </Link>
-        <div className="flex-1 max-w-[500px] ml-auto flex flex-row items-center justify-between">
+        <div
+          className={`flex flex-1 max-w-[500px] ml-auto flex-row items-center justify-between`}
+        >
           {searchBarLinks.map((link, index) => {
             return (
               <Link
                 key={index}
                 to={link.link}
-                className={`${
+                className={`md:hidden ${
                   pathname === link.link
                     ? "font-bold opacity-100"
                     : "opacity-75"
@@ -102,7 +181,7 @@ const NewHeader = () => {
           )}
           {!isLoggedIn && (
             <Link
-              className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-md px-[7px] py-[10px] gap-[7px]`}
+              className={`ml-auto flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-md px-[7px] py-[10px] gap-[7px]`}
               to={"/login"}
             >
               <span>
@@ -110,11 +189,6 @@ const NewHeader = () => {
               </span>
               <span>Subscribe</span>
             </Link>
-          )}
-          {isLoggedIn && (
-            <div className="text-white ml-4 cursor-pointer" onClick={logOut}>
-              Log Out
-            </div>
           )}
         </div>
       </div>
