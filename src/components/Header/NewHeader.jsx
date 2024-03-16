@@ -34,8 +34,9 @@ const maxAge = 13;
 
 const NewHeader = () => {
   const location = useLocation();
-  const { pathname } = location;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { pathname } = location;
   const [renderAge, setRenderAge] = useState(false);
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
   const {
@@ -117,7 +118,7 @@ const NewHeader = () => {
           } hidden md:flex flex-col fixed top-0 left-0 h-max w-[50%] bg-white z-[990] gap-[20px] transition-all duration-300 pt-[70px] shadow-2xl`}
         >
           {mobileNavLinks.map((items, index) => {
-            return (
+            return items.title !== "FAQs" ? (
               <Link key={index} to={`${items.link}`} className="w-full">
                 <div className="w-full pb-[20px] text-mainColor border-b-[1px] border-secondary">
                   <span className="p-[20px] text-[14px] font-bold">
@@ -125,6 +126,25 @@ const NewHeader = () => {
                   </span>
                 </div>
               </Link>
+            ) : (
+              <div
+                className="w-full cursor-pointer"
+                onClick={() => {
+                  if (pathname === "/") {
+                    document
+                      .getElementById("faqs")
+                      .scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    navigate("/#faqs");
+                  }
+                }}
+              >
+                <div className="w-full pb-[20px] text-mainColor border-b-[1px] border-secondary">
+                  <span className="p-[20px] text-[14px] font-bold">
+                    {items.title}
+                  </span>
+                </div>
+              </div>
             );
           })}
           {isLoggedIn ? (

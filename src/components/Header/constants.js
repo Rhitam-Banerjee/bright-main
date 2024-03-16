@@ -22,6 +22,6 @@ export const mobileNavLinks = [
   },
   {
     title: "Contact",
-    link: "/",
+    link: "/contact-us",
   },
 ];
