@@ -14,7 +14,7 @@ import Author from "./components/Author/Author";
 import Footer from "./components/Footer";
 
 import Login from "./components/Login";
-import Register from "./components/Register";
+import { Register } from "./components/NewRegister";
 import ForgotPassword from "./components/Login/ForgotPassword";
 
 import Content from "./components/Content";

@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { plans } from "../components/Register/PlanDetails/constants";
+// import { plans } from "../components/Register/PlanDetails/constants";
+import { planDetails } from "../components/NewRegister/constants";
 
 const initialState = {
   isLoggedIn: false,
   alert: { text: "", color: "" },
   user: {},
-  plan: plans[2],
+  plan: planDetails[1],
+  // plan: plans[2],
   registrationStep: 0,
   childPreferences: [],
   ageDropDown: false,
@@ -15,7 +17,8 @@ const initialState = {
     mobileNumber: "",
     contactNumber: "",
     otp: "",
-    selectedPlan: plans[1],
+    selectedPlan: planDetails[1],
+    // selectedPlan: plans[1],
     selectedSubscription: 6,
     address: "",
     pinCode: "",
