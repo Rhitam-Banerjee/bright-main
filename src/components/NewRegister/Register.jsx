@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,15 +19,40 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 import { features, planDetails, stepsComplete } from "./constants";
 
-import { setAlert, setRegisterDetails } from "../../reducers/mainSlice";
+import {
+  nextStepRegister,
+  setAlert,
+  setRegisterDetails,
+} from "../../reducers/mainSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     isLoggedIn,
-    registerDetails: { mobileNumber, selectedPlan },
+    registerDetails: {
+      mobileNumber,
+      selectedPlan,
+      paymentDone,
+      registrationDone,
+      paymentStatus,
+      selectedSubscription,
+    },
   } = useSelector((store) => store.main);
+
+  const selectPlan = async () => {
+    try {
+      await axios.post(
+        devUrls.choosePlan,
+        { mobile_number: mobileNumber, plan: selectedPlan.planId },
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const goToRegister = async (event) => {
     event.preventDefault();
@@ -64,6 +89,58 @@ const Register = () => {
     }
   };
 
+  const initiatePayment = async () => {
+    await selectPlan();
+    try {
+      const response = await axios.post(
+        devUrls.generateOrderId,
+        { mobile_number: mobileNumber, card: selectedSubscription },
+        { withCredentials: true }
+      );
+      const instance = window.Razorpay({
+        ...response.data,
+        handler: async (data) => {
+          await axios.post(
+            devUrls.verifyOrder,
+            {
+              payment_id: data.razorpay_payment_id,
+              order_id: data.razorpay_order_id,
+              signature: data.razorpay_signature,
+            },
+            { withCredentials: true }
+          );
+          await axios.post(
+            devUrls.orderSuccessful,
+            {
+              order_id: data.razorpay_order_id,
+              payment_id: data.razorpay_payment_id,
+              mobile_number: mobileNumber,
+            },
+            { withCredentials: true }
+          );
+          dispatch(
+            setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" })
+          );
+          dispatch(nextStepRegister());
+        },
+      });
+      instance.on("payment.failed", (response) => {
+        dispatch(
+          setAlert({ text: "Payment failed! Try again later", color: "F75549" })
+        );
+      });
+      instance.open();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <main className="mt-[90px] flex flex-col justify-center items-center gap-[30px]">
       <section className="flex flex-col justify-center items-center max-w-[230px] text-center">
@@ -77,7 +154,7 @@ const Register = () => {
           Illuminate your reading journey
         </p>
       </section>
-      <section className="flex flex-row justify-between w-full max-w-[320px] mx-auto gap-[25px]">
+      <section className="mt-[20px] flex flex-row justify-between w-full max-w-[320px] mx-auto gap-[25px]">
         {features.map((feature, index) => {
           return (
             <div
@@ -98,7 +175,25 @@ const Register = () => {
           );
         })}
       </section>
-      <section className="relative w-full max-w-[353px] flex flex-row justify-between items-center">
+      <form className="mt-[20px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor rounded-[5px] p-[4px]">
+        <input
+          className="flex-1 bg-transparent"
+          type="number"
+          placeholder="Enter mobile number to explore"
+          onChange={({ target: { value } }) =>
+            dispatch(setRegisterDetails({ mobileNumber: value }))
+          }
+        />
+        <button
+          className="grid place-items-center bg-[#3b72ff85] h-[28px] w-[52px] rounded-[5px]"
+          type="submit"
+          value="Get Started"
+          onClick={goToRegister}
+        >
+          <FaArrowRightLong className="w-[22px] text-white" />
+        </button>
+      </form>
+      <section className="mt-[20px] relative w-full max-w-[353px] flex flex-row justify-between items-center">
         {stepsComplete.map((step, index) => {
           return (
             <div
@@ -131,25 +226,7 @@ const Register = () => {
         </div>
       </section>
       <section className="w-full max-w-[360px] flex flex-col justify-center items-center gap-[10px]">
-        <form className="flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor rounded-[5px] p-[4px]">
-          <input
-            className="flex-1 bg-transparent"
-            type="number"
-            placeholder="Enter mobile number to explore"
-            onChange={({ target: { value } }) =>
-              dispatch(setRegisterDetails({ mobileNumber: value }))
-            }
-          />
-          <button
-            className="grid place-items-center bg-[#3b72ff85] h-[28px] w-[52px] rounded-[5px]"
-            type="submit"
-            value="Get Started"
-            onClick={goToRegister}
-          >
-            <FaArrowRightLong className="w-[22px] text-white" />
-          </button>
-        </form>
-        <span className="mt-[33px] text-[13px] font-bold">
+        <span className="mt-[10px] text-[13px] font-bold">
           Select a plan based on the books you reed per week
         </span>
         <div className="flex flex-row justify-center items-center gap-[8px]">
@@ -157,7 +234,7 @@ const Register = () => {
             return (
               <div
                 key={index}
-                className={`mt-[10px] relative flex flex-col justify-center items-center w-[100px] h-[100px] rounded-[5px] ${
+                className={`mt-[10px] relative flex flex-col justify-center items-center w-[100px] h-[100px] rounded-[5px] cursor-pointer ${
                   plan.planId === selectedPlan.planId
                     ? "text-white bg-mainColor"
                     : "text-unHighlightDark bg-mainColorLight"
@@ -250,18 +327,21 @@ const Register = () => {
             </>
           )}
         </div>
-      </section>
-      <section className="w-full max-w-[360px] mx-auto">
-        <span className="flex flex-row justify-center items-center text-[10px] text-unHighlightDark">
-          <img className="w-[13px] mr-[5px]" src={infoIcon} alt="Info" /> The
-          price mentioned above is for a 6 month plan paid in full
-        </span>
-        <span className="mt-[20px] flex flex-row justify-center items-center max-w-[260px] w-full mx-auto px-[65px] py-[11px] text-white bg-mainColor rounded-[5px] cursor-pointer">
-          Make Payment <FaArrowRightLong className="ml-[10px]" />
-        </span>
-        <span className="mt-[20px] flex flex-row justify-center items-center text-[10px] text-unHighlightDark">
-          Powered by <img src={razorpay} alt="RazorPay" />
-        </span>
+        <div className="w-full max-w-[360px] mx-auto">
+          <span className="flex flex-row justify-center items-center text-[10px] text-unHighlightDark">
+            <img className="w-[13px] mr-[5px]" src={infoIcon} alt="Info" /> The
+            price mentioned above is for a 6 month plan paid in full
+          </span>
+          <span
+            className="mt-[20px] flex flex-row justify-center items-center max-w-[260px] w-full mx-auto px-[65px] py-[11px] text-white text-[12px] bg-mainColor rounded-[5px] cursor-pointer"
+            // onClick={initiatePayment}
+          >
+            Make Payment <FaArrowRightLong className="ml-[10px]" />
+          </span>
+          <span className="mt-[20px] flex flex-row justify-center items-center text-[10px] text-unHighlightDark">
+            Powered by <img src={razorpay} alt="RazorPay" />
+          </span>
+        </div>
       </section>
     </main>
   );
