@@ -66,10 +66,15 @@ const Landing = () => {
 
   const goToRegister = async (event) => {
     event.preventDefault();
-    if (mobileNumber.length !== 10)
-      return dispatch(
-        setAlert({ text: "Invalid mobile number", color: "#F75549" })
+    if (!mobileNumber) {
+      dispatch(setAlert({ text: "Enter a Mobile Number", color: "#ff0000" }));
+      return;
+    } else if (mobileNumber.length !== 10) {
+      dispatch(
+        setAlert({ text: "Not a Valid Mobile Number", color: "#ff0000" })
       );
+      return;
+    }
     try {
       const response = await axios.post(
         devUrls.submitMobileNumber,
@@ -98,9 +103,6 @@ const Landing = () => {
       console.log(err);
     }
   };
-  useEffect(() => {
-    dispatch(flushRegisterDetails());
-  }, []);
 
   useEffect(() => {
     if (location.hash) {

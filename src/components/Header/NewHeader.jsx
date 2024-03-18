@@ -191,7 +191,7 @@ const NewHeader = () => {
           {!isLoggedIn && (
             <Link
               className={`ml-auto flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-md px-[7px] py-[10px] gap-[7px]`}
-              to={"/login"}
+              to={"/register"}
             >
               <span>
                 <img src={badgeIcon} alt="Badge" />

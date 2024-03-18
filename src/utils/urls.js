@@ -75,11 +75,9 @@ const urls = {
   getBookDetails: `${newDomainUpdated}/get-book-details`,
   getBookAuthors: `${newDomainUpdated}/get-book-authors`,
   getBookSeries: `${newDomainUpdated}/get-book-series`,
-  getBooksByAuthorAll: `${newDomainUpdated}/get-all-books-author`,
 
   getAllSeries: `${newDomainUpdated}/get-all-sets`,
   getGenreAll: `${newDomainUpdated}/get-genres`,
-  getSeriesNameBook: `${newDomainUpdated}/get-set-from-book`,
 
   getPopularBooks: `${newDomainUpdated}/get-newyork-best-seller`,
   getBookYTVideos: `${newDomainUpdated}/get-videos-from-book`,
