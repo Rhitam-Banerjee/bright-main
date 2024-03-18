@@ -13,7 +13,7 @@ module.exports = {
         unHighlightLight: "#ABABAB",
         unHighlightDark: "#7a7a7a",
         successGreen: "#14D027",
-        errorRed: "",
+        errorRed: "#ff0000",
       },
       boxShadow: {
         customShadowLight: "0 4px 10px rgba(0,0,0,0.4)",

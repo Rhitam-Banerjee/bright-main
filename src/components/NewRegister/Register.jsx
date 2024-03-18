@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import devUrls from "../../utils/devUrls";
 
+import { getFormattedDate, getApiAgeGroup, getAge } from "../../utils";
+
 import badgeIcon from "../../icons/badgeIconOrange.svg";
 import tickIconWhite from "../../icons/tickIconWhite.svg";
 import bookIcon from "../../icons/bookIconBlue.svg";
@@ -21,6 +23,10 @@ import childIcon from "../../icons/childIcon.svg";
 import nameDetailsIcon from "../../icons/nameDetailsIcon.svg";
 import calenderBlueIcon from "../../icons/calenderIconBlue.svg";
 
+import celebrateIcon from "../../icons/celebrateIcon.svg";
+import mobileIcon from "../../icons/mobileIcon.svg";
+import privacyIconFill from "../../icons/privacyIconFill.svg";
+
 import razorpay from "../../icons/razorpayIcon.svg";
 
 import { FaArrowRightLong, FaPlus } from "react-icons/fa6";
@@ -28,6 +34,9 @@ import { FaArrowRightLong, FaPlus } from "react-icons/fa6";
 import { features, planDetails, stepsComplete } from "./constants";
 
 import {
+  addChildToRegisterDetails,
+  flushRegisterDetails,
+  login,
   nextStepRegister,
   setAlert,
   setRegisterDetails,
@@ -42,6 +51,15 @@ const Register = () => {
     registrationStep,
     registerDetails: {
       mobileNumber,
+
+      name,
+      address,
+      pinCode,
+      childName,
+      childDateOfBirth,
+      children,
+      contactNumber,
+
       selectedPlan,
       paymentDone,
       registrationDone,
@@ -50,9 +68,20 @@ const Register = () => {
     },
   } = useSelector((store) => store.main);
 
-  // const [isMobileNumberValid, setIsMobileNumberValid] = useState(false);
   const [mobileNumberWhatsApp, setMobileNumberWhatsApp] = useState(true);
-  const [addChildSecond, setAddChildSecond] = useState(false);
+  const [password, setPassword] = useState("12345");
+  const [isEditing, setIsEditing] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const addChild = async () => {
+    if (!childName && !childDateOfBirth && !children.length)
+      return dispatch(
+        setAlert({ text: "Add atleast 1 child", color: "#F75549" })
+      );
+    if (childName && childDateOfBirth) {
+      dispatch(addChildToRegisterDetails());
+    }
+  };
 
   const selectPlan = async () => {
     try {
@@ -75,76 +104,177 @@ const Register = () => {
     }
   };
 
+  const checkNumber = async () => {
+    try {
+      const response = await axios.post(
+        devUrls.submitMobileNumber,
+        { mobile_number: mobileNumber },
+        {
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      if (data.user) {
+        dispatch(
+          setRegisterDetails({
+            paymentStatus: data.user.payment_status,
+          })
+        );
+      }
+      if (data.redirect.includes("login")) navigate("/login");
+    } catch (err) {
+      dispatch(
+        setAlert({ text: err.response?.data?.message, color: "#F75549" })
+      );
+      console.log(err);
+    }
+  };
+
   const initiatePayment = async () => {
     if (!mobileNumber) {
       dispatch(setAlert({ text: "Enter a Mobile Number", color: "#ff0000" }));
+      window.scrollTo(0, 0);
       return;
     } else if (mobileNumber.length !== 10) {
       dispatch(
         setAlert({ text: "Not a Valid Mobile Number", color: "#ff0000" })
       );
+      window.scrollTo(0, 0);
       return;
     }
-    window.scrollTo(0, 0);
-    dispatch(nextStepRegister());
-    stepsComplete.forEach((step, index) => {
-      if (index !== 2) {
-        step.isComplete = true;
-        step.isOnStep = false;
-      }
-    });
-    stepsComplete[2].isOnStep = true;
+    await checkNumber();
+    await selectPlan();
+    // window.scrollTo(0, 0);
+    // dispatch(nextStepRegister());
+    // stepsComplete.forEach((step, index) => {
+    //   if (index !== 2) {
+    //     step.isComplete = true;
+    //     step.isOnStep = false;
+    //   }
+    // });
+    // dispatch(setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" }));
+    // stepsComplete[2].isOnStep = true;
 
-    // try {
-    //   const response = await axios.post(
-    //     devUrls.generateOrderId,
-    //     { mobile_number: mobileNumber, card: selectedSubscription },
-    //     { withCredentials: true }
-    //   );
-    //   const instance = window.Razorpay({
-    //     ...response.data,
-    //     handler: async (data) => {
-    //       await axios.post(
-    //         devUrls.verifyOrder,
-    //         {
-    //           payment_id: data.razorpay_payment_id,
-    //           order_id: data.razorpay_order_id,
-    //           signature: data.razorpay_signature,
-    //         },
-    //         { withCredentials: true }
-    //       );
-    //       await axios.post(
-    //         devUrls.orderSuccessful,
-    //         {
-    //           order_id: data.razorpay_order_id,
-    //           payment_id: data.razorpay_payment_id,
-    //           mobile_number: mobileNumber,
-    //         },
-    //         { withCredentials: true }
-    //       );
-    //       dispatch(
-    //         setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" })
-    //       );
-    //       window.scrollTo(0, 0);
-    //       dispatch(nextStepRegister());
-    //       stepsComplete.forEach((step, index) => {
-    //         if (index !== 2) {
-    //           step.isComplete = true;
-    //           step.isOnStep = false;
-    //         }
-    //       });
-    //       stepsComplete[2].isOnStep = true;
-    //     },
-    //   });
-    //   instance.on("payment.failed", (response) => {
-    //     dispatch(
-    //       setAlert({ text: "Payment failed! Try again later", color: "F75549" })
-    //     );
-    //   });
-    //   instance.open();
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const response = await axios.post(
+        devUrls.generateOrderId,
+        { mobile_number: mobileNumber, card: selectedSubscription },
+        { withCredentials: true }
+      );
+      const instance = window.Razorpay({
+        ...response.data,
+        handler: async (data) => {
+          await axios.post(
+            devUrls.verifyOrder,
+            {
+              payment_id: data.razorpay_payment_id,
+              order_id: data.razorpay_order_id,
+              signature: data.razorpay_signature,
+            },
+            { withCredentials: true }
+          );
+          await axios.post(
+            devUrls.orderSuccessful,
+            {
+              order_id: data.razorpay_order_id,
+              payment_id: data.razorpay_payment_id,
+              mobile_number: mobileNumber,
+            },
+            { withCredentials: true }
+          );
+          dispatch(
+            setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" })
+          );
+          window.scrollTo(0, 0);
+          dispatch(nextStepRegister());
+          stepsComplete.forEach((step, index) => {
+            if (index !== 2) {
+              step.isComplete = true;
+              step.isOnStep = false;
+            }
+          });
+          stepsComplete[2].isOnStep = true;
+        },
+      });
+      instance.on("payment.failed", (response) => {
+        dispatch(
+          setAlert({ text: "Payment failed! Try again later", color: "F75549" })
+        );
+      });
+      instance.open();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name.trim().length)
+      return dispatch(setAlert({ text: "Enter your name", color: "#ff0000" }));
+    if (!children.length)
+      return dispatch(
+        setAlert({ text: "Add atleast 1 child", color: "#ff0000" })
+      );
+    if (
+      !address.trim() ||
+      !pinCode.trim() ||
+      (mobileNumberWhatsApp && !contactNumber.trim())
+    )
+      return dispatch(
+        setAlert({ text: "Enter all the details", color: "#ff0000" })
+      );
+    await addChild(e);
+    try {
+      await axios.post(
+        devUrls.signup,
+        {
+          name: name,
+          mobile_number: mobileNumber,
+          address,
+          pin_code: pinCode,
+          contact_number: !mobileNumberWhatsApp ? mobileNumber : contactNumber,
+          children: children.map((child) => {
+            return {
+              name: child.name,
+              dob: getFormattedDate(child.dateOfBirth),
+              age_group: getApiAgeGroup(child.dateOfBirth),
+            };
+          }),
+        },
+        { withCredentials: true }
+      );
+      dispatch(setRegisterDetails({ registrationDone: true }));
+    } catch (err) {
+      dispatch(setAlert({ text: err, color: "#ff0000" }));
+      console.log(err);
+    }
+  };
+
+  const finishRegistration = async () => {
+    try {
+      if (!password || password.length < 5)
+        dispatch(
+          setAlert({
+            text: "Password should be atleast of 5 characters",
+            color: "#F75549",
+          })
+        );
+      await axios.post(
+        devUrls.changePassword,
+        { password },
+        { withCredentials: true }
+      );
+      const response = await axios.get(devUrls.getUser, {
+        withCredentials: true,
+      });
+      dispatch(login({ user: response.data.user }));
+      navigate("/browse-library");
+      dispatch(flushRegisterDetails());
+      dispatch(setAlert({ text: "Registered successfully", color: "#14D027" }));
+    } catch (err) {
+      dispatch(setAlert({ text: err.response.data.message, color: "#ff0000" }));
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -155,18 +285,24 @@ const Register = () => {
 
   return (
     <main className="mt-[90px] flex flex-col justify-center items-center gap-[30px]">
-      <section className="flex flex-col justify-center items-center max-w-[230px] text-center">
-        <div className="mb-[20px]">
-          <img className="w-[27px] h-[27px]" src={badgeIcon} alt="BadgeIcon" />
-        </div>
-        <p className="text-[15px] font-bold text-mainColor">
-          Become a Brightr Club member
-        </p>
-        <p className="text-[13px] font-semibold">
-          Illuminate your reading journey
-        </p>
-      </section>
-      {registrationStep === 0 && (
+      {!registrationDone && (
+        <section className="flex flex-col justify-center items-center max-w-[230px] text-center">
+          <div className="mb-[20px]">
+            <img
+              className="w-[27px] h-[27px]"
+              src={badgeIcon}
+              alt="BadgeIcon"
+            />
+          </div>
+          <p className="text-[15px] font-bold text-mainColor">
+            Become a Brightr Club member
+          </p>
+          <p className="text-[13px] font-semibold">
+            Illuminate your reading journey
+          </p>
+        </section>
+      )}
+      {registrationStep === 0 && !paymentDone && !registrationDone && (
         <>
           <section className="mt-[20px] flex flex-row justify-between w-full max-w-[320px] mx-auto gap-[25px]">
             {features.map((feature, index) => {
@@ -209,44 +345,52 @@ const Register = () => {
           </form>
         </>
       )}
-      <section className="mt-[30px] relative w-full max-w-[353px] flex flex-row justify-between items-center">
-        {stepsComplete.map((step, index) => {
-          return (
-            <div
-              key={index}
-              className="flex flex-col justify-between items-center gap-[11px]"
-            >
-              <span
-                className={` ${
-                  step.isOnStep || step.isComplete
-                    ? "bg-mainColor"
-                    : "bg-unHighlight"
-                } w-[16px] h-[16px] rounded-full grid place-items-center`}
+      {!registrationDone && (
+        <section className="mt-[30px] relative w-full max-w-[353px] flex flex-row justify-between items-center">
+          {stepsComplete.map((step, index) => {
+            return (
+              <div
+                key={index}
+                className="flex flex-col justify-between items-center gap-[11px]"
               >
-                {step.isComplete && (
-                  <img className="w-[8px]" src={tickIconWhite} alt="Complete" />
-                )}
-              </span>
-              <span className="text-[13px] text-mainColor font-semibold">
-                {step.title}
-              </span>
-            </div>
-          );
-        })}
-        <div className="absolute top-[6px] left-1/2 -translate-x-1/2 h-[3px] w-[297px] bg-unHighlight -z-[1]">
-          {stepsComplete[0].isComplete && !stepsComplete[2].isOnStep && (
-            <div
-              className={`${
-                stepsComplete[1].isComplete ? "w-3/4 from-50%" : "w-1/2 from-0%"
-              } bg-gradient-to-r from-mainColor to-unHighlight h-full`}
-            ></div>
-          )}
-          {stepsComplete[2].isOnStep && (
-            <div className="w-full h-full bg-mainColor"></div>
-          )}
-        </div>
-      </section>
-      {registrationStep === 0 && (
+                <span
+                  className={` ${
+                    step.isOnStep || step.isComplete
+                      ? "bg-mainColor"
+                      : "bg-unHighlight"
+                  } w-[16px] h-[16px] rounded-full grid place-items-center`}
+                >
+                  {step.isComplete && (
+                    <img
+                      className="w-[8px]"
+                      src={tickIconWhite}
+                      alt="Complete"
+                    />
+                  )}
+                </span>
+                <span className="text-[13px] text-mainColor font-semibold">
+                  {step.title}
+                </span>
+              </div>
+            );
+          })}
+          <div className="absolute top-[6px] left-1/2 -translate-x-1/2 h-[3px] w-[297px] bg-unHighlight -z-[1]">
+            {stepsComplete[0].isComplete && !stepsComplete[2].isOnStep && (
+              <div
+                className={`${
+                  stepsComplete[1].isComplete
+                    ? "w-3/4 from-50%"
+                    : "w-1/2 from-0%"
+                } bg-gradient-to-r from-mainColor to-unHighlight h-full`}
+              ></div>
+            )}
+            {stepsComplete[2].isOnStep && (
+              <div className="w-full h-full bg-mainColor"></div>
+            )}
+          </div>
+        </section>
+      )}
+      {registrationStep === 0 && !paymentDone && !registrationDone && (
         <section className="w-full max-w-[360px] flex flex-col justify-center items-center gap-[10px]">
           <span className="mt-[10px] text-[13px] font-bold">
             Select a plan based on the books you reed per week
@@ -369,8 +513,8 @@ const Register = () => {
           </div>
         </section>
       )}
-      {registrationStep === 1 && (
-        <form className="w-full max-w-[330px]">
+      {registrationStep === 1 && paymentDone && !registrationDone && (
+        <form onSubmit={handleSubmit} className="w-full max-w-[330px]">
           <div className="w-full p-[20px] flex flex-col justify-start items-start gap-[15px] bg-lightGrey rounded-[5px]">
             <div className="flex flex-col items-start justify-start gap-[5px]">
               <label htmlFor="whatsappNumberFormInput">
@@ -386,11 +530,15 @@ const Register = () => {
               <input
                 className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
                 id="whatsappNumberFormInput"
-                value={mobileNumber}
+                value={mobileNumberWhatsApp ? mobileNumber : contactNumber}
+                readOnly={mobileNumberWhatsApp}
                 style={{
                   border: "1px solid #3B72FF",
                 }}
                 type="number"
+                onChange={({ target: { value } }) =>
+                  dispatch(setRegisterDetails({ contactNumber: value }))
+                }
               />
             </div>
             {!mobileNumberWhatsApp && (
@@ -408,10 +556,9 @@ const Register = () => {
                 <input
                   className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
                   id="mobileNumberFormInput"
-                  style={{
-                    border: "1px solid #3B72FF",
-                  }}
-                  type="mobileNumberFormInput"
+                  value={mobileNumber}
+                  readOnly={true}
+                  type="number"
                 />
               </div>
             )}
@@ -452,6 +599,10 @@ const Register = () => {
                   border: "1px solid #3B72FF",
                 }}
                 type="text"
+                value={name}
+                onChange={({ target: { value } }) =>
+                  dispatch(setRegisterDetails({ name: value }))
+                }
               />
             </div>
             <div className="flex flex-col items-start justify-start gap-[5px]">
@@ -471,6 +622,10 @@ const Register = () => {
                   border: "1px solid #3B72FF",
                 }}
                 id="addressFormInput"
+                value={address}
+                onChange={({ target: { value } }) =>
+                  dispatch(setRegisterDetails({ address: value }))
+                }
               />
             </div>
             <div className="flex flex-col items-start justify-start gap-[5px]">
@@ -491,8 +646,63 @@ const Register = () => {
                   border: "1px solid #3B72FF",
                 }}
                 type="number"
+                value={pinCode}
+                onChange={({ target: { value } }) =>
+                  dispatch(
+                    setRegisterDetails({ pinCode: value.trim().slice(0, 6) })
+                  )
+                }
               />
             </div>
+            {children.map((child, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col items-start justify-start gap-[5px]"
+                >
+                  <span className="mb-[5px] flex flex-row items-center text-[13px] text-mainColor font-semibold">
+                    <img
+                      src={childIcon}
+                      className="w-[13px] mr-[5px]"
+                      alt="WhatsApp"
+                    />
+                    Child
+                  </span>
+                  <div className="w-full flex flex-col items-start justify-start gap-[10px] bg-unHighlight p-[10px] rounded-[5px]">
+                    <div className="flex flex-col items-start justify-start gap-[5px]">
+                      <label htmlFor="childNameFormInput">
+                        <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
+                          <img
+                            src={nameDetailsIcon}
+                            className="w-[13px] mr-[5px]"
+                            alt="WhatsApp"
+                          />
+                          Name
+                        </span>
+                      </label>
+                      <div className="w-[263px] h-[29px] text-[13px] p-[5px] rounded-[5px]">
+                        {child.name}
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-start justify-start gap-[5px]">
+                      <label htmlFor="childDOBFormInputFirst">
+                        <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
+                          <img
+                            src={calenderBlueIcon}
+                            className="w-[13px] mr-[5px]"
+                            alt="WhatsApp"
+                          />
+                          Date
+                        </span>
+                      </label>
+                      <div className="w-[263px] h-[29px] text-[13px] p-[5px] rounded-[5px]">
+                        {getAge(child.dateOfBirth)} years
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
             <div className="flex flex-col items-start justify-start gap-[5px]">
               <span className="mb-[5px] flex flex-row items-center text-[13px] text-mainColor font-semibold">
                 <img
@@ -500,7 +710,7 @@ const Register = () => {
                   className="w-[13px] mr-[5px]"
                   alt="WhatsApp"
                 />
-                {addChildSecond ? "Elder" : "Child"}
+                Child
               </span>
               <div className="w-full flex flex-col items-start justify-start gap-[10px] bg-unHighlight p-[10px] rounded-[5px]">
                 <div className="flex flex-col items-start justify-start gap-[5px]">
@@ -521,6 +731,10 @@ const Register = () => {
                       border: "1px solid #3B72FF",
                     }}
                     type="text"
+                    value={childName}
+                    onChange={({ target: { value } }) =>
+                      dispatch(setRegisterDetails({ childName: value }))
+                    }
                   />
                 </div>
                 <div className="flex flex-col items-start justify-start gap-[5px]">
@@ -541,74 +755,26 @@ const Register = () => {
                       border: "1px solid #3B72FF",
                     }}
                     type="date"
+                    value={childDateOfBirth}
+                    onChange={({ target: { value } }) =>
+                      dispatch(
+                        setRegisterDetails({
+                          childDateOfBirth: value.toString(),
+                        })
+                      )
+                    }
                   />
                 </div>
               </div>
             </div>
-            {addChildSecond && (
-              <div className="flex flex-col items-start justify-start gap-[5px]">
-                <span className="mb-[5px] flex flex-row items-center text-[13px] text-mainColor font-semibold">
-                  <img
-                    src={childIcon}
-                    className="w-[13px] mr-[5px]"
-                    alt="WhatsApp"
-                  />
-                  Younger
-                </span>
-                <div className="w-full flex flex-col items-start justify-start gap-[10px] bg-unHighlight p-[10px] rounded-[5px]">
-                  <div className="flex flex-col items-start justify-start gap-[5px]">
-                    <label htmlFor="childNameFormInputSecond">
-                      <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
-                        <img
-                          src={nameDetailsIcon}
-                          className="w-[13px] mr-[5px]"
-                          alt="WhatsApp"
-                        />
-                        Name
-                      </span>
-                    </label>
-                    <input
-                      className="w-[263px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-                      id="childNameFormInputSecond"
-                      style={{
-                        border: "1px solid #3B72FF",
-                      }}
-                      type="text"
-                    />
-                  </div>
-                  <div className="flex flex-col items-start justify-start gap-[5px]">
-                    <label htmlFor="childDOBFormInputSecond">
-                      <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
-                        <img
-                          src={calenderBlueIcon}
-                          className="w-[13px] mr-[5px]"
-                          alt="WhatsApp"
-                        />
-                        Date
-                      </span>
-                    </label>
-                    <input
-                      className="w-[263px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-                      id="childDOBFormInputSecond"
-                      style={{
-                        border: "1px solid #3B72FF",
-                      }}
-                      type="date"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-            {!addChildSecond && (
-              <div
-                className="w-full flex flex-row justify-start items-center gap-[10px] text-[10px] text-mainColor font-semibold cursor-pointer"
-                onClick={() => {
-                  setAddChildSecond(true);
-                }}
-              >
-                <FaPlus /> Add Child
-              </div>
-            )}
+            <div
+              className="w-full flex flex-row justify-start items-center gap-[10px] text-[10px] text-mainColor font-semibold cursor-pointer"
+              onClick={() => {
+                addChild();
+              }}
+            >
+              <FaPlus /> Add Child
+            </div>
           </div>
           <button
             type="submit"
@@ -618,6 +784,76 @@ const Register = () => {
             <span>Save</span>
           </button>
         </form>
+      )}
+      {registrationDone && (
+        <section className="flex flex-col justify-center items-center w-full max-w-[330px] text-center">
+          <div className="flex flex-col justify-center items-center gap-[10px]">
+            <img
+              className="w-[27px] h-[27px]"
+              src={celebrateIcon}
+              alt="Complete"
+            />
+            <p className="text-[15px] font-bold text-mainColor">
+              Congratulations
+            </p>
+            <p className="text-[13px] font-semibold">
+              Your details have been saved
+            </p>
+            <small>Thank you for subscribing</small>
+          </div>
+          <form className="mt-[40px] flex flex-col justify-start items-start bg-lightGrey rounded-[5px] p-[20px] gap-[15px]">
+            <div className="flex flex-col items-start justify-start gap-[5px]">
+              <label htmlFor="whatsappNumberFormInput">
+                <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
+                  <img
+                    src={mobileIcon}
+                    className="w-[13px] mr-[5px]"
+                    alt="WhatsApp"
+                  />
+                  Mobile Number
+                </span>
+              </label>
+              <input
+                className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
+                id="whatsappNumberFormInput"
+                value={mobileNumber}
+                readOnly={true}
+                style={{
+                  border: "1px solid #3B72FF",
+                }}
+                type="number"
+              />
+            </div>
+            <div className="flex flex-col items-start justify-start gap-[5px]">
+              <label htmlFor="whatsappNumberFormInput">
+                <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
+                  <img
+                    src={privacyIconFill}
+                    className="w-[13px] mr-[5px]"
+                    alt="Password"
+                  />
+                  Password
+                </span>
+              </label>
+              <input
+                className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
+                id="whatsappNumberFormInput"
+                value={password}
+                style={{
+                  border: "1px solid #3B72FF",
+                }}
+                type={showPassword ? "text" : "password"}
+              />
+            </div>
+            <button
+              type="submit"
+              className="mt-[20px] flex flex-row justify-center items-center gap-[10px] max-w-[110px] w-full mx-auto p-[10px] text-white text-[12px] bg-secondary rounded-[5px] cursor-pointer"
+              onClick={finishRegistration}
+            >
+              <span>Browse Library</span>
+            </button>
+          </form>
+        </section>
       )}
     </main>
   );
