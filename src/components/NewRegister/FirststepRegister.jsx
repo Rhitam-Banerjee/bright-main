@@ -91,67 +91,68 @@ const FirststepRegister = () => {
     await checkNumber();
     await selectPlan();
 
-    window.scrollTo(0, 0);
-    stepsComplete.forEach((step, index) => {
-      if (index !== 2) {
-        step.isComplete = true;
-        step.isOnStep = false;
-      }
-    });
-    stepsComplete[2].isOnStep = true;
-    dispatch(setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" }));
-    dispatch(nextStepRegister());
+    // window.scrollTo(0, 0);
+    // stepsComplete.forEach((step, index) => {
+    //   if (index !== 2) {
+    //     step.isComplete = true;
+    //     step.isOnStep = false;
+    //   }
+    // });
+    // stepsComplete[2].isOnStep = true;
+    // dispatch(setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" }));
+    // dispatch(nextStepRegister());
 
-    // try {
-    //   const response = await axios.post(
-    //     devUrls.generateOrderId,
-    //     { mobile_number: mobileNumber, card: selectedSubscription },
-    //     { withCredentials: true }
-    //   );
-    //   const instance = window.Razorpay({
-    //     ...response.data,
-    //     handler: async (data) => {
-    //       await axios.post(
-    //         devUrls.verifyOrder,
-    //         {
-    //           payment_id: data.razorpay_payment_id,
-    //           order_id: data.razorpay_order_id,
-    //           signature: data.razorpay_signature,
-    //         },
-    //         { withCredentials: true }
-    //       );
-    //       await axios.post(
-    //         devUrls.orderSuccessful,
-    //         {
-    //           order_id: data.razorpay_order_id,
-    //           payment_id: data.razorpay_payment_id,
-    //           mobile_number: mobileNumber,
-    //         },
-    //         { withCredentials: true }
-    //       );
-    //       window.scrollTo(0, 0);
-    //       dispatch(nextStepRegister());
-    //       stepsComplete.forEach((step, index) => {
-    //         if (index !== 2) {
-    //           step.isComplete = true;
-    //           step.isOnStep = false;
-    //         }
-    //       });
-    //       dispatch(
-    //         setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" })
-    //       );
-    //       stepsComplete[2].isOnStep = true;
-    //     },
-    //   });
-    //   instance.on("payment.failed", (response) => {
-    //     dispatch(
-    //       setAlert({ text: "Payment failed! Try again later", color: "F75549" })
-    //     );
-    //   });
-    //   instance.open();
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const response = await axios.post(
+        devUrls.generateOrderId,
+        { mobile_number: mobileNumber, card: selectedSubscription },
+        { withCredentials: true }
+      );
+      const instance = window.Razorpay({
+        ...response.data,
+        handler: async (data) => {
+          await axios.post(
+            devUrls.verifyOrder,
+            {
+              payment_id: data.razorpay_payment_id,
+              order_id: data.razorpay_order_id,
+              signature: data.razorpay_signature,
+            },
+            { withCredentials: true }
+          );
+          await axios.post(
+            devUrls.orderSuccessful,
+            {
+              order_id: data.razorpay_order_id,
+              payment_id: data.razorpay_payment_id,
+              mobile_number: mobileNumber,
+            },
+            { withCredentials: true }
+          );
+          window.scrollTo(0, 0);
+          dispatch(nextStepRegister());
+          stepsComplete.forEach((step, index) => {
+            if (index !== 2) {
+              step.isComplete = true;
+              step.isOnStep = false;
+            }
+          });
+          dispatch(
+            setRegisterDetails({ paymentDone: true, paymentStatus: "Paid" })
+          );
+          navigate("/register");
+          stepsComplete[2].isOnStep = true;
+        },
+      });
+      instance.on("payment.failed", (response) => {
+        dispatch(
+          setAlert({ text: "Payment failed! Try again later", color: "F75549" })
+        );
+      });
+      instance.open();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
