@@ -36,7 +36,7 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(login({ user: response.data.user }));
-      navigate("/your-library");
+      // navigate("/your-library");
     } catch (err) {
       dispatch(setAlert({ text: err.response.data.message, color: "#F75549" }));
       if (
@@ -65,7 +65,7 @@ const Login = () => {
       </div>
       <form className="mt-[20px] flex flex-col justify-start items-start bg-lightGrey rounded-[5px] p-[20px] gap-[15px]">
         <div className="flex flex-col items-start justify-start gap-[5px]">
-          <label htmlFor="whatsappNumberFormInput">
+          <label htmlFor="mobileNumber">
             <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
               <img
                 src={mobileIcon}
@@ -77,7 +77,7 @@ const Login = () => {
           </label>
           <input
             className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-            id="whatsappNumberFormInput"
+            id="mobileNumber"
             value={mobileNumber}
             style={{
               border: "1px solid #3B72FF",
@@ -89,7 +89,7 @@ const Login = () => {
           />
         </div>
         <div className="flex flex-col items-start justify-start gap-[5px]">
-          <label htmlFor="whatsappNumberFormInput">
+          <label htmlFor="password">
             <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
               <img
                 src={privacyIconFill}
@@ -101,7 +101,7 @@ const Login = () => {
           </label>
           <input
             className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-            id="whatsappNumberFormInput"
+            id="password"
             value={password}
             style={{
               border: "1px solid #3B72FF",

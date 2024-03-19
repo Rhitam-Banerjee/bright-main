@@ -183,7 +183,7 @@ const NewHeader = () => {
               className={`w-max ${
                 pathname === "/your-library"
                   ? "font-bold opacity-100"
-                  : "opacity-75"
+                  : "opacity-50"
               } text-white`}
               to={"/your-library"}
             >
@@ -200,14 +200,14 @@ const NewHeader = () => {
           ) : (
             <Link
               to={"/login"}
-              className="md:hidden w-max flex flex-row justify-center items-center bg-white text-[13px] text-secondary font-bold rounded-[5px] px-[10px] py-[5px] cursor-pointer"
+              className="md:hidden w-max flex flex-row justify-center items-center bg-white text-[13px] text-secondary font-bold rounded-[5px] p-[10px] cursor-pointer"
             >
               Sign In
             </Link>
           )}
           {!isLoggedIn && (
             <Link
-              className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] px-[7px] py-[10px] gap-[7px]`}
+              className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]`}
               to={"/register"}
             >
               <span>

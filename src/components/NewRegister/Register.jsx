@@ -30,6 +30,7 @@ import privacyIconFill from "../../icons/privacyIconFill.svg";
 import razorpay from "../../icons/razorpayIcon.svg";
 
 import { FaArrowRightLong, FaPlus } from "react-icons/fa6";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 import { features, planDetails, stepsComplete } from "./constants";
 
@@ -218,7 +219,7 @@ const Register = () => {
     if (
       !address.trim() ||
       !pinCode.trim() ||
-      (mobileNumberWhatsApp && !contactNumber.trim())
+      (!mobileNumberWhatsApp && !contactNumber.trim())
     )
       return dispatch(
         setAlert({ text: "Enter all the details", color: "#ff0000" })
@@ -232,7 +233,7 @@ const Register = () => {
           mobile_number: mobileNumber,
           address,
           pin_code: pinCode,
-          contact_number: !mobileNumberWhatsApp ? mobileNumber : contactNumber,
+          contact_number: mobileNumberWhatsApp ? mobileNumber : contactNumber,
           children: children.map((child) => {
             return {
               name: child.name,
@@ -277,11 +278,11 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    if (stepsComplete[1].isComplete && registrationStep !== 1) {
-      dispatch(nextStepRegister());
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (stepsComplete[1].isComplete && registrationStep !== 1) {
+  //     dispatch(nextStepRegister());
+  //   }
+  // }, []);
 
   return (
     <main className="mt-[90px] flex flex-col justify-center items-center gap-[30px]">
@@ -530,15 +531,12 @@ const Register = () => {
               <input
                 className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
                 id="whatsappNumberFormInput"
-                value={mobileNumberWhatsApp ? mobileNumber : contactNumber}
-                readOnly={mobileNumberWhatsApp}
+                value={mobileNumber}
+                readOnly={true}
                 style={{
                   border: "1px solid #3B72FF",
                 }}
                 type="number"
-                onChange={({ target: { value } }) =>
-                  dispatch(setRegisterDetails({ contactNumber: value }))
-                }
               />
             </div>
             {!mobileNumberWhatsApp && (
@@ -556,9 +554,12 @@ const Register = () => {
                 <input
                   className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
                   id="mobileNumberFormInput"
-                  value={mobileNumber}
-                  readOnly={true}
+                  value={mobileNumberWhatsApp ? mobileNumber : contactNumber}
+                  readOnly={mobileNumberWhatsApp}
                   type="number"
+                  onChange={({ target: { value } }) =>
+                    dispatch(setRegisterDetails({ contactNumber: value }))
+                  }
                 />
               </div>
             )}
@@ -803,7 +804,7 @@ const Register = () => {
           </div>
           <form className="mt-[40px] flex flex-col justify-start items-start bg-lightGrey rounded-[5px] p-[20px] gap-[15px]">
             <div className="flex flex-col items-start justify-start gap-[5px]">
-              <label htmlFor="whatsappNumberFormInput">
+              <label htmlFor="mobileNumber">
                 <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
                   <img
                     src={mobileIcon}
@@ -814,10 +815,11 @@ const Register = () => {
                 </span>
               </label>
               <input
-                className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-                id="whatsappNumberFormInput"
+                className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]  bg-white"
+                id="mobileNumber"
                 value={mobileNumber}
                 readOnly={true}
+                disabled={true}
                 style={{
                   border: "1px solid #3B72FF",
                 }}
@@ -825,7 +827,7 @@ const Register = () => {
               />
             </div>
             <div className="flex flex-col items-start justify-start gap-[5px]">
-              <label htmlFor="whatsappNumberFormInput">
+              <label htmlFor="password">
                 <span className="flex flex-row items-center text-[13px] text-mainColor font-semibold">
                   <img
                     src={privacyIconFill}
@@ -836,14 +838,33 @@ const Register = () => {
                 </span>
               </label>
               <input
-                className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-                id="whatsappNumberFormInput"
-                value={password}
+                className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px] bg-white"
+                id="password"
                 style={{
                   border: "1px solid #3B72FF",
                 }}
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={({ target: { value } }) => setPassword(value)}
+                disabled={!isEditing}
               />
+              {showPassword ? (
+                <AiFillEye
+                  className="text-secondary text-[15px]"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <AiFillEyeInvisible
+                  className="text-secondary text-[15px]"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+              <p
+                className="text-[13px] text-mainColor font-semibold"
+                onClick={() => setIsEditing((_) => !_)}
+              >
+                {isEditing ? "Done" : "Edit"}
+              </p>
             </div>
             <button
               type="submit"
