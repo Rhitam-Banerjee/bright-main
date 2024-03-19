@@ -104,12 +104,12 @@ const NewHeader = () => {
             hamburgerClicked
               ? "[clip-path:circle(100%)]"
               : "[clip-path:circle(0%_at_30px_33px)]"
-          } hidden md:flex flex-col fixed top-0 left-0 h-max w-[50%] bg-white z-[990] gap-[20px] transition-all duration-300 pt-[70px] shadow-2xl`}
+          } hidden p-[10px] md:flex flex-col fixed top-0 left-0 h-max w-[50%] bg-white z-[990] gap-[20px] transition-all duration-300 pt-[70px] shadow-customShadowDark rounded-br-[10px]`}
         >
           {mobileNavLinks.map((items, index) => {
             return items.title !== "FAQs" ? (
               <Link key={index} to={`${items.link}`} className="w-full">
-                <div className="w-full pb-[20px] text-mainColor border-b-[1px] border-secondary">
+                <div className="w-full pb-[20px] text-mainColor border-b-[2px] border-secondary">
                   <span className="p-[20px] text-[14px] font-bold">
                     {items.title}
                   </span>
@@ -128,7 +128,7 @@ const NewHeader = () => {
                   }
                 }}
               >
-                <div className="w-full pb-[20px] text-mainColor border-b-[1px] border-secondary">
+                <div className="w-full pb-[20px] text-mainColor border-b-[2px] border-secondary">
                   <span className="p-[20px] text-[14px] font-bold">
                     {items.title}
                   </span>
@@ -159,26 +159,28 @@ const NewHeader = () => {
           <img className="w-[100px] mr-auto" src={logo} alt="Logo" />
         </Link>
         <div
-          className={`flex flex-1 max-w-[500px] ml-auto flex-row items-center justify-between`}
+          className={`flex flex-1 w-full ml-auto flex-row items-center justify-between gap-[50px]`}
         >
-          {searchBarLinks.map((link, index) => {
-            return (
-              <Link
-                key={index}
-                to={link.link}
-                className={`md:hidden ${
-                  pathname === link.link
-                    ? "font-bold opacity-100"
-                    : "opacity-75"
-                } text-white`}
-              >
-                {link.title}
-              </Link>
-            );
-          })}
+          <div className="ml-auto w-max flex flex-row items-center justify-start gap-[100px]">
+            {searchBarLinks.map((link, index) => {
+              return (
+                <Link
+                  key={index}
+                  to={link.link}
+                  className={`md:hidden ${
+                    pathname === link.link
+                      ? "font-bold opacity-100"
+                      : "opacity-75"
+                  } text-white`}
+                >
+                  {link.title}
+                </Link>
+              );
+            })}
+          </div>
           {isLoggedIn && (
             <Link
-              className={`${
+              className={`w-max ${
                 pathname === "/your-library"
                   ? "font-bold opacity-100"
                   : "opacity-75"
@@ -188,15 +190,30 @@ const NewHeader = () => {
               <img className="w-[18px] h-[18px]" src={bookIcon} alt="" />
             </Link>
           )}
+          {isLoggedIn ? (
+            <div
+              className="md:hidden w-max flex flex-row justify-center items-center bg-white text-[13px] text-secondary font-bold rounded-[5px] px-[10px] py-[5px] cursor-pointer"
+              onClick={logOut}
+            >
+              Log-Out
+            </div>
+          ) : (
+            <Link
+              to={"/login"}
+              className="md:hidden w-max flex flex-row justify-center items-center bg-white text-[13px] text-secondary font-bold rounded-[5px] px-[10px] py-[5px] cursor-pointer"
+            >
+              Sign In
+            </Link>
+          )}
           {!isLoggedIn && (
             <Link
-              className={`ml-auto flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-md px-[7px] py-[10px] gap-[7px]`}
+              className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] px-[7px] py-[10px] gap-[7px]`}
               to={"/register"}
             >
               <span>
                 <img src={badgeIcon} alt="Badge" />
               </span>
-              <span>Subscribe</span>
+              <span className="text-[13px]">Subscribe</span>
             </Link>
           )}
         </div>

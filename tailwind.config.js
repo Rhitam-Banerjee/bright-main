@@ -17,6 +17,7 @@ module.exports = {
       },
       boxShadow: {
         customShadowLight: "0 4px 10px rgba(0,0,0,0.4)",
+        customShadowDark: "0 4px 20px rgba(0,0,0,0.8)",
         // customShadow: "0 4px 10px #222",
         // customShadowActive: "0 10px 10px #111",
       },
