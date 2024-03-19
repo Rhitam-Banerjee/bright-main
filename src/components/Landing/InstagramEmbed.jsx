@@ -32,17 +32,17 @@ const InstagramEmbedSection = () => {
     >
       {videosEmbed.map((video, index) => {
         return (
-          <SwiperSlide key={index} className="w-full !h-[230px]">
-            <InstagramEmbed
+          <SwiperSlide key={index} className="w-full !h-[570px]">
+            {/* <InstagramEmbed
               key={index}
               className="!w-[167px] !h-full"
               url={video}
-            />
-            {/* <iframe
+            /> */}
+            <iframe
               title={video}
               className="!h-full !overflow-hidden"
               src={`${video}embed`}
-            ></iframe> */}
+            ></iframe>
           </SwiperSlide>
         );
       })}

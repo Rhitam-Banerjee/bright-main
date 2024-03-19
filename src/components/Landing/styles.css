@@ -1,4 +1,7 @@
 .rsme-embed > iframe {
-  height: 230px !important;
+  height: 600px;
   min-width: 0 !important;
+}
+iframe > body {
+  overflow: hidden !important;
 }

@@ -13,7 +13,7 @@ import SearchBooks from "./components/OldBrowseLibrary/SearchBooks";
 import Author from "./components/Author/Author";
 import Footer from "./components/Footer";
 
-import Login from "./components/Login";
+import Login from "./components/Login/Login";
 import { Register } from "./components/NewRegister";
 import ForgotPassword from "./components/Login/ForgotPassword";
 
