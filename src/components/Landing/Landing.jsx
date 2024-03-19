@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import devUrls from "../../utils/devUrls";
 
@@ -49,7 +49,10 @@ const Landing = () => {
     registerDetails: { mobileNumber },
   } = useSelector((store) => store.main);
 
+  const loadHeavyComponents = useRef();
+  const [loadVideos, setLoadVideos] = useState(false);
   const [faqs, setFaqs] = useState(allFaqs);
+
   const toggleFAQ = (index) => {
     setFaqs(
       faqs.map((faq, i) => {
@@ -104,6 +107,15 @@ const Landing = () => {
     }
   };
 
+  const loadHeavyComponentsFunction = () => {
+    if (loadHeavyComponents.current)
+      if (
+        window.innerHeight + window.scrollY >=
+        loadHeavyComponents.current.offsetTop - 500
+      )
+        setLoadVideos(true);
+  };
+
   useEffect(() => {
     if (location.hash) {
       let elem = document.getElementById(location.hash.slice(1));
@@ -114,6 +126,14 @@ const Landing = () => {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", loadHeavyComponentsFunction);
+    return () => {
+      window.removeEventListener("scroll", loadHeavyComponentsFunction);
+    };
+  }, []);
+
   return (
     <main className="mt-[50px]">
       <section className="relative h-[570px] w-full">
@@ -218,7 +238,8 @@ const Landing = () => {
           Discover through video summaries before you dive in!
         </p>
       </section>
-      <VideoScroll />
+      <div ref={loadHeavyComponents} />
+      {loadVideos && <VideoScroll />}
       <section className="mt-[30px] pb-[30px] pt-0 flex flex-col justify-center items-center">
         <div>
           <img className="w-[24px]" src={bookIcon} alt="BookIcon" />
@@ -239,6 +260,7 @@ const Landing = () => {
           Browse Library
         </Link>
       </div>
+      <div></div>
       <section className="mt-[20px] py-[30px] flex flex-col pb-[12px] justify-center items-center bg-mainColor">
         <p className="text-[15px] font-bold text-white">
           Hear from our community
@@ -271,7 +293,7 @@ const Landing = () => {
           Embark on journeys shared by fellow members
         </p>
       </section>
-      <InstagramEmbed />
+      {loadVideos && <InstagramEmbed />}
       <section className="mt-[16px] py-[30px] flex flex-col justify-center items-center gap-[10px] w-full bg-mainColor">
         <span className="text-[13px] text-white font-semibold">
           Select a plan based on the books you reed per week

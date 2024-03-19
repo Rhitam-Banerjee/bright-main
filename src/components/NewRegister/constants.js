@@ -1,6 +1,8 @@
 import bookIconBlue from "../../icons/bookIconBlue.svg";
 import cycleIconBlue from "../../icons/cycleIconBlue.svg";
 import calenderIconBlue from "../../icons/calenderIconBlue.svg";
+import FirststepRegister from "./FirststepRegister";
+import AddDetails from "./AddDetails";
 export const features = [
   {
     title: "Choose Any Book",
@@ -11,7 +13,7 @@ export const features = [
     icon: cycleIconBlue,
   },
   {
-    title: "Change/Cancel Anytime",
+    title: "Change / Cancel Anytime",
     icon: calenderIconBlue,
   },
 ];
@@ -25,11 +27,24 @@ export const stepsComplete = [
     title: "Payment",
     isOnStep: false,
     isComplete: false,
+    component: "",
   },
   {
     title: "Add Details",
     isOnStep: false,
     isComplete: false,
+    component: <AddDetails />,
+  },
+];
+
+export const registerFlow = [
+  {
+    title: "First Step",
+    component: <FirststepRegister />,
+  },
+  {
+    title: "Add Details",
+    component: <AddDetails />,
   },
 ];
 

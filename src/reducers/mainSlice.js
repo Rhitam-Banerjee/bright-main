@@ -19,7 +19,7 @@ const initialState = {
     otp: "",
     selectedPlan: planDetails[1],
     // selectedPlan: plans[1],
-    selectedSubscription: 6,
+    selectedSubscription: 3,
     address: "",
     pinCode: "",
     childName: "",
