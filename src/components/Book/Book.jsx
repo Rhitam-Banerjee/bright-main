@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import devUrls from "../../utils/devUrls";
@@ -16,8 +16,7 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 import { FaAmazon, FaHeart, FaYoutube } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 
-import moment from "moment";
-import { setBooksAuthors, setBookInSeries } from "../../reducers/bookSlice";
+import { setBooksAuthors } from "../../reducers/bookSlice";
 
 import { NewBook } from "./";
 
@@ -30,8 +29,8 @@ import genreIcon from "../../icons/genreIcon.svg";
 import bookIconDetails from "../../icons/bookIconBookDetaills.svg";
 import pageIcon from "../../icons/pagesIcon.svg";
 
-const yt_url_video_link_prefix = "https://www.youtube.com/watch?v=";
-const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
+// const yt_url_video_link_prefix = "https://www.youtube.com/watch?v=";
+// const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
 
 const Book = () => {
   function kFormatter(num) {

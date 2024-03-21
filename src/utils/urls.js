@@ -97,6 +97,8 @@ const urls = {
 
   getAuthorDetails: `${newDomainUpdated}/get-author-details`,
   getSeriesDetails: `${newDomainUpdated}/get-series-details`,
+
+  getSearch: `${newDomainUpdated}/get-search-query`,
 };
 
 export default urls;

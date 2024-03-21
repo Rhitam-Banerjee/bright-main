@@ -17,7 +17,6 @@ import genreImg from "../../icons/genreImg.svg";
 import genreImgSelected from "../../icons/genreImgSelected.svg";
 import amazonLogo from "../../icons/amazoncom.svg";
 import { FaAmazon } from "react-icons/fa";
-import NewSlider from "../BookSlider/NewSlider";
 import { NewBook } from "../Book";
 
 const AmazonGenre = () => {

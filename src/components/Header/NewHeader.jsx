@@ -29,6 +29,9 @@ import bookIcon from "../../icons/bookIconOutline.svg";
 
 // import { FaRegUser } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
+import { CiSearch } from "react-icons/ci";
+import { FaCross, FaSearch } from "react-icons/fa";
+import { searchReset, setSearchText } from "../../reducers/mainSlice";
 
 const maxAge = 13;
 
@@ -39,9 +42,10 @@ const NewHeader = () => {
   const { pathname } = location;
   const [renderAge, setRenderAge] = useState(false);
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const {
-    main: { isLoggedIn },
-    book: { age, searchQuery },
+    main: { isLoggedIn, searchText },
+    book: { age },
   } = useSelector((state) => state);
 
   const logOut = async () => {
@@ -67,7 +71,8 @@ const NewHeader = () => {
   };
 
   useEffect(() => {
-    if (pathname === "/browse-library") {
+    console.log(pathname);
+    if (pathname.includes("/browse-library") || pathname.includes("/search")) {
       setRenderAge(true);
     } else {
       setRenderAge(false);
@@ -161,7 +166,7 @@ const NewHeader = () => {
         <div
           className={`flex flex-1 w-full ml-auto flex-row items-center justify-between gap-[50px]`}
         >
-          <div className="ml-auto w-max flex flex-row items-center justify-start gap-[100px]">
+          <div className="ml-auto w-max flex flex-row items-center justify-start gap-[100px] md:!gap-[50px]">
             {searchBarLinks.map((link, index) => {
               return (
                 <Link
@@ -177,6 +182,21 @@ const NewHeader = () => {
                 </Link>
               );
             })}
+          </div>
+          <div
+            className="w-max"
+            onClick={() => {
+              setSearchOpen(!searchOpen);
+              if (searchOpen) {
+                dispatch(searchReset());
+              }
+            }}
+          >
+            {!searchOpen ? (
+              <FaSearch className="ml-auto mr-1 w-max text-[15px] text-white font-bold" />
+            ) : (
+              <IoClose className="ml-auto mr-1 w-max text-[20px] text-white font-bold" />
+            )}
           </div>
           {isLoggedIn && (
             <Link
@@ -210,8 +230,8 @@ const NewHeader = () => {
               className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]`}
               to={"/register"}
             >
-              <span>
-                <img src={badgeIcon} alt="Badge" />
+              <span className="!w-[15px]">
+                <img className="!w-[15px]" src={badgeIcon} alt="Badge" />
               </span>
               <span className="text-[13px]">Subscribe</span>
             </Link>
@@ -261,6 +281,24 @@ const NewHeader = () => {
                 );
               })}
           </Swiper>
+        </div>
+      )}
+      {searchOpen && (
+        <div className="absolute -bottom-[50px] left-1/2 -translate-x-1/2 w-full h-[50px] max-w-[350px] p-1 flex flex-row justify-between items-center border-[1px] border-mainColor bg-[#ffffffd8] rounded-[5px] shadow-lg">
+          <input
+            type="text"
+            className="max-w-[350px] w-full mx-auto p-2 h-full bg-white"
+            value={searchText}
+            onChange={({ target: { value } }) => {
+              dispatch(setSearchText(value));
+            }}
+          />
+          <Link
+            to={`/search/${searchText}`}
+            className="w-[50px] h-full bg-unHighlight grid place-items-center"
+          >
+            <FaSearch className="ml-auto mr-1 w-full text-[15px] text-secondary font-bold" />
+          </Link>
         </div>
       )}
     </nav>

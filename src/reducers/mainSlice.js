@@ -11,6 +11,7 @@ const initialState = {
   registrationStep: 0,
   childPreferences: [],
   ageDropDown: false,
+  searchText: "",
   registerDetails: {
     otpSent: false,
     name: "",
@@ -51,6 +52,12 @@ export const mainSlice = createSlice({
     },
     setAgeDropDown: (state) => {
       state.ageDropDown = !state.ageDropDown;
+    },
+    setSearchText: (state, { payload }) => {
+      state.searchText = payload;
+    },
+    searchReset: (state) => {
+      state.searchText = initialState.searchText;
     },
     nextStepRegister: (state) => {
       state.registrationStep = state.registrationStep + 1;
@@ -122,6 +129,8 @@ export const {
   setUser,
   resetAlert,
   setAgeDropDown,
+  setSearchText,
+  searchReset,
   nextStepRegister,
   previousStepRegister,
   goToStepRegister,

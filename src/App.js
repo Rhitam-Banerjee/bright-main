@@ -9,7 +9,7 @@ import Header from "./components/Header/NewHeader";
 import Landing from "./components/Landing/Landing";
 import { Book } from "./components/Book";
 import YourLibrary from "./components/YourLibrary";
-import SearchBooks from "./components/OldBrowseLibrary/SearchBooks";
+import { Search } from "./components/Search";
 import Author from "./components/Author/Author";
 import Footer from "./components/Footer";
 
@@ -95,7 +95,7 @@ const App = () => {
         <Route path="/book/:isbn" element={<Book />} />
         <Route path="/author/:author" element={<Author />} />
         <Route path="/series/:series_id" element={<Series />} />
-        <Route path="/search-books" element={<SearchBooks />} />
+        <Route path="/search/:search" element={<Search />} />
         <Route
           path="/your-library"
           element={isLoggedIn ? <YourLibrary /> : <Navigate to="/" />}
