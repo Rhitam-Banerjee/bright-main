@@ -93,7 +93,7 @@ const Search = () => {
             Search Results for{" "}
             <span className="text-secondary pl-2">{search}</span>
           </h1>
-          <SearchBooks data={bookData} />
+          {bookData?.length > 0 && <SearchBooks data={bookData} />}
           {seriesData?.length > 0 && <SearchSeries data={seriesData} />}
           {genreData?.length > 0 && <SearchGenres data={genreData} />}
           {authorData?.length > 0 && <SearchAuthors data={authorData} />}
