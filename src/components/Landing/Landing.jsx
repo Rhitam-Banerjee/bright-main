@@ -97,7 +97,7 @@ const Landing = () => {
       if (data.redirect.includes("login")) navigate("/login");
       else {
         dispatch(setRegisterDetails({ mobileNumber, otpSent: true }));
-        navigate("/register");
+        document.getElementById("cta").scrollIntoView({ behavior: "smooth" });
       }
     } catch (err) {
       dispatch(
@@ -170,7 +170,9 @@ const Landing = () => {
                 }
               />
               <button
-                className="grid place-items-center bg-[#3b72ff85] h-[28px] w-[52px] rounded-[5px]"
+                className={`${
+                  mobileNumber.length === 10 ? "bg-mainColor" : "bg-[#3b72ff85]"
+                } grid place-items-center h-[28px] w-[52px] rounded-[5px]`}
                 type="submit"
                 value="Get Started"
                 onClick={goToRegister}
@@ -181,7 +183,10 @@ const Landing = () => {
           )}
         </div>
       </section>
-      <section className="p-[30px] flex flex-col justify-center items-center gap-[10px] bg-mainColor w-full">
+      <section
+        id="cta"
+        className="p-[30px] flex flex-col justify-center items-center gap-[10px] bg-mainColor w-full"
+      >
         <div>
           <img src={bookInfo} alt="BookIconInfo" />
         </div>
