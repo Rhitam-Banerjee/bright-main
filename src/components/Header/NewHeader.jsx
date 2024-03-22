@@ -284,7 +284,7 @@ const NewHeader = () => {
         </div>
       )}
       {searchOpen && (
-        <div className="absolute -bottom-[50px] left-1/2 -translate-x-1/2 w-full h-[50px] max-w-[350px] p-1 flex flex-row justify-between items-center border-[1px] border-mainColor bg-[#ffffffd8] rounded-[5px] shadow-lg">
+        <form className="absolute -bottom-[50px] left-1/2 -translate-x-1/2 w-full h-[50px] max-w-[350px] p-1 flex flex-row justify-between items-center border-[1px] border-mainColor bg-[#ffffffd8] rounded-[5px] shadow-lg">
           <input
             type="text"
             className="max-w-[350px] w-full mx-auto p-2 h-full bg-white"
@@ -295,11 +295,13 @@ const NewHeader = () => {
           />
           <Link
             to={`/search/${searchText}`}
-            className="w-[50px] h-full bg-unHighlight grid place-items-center"
+            className={`${
+              searchText?.length > 1 ? "grid bg-lightGrey " : "hidden"
+            } w-[50px] h-full place-items-center rounded-br-[5px] rounded-tr-[5px]`}
           >
             <FaSearch className="ml-auto mr-1 w-full text-[15px] text-secondary font-bold" />
           </Link>
-        </div>
+        </form>
       )}
     </nav>
   );

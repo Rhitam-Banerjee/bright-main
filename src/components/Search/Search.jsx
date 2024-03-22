@@ -13,7 +13,11 @@ const Search = () => {
   const { search } = useParams();
   const dispatch = useDispatch();
   const { age, loading } = useSelector((store) => store.book);
-  const { isLoggedIn, searchText } = useSelector((store) => store.main);
+  const {
+    isLoggedIn,
+    searchText,
+    registerDetails: { mobileNumber },
+  } = useSelector((store) => store.main);
 
   const [bookData, setBookData] = useState([]);
   const [authorData, setAuthorData] = useState([]);
@@ -21,13 +25,18 @@ const Search = () => {
   const [genreData, setGenreData] = useState([]);
 
   const getSearch = async () => {
+    console.log(mobileNumber);
     dispatch(load());
     try {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getSearch}?to_search=${search.toString()}`
-            : `${urls.getSearch}?age=${age}&to_search=${search.toString()}`
+            ? `${
+                urls.getSearch
+              }?to_search=${search.toString()}&mobile_number=${mobileNumber}`
+            : `${
+                urls.getSearch
+              }?age=${age}&to_search=${search.toString()}&mobile_number=${mobileNumber}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
