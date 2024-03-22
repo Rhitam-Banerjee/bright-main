@@ -35,9 +35,6 @@ const SearchAuthors = ({ data }) => {
         return b.review_count - a.review_count;
       });
       setBooks(response.books);
-      if (data.length) {
-        setChosen(data[0].id);
-      }
       setBookLoaded(true);
     } catch (error) {
       console.log(error);
@@ -46,6 +43,7 @@ const SearchAuthors = ({ data }) => {
   useEffect(() => {
     if (data?.length) {
       getBooks(data[0]?.id);
+      setChosen(data[0]?.id);
     }
   }, []);
   return (

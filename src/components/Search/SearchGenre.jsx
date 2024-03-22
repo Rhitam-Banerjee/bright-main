@@ -47,6 +47,7 @@ const SearchGenres = ({ data }) => {
   useEffect(() => {
     if (data?.length) {
       getBooks(data[0]?.id);
+      setChosen(data[0]?.id);
     }
   }, []);
   return (
