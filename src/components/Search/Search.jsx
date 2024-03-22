@@ -24,11 +24,18 @@ const Search = () => {
     dispatch(load());
     try {
       const response = await axios
-        .get(`${urls.getSearch}?age=${age}&to_search=${search}`)
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getSearch}?to_search=${search.toString()}`
+            : `${urls.getSearch}?age=${age}&to_search=${search.toString()}`
+        )
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.result.books?.sort((a, b) => {
         return b.review_count - a.review_count;
+      });
+      response.result.books?.sort((a, b) => {
+        return b.match - a.match;
       });
       if (isLoggedIn) {
         response.result.books.sort((a, b) => {
@@ -39,15 +46,24 @@ const Search = () => {
       response.result.authors?.sort((a, b) => {
         return b.review_count - a.review_count;
       });
+      response.result.authors?.sort((a, b) => {
+        return b.match - a.match;
+      });
       setAuthorData(response.result.authors);
 
       response.result.series?.sort((a, b) => {
         return b.review_count - a.review_count;
       });
+      response.result.series?.sort((a, b) => {
+        return b.match - a.match;
+      });
       setSeriesData(response.result.series);
 
       response.result.genres?.sort((a, b) => {
         return b.review_count - a.review_count;
+      });
+      response.result.genres?.sort((a, b) => {
+        return b.match - a.match;
       });
       setGenreData(response.result.genres);
       dispatch(stopLoad());
@@ -69,9 +85,9 @@ const Search = () => {
             <span className="text-secondary pl-2">{search}</span>
           </h1>
           <SearchBooks data={bookData} />
-          <SearchAuthors data={authorData} />
-          <SearchSeries data={seriesData} />
-          <SearchGenres data={genreData} />
+          {authorData?.length > 0 && <SearchAuthors data={authorData} />}
+          {seriesData?.length > 0 && <SearchSeries data={seriesData} />}
+          {genreData?.length > 0 && <SearchGenres data={genreData} />}
         </>
       ) : (
         <h1>Loading</h1>

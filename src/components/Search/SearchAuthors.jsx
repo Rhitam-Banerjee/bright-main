@@ -14,6 +14,7 @@ import bookIconOrange from "../../icons/bookIconOrange.svg";
 import authorImg from "../../icons/authorImg.svg";
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
+import { useSelector } from "react-redux";
 
 const SearchAuthors = ({ data }) => {
   function kFormatter(num) {
@@ -21,14 +22,18 @@ const SearchAuthors = ({ data }) => {
       ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
       : Math.sign(num) * Math.abs(num);
   }
-
+  const { age } = useSelector((store) => store.book);
   const [books, setBooks] = useState([]);
   const [bookLoaded, setBookLoaded] = useState(false);
   const [chosen, setChosen] = useState(null);
   const getBooks = async (id) => {
     try {
       const response = await axios
-        .get(`${urls.getBooksFromAuthor}?author_id=${id}`)
+        .get(
+          age === "" || age === undefined
+            ? `${urls.getBooksFromAuthor}?author_id=${id}`
+            : `${urls.getBooksFromAuthor}?author_id=${id}&age=${age}`
+        )
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.books?.sort((a, b) => {
