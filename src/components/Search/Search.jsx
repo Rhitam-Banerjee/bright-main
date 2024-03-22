@@ -94,9 +94,9 @@ const Search = () => {
             <span className="text-secondary pl-2">{search}</span>
           </h1>
           <SearchBooks data={bookData} />
-          {authorData?.length > 0 && <SearchAuthors data={authorData} />}
           {seriesData?.length > 0 && <SearchSeries data={seriesData} />}
           {genreData?.length > 0 && <SearchGenres data={genreData} />}
+          {authorData?.length > 0 && <SearchAuthors data={authorData} />}
         </>
       ) : (
         <h1>Loading</h1>

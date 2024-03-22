@@ -71,7 +71,6 @@ const NewHeader = () => {
   };
 
   useEffect(() => {
-    console.log(pathname);
     if (pathname.includes("/browse-library") || pathname.includes("/search")) {
       setRenderAge(true);
     } else {
