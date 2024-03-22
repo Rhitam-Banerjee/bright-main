@@ -26,6 +26,10 @@ import axios from "axios";
 import logo from "../../icons/BrightR.svg";
 import badgeIcon from "../../icons/badgeIcon.svg";
 import bookIcon from "../../icons/bookIconOutline.svg";
+import searchIcon from "../../icons/searchIcon.svg";
+import pricingIcon from "../../icons/pricingIcon.svg";
+import logInIcon from "../../icons/loginIcon.svg";
+import logOutIcon from "../../icons/logOutIcon.svg";
 
 // import { FaRegUser } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
@@ -92,9 +96,9 @@ const NewHeader = () => {
         renderAge ? "h-[130px]" : "h-max"
       } top-0 left-0 w-full mb-16 px-[13px] py-[14px] flex flex-col justify-start items-center bg-mainColor z-[99]`}
     >
-      <div className="w-full flex flex-row justify-between items-center">
+      <div className="w-full flex flex-row justify-between items-center gap-[10px]">
         <div
-          className="hamburger relative hidden md:block mr-[20px] text-[30px] text-white transition-all z-[999] cursor-pointer"
+          className="hamburger relative hidden md:block text-[30px] text-white transition-all z-[999] cursor-pointer"
           onClick={() => handleHamburgerclick()}
         >
           {hamburgerClicked ? (
@@ -158,82 +162,151 @@ const NewHeader = () => {
         </div>
         <Link
           to={"/"}
-          className="flex md:flex-1 mr-auto items-center justify-center"
+          className="flex w-max mx-auto items-center justify-center"
         >
           <img className="w-[100px] mr-auto" src={logo} alt="Logo" />
         </Link>
         <div
-          className={`flex flex-1 w-full ml-auto flex-row items-center justify-between gap-[50px]`}
+          className={`flex flex-1 w-full ml-auto flex-row items-center justify-between gap-[50px] md:gap-[10px]`}
         >
-          <div className="ml-auto w-max flex flex-row items-center justify-start gap-[100px] md:!gap-[50px]">
+          {/* <div
+            className="ml-auto h-[34px] w-full max-w-[530px] flex flex-row justify-start items-center bg-[#ffffffe0] rounded-[5px] border-[1px] border-white"
+            >
+              <img src={searchIcon} alt="SearchIcon" />
+              <input type="text" />
+          </div> */}
+          {/* onClick={() => {
+              setSearchOpen(!searchOpen);
+              if (searchOpen) {
+                dispatch(searchReset());
+              }
+            }} */}
+          {/* {!searchOpen ? (
+              <FaSearch className="ml-auto mr-1 w-max text-[15px] text-white font-bold" />
+            ) : (
+              <IoClose className="ml-auto mr-1 w-max text-[20px] text-white font-bold" />
+            )} */}
+          <form
+            onSubmit={() => {
+              navigate(`/search/${searchText}`);
+            }}
+            className="mx-auto p-[10px] w-full h-[34px] max-w-[530px] flex flex-row justify-start items-center border-[1px] border-white bg-[#ffffff36] rounded-[5px]"
+          >
+            <button
+              className="w-max h-full grid place-items-center mr-[10px]"
+              type="submit"
+            >
+              <img className="w-[14px]" src={searchIcon} alt="SearchIcon" />
+            </button>
+            <input
+              type="text"
+              className="w-full h-full bg-transparent placeholder-white text-[13px] text-white"
+              placeholder="Search Book,Author,Series,Genre..."
+              value={searchText}
+              onChange={({ target: { value } }) => {
+                dispatch(setSearchText(value));
+              }}
+            />
+          </form>
+
+          <div className="md:hidden ml-auto w-max flex flex-row items-center justify-start gap-[60px] md:!gap-[50px]">
             {searchBarLinks.map((link, index) => {
               return (
                 <Link
                   key={index}
                   to={link.link}
-                  className={`md:hidden ${
+                  className={`${
                     pathname === link.link
                       ? "font-bold opacity-100"
                       : "opacity-75"
-                  } text-white`}
+                  } text-white flex flex-row items-center justify-center gap-[10px] `}
                 >
-                  {link.title}
+                  <img className="w-[14px]" src={link.icon} alt="LinkIcon" />
+                  <span>{link.title}</span>
                 </Link>
               );
             })}
           </div>
-          <div
-            className="w-max"
-            onClick={() => {
-              setSearchOpen(!searchOpen);
-              if (searchOpen) {
-                dispatch(searchReset());
-              }
-            }}
-          >
-            {!searchOpen ? (
-              <FaSearch className="ml-auto mr-1 w-max text-[15px] text-white font-bold" />
-            ) : (
-              <IoClose className="ml-auto mr-1 w-max text-[20px] text-white font-bold" />
-            )}
-          </div>
-          {isLoggedIn && (
-            <Link
-              className={`w-max ${
-                pathname === "/your-library"
-                  ? "font-bold opacity-100"
-                  : "opacity-50"
-              } text-white`}
-              to={"/your-library"}
-            >
-              <img className="w-[18px] h-[18px]" src={bookIcon} alt="" />
-            </Link>
-          )}
           {isLoggedIn ? (
-            <div
-              className="md:hidden w-max flex flex-row justify-center items-center bg-white text-[13px] text-secondary font-bold rounded-[5px] px-[10px] py-[5px] cursor-pointer"
-              onClick={logOut}
-            >
-              Log-Out
-            </div>
+            <>
+              <Link
+                className="md:hidden flex flex-row justify-start items-center text-[13px] text-white"
+                to={"/your-library"}
+              >
+                <img
+                  className="w-[14px] mr-[10px]"
+                  src={bookIcon}
+                  alt="LoginIcon"
+                />
+                <span>My Library</span>
+              </Link>
+              <Link className="hidden md:grid" to={"/your-library"}>
+                <img
+                  className="w-[15px] ml-[10px]"
+                  src={bookIcon}
+                  alt="LoginIcon"
+                />
+              </Link>
+
+              <div
+                className="flex md:hidden flex-row justify-start items-center text-[13px] text-white"
+                onClick={logOut}
+              >
+                <img
+                  className="w-[14px] mr-[10px]"
+                  src={logOutIcon}
+                  alt="LoginIcon"
+                />
+                <span>Log out</span>
+              </div>
+            </>
           ) : (
-            <Link
-              to={"/login"}
-              className="md:hidden w-max flex flex-row justify-center items-center bg-white text-[13px] text-secondary font-bold rounded-[5px] p-[10px] cursor-pointer"
-            >
-              Sign In
-            </Link>
+            <>
+              <Link
+                to={"/register"}
+                className="md:hidden flex flex-row justify-start items-center text-[13px] text-white"
+              >
+                <img
+                  className="w-[14px] mr-[10px]"
+                  src={pricingIcon}
+                  alt="LoginIcon"
+                />
+                <span>Pricing</span>
+              </Link>
+              <Link
+                to={"/login"}
+                className="md:hidden flex flex-row justify-start items-center text-[13px] text-white"
+              >
+                <img
+                  className="w-[14px] mr-[10px]"
+                  src={logInIcon}
+                  alt="LoginIcon"
+                />
+                <span>Log in</span>
+              </Link>
+            </>
           )}
           {!isLoggedIn && (
-            <Link
-              className={`flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]`}
-              to={"/register"}
-            >
-              <span className="!w-[15px]">
-                <img className="!w-[15px]" src={badgeIcon} alt="Badge" />
-              </span>
-              <span className="text-[13px]">Subscribe</span>
-            </Link>
+            <>
+              <Link
+                className="md:hidden flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]"
+                to={"/register"}
+              >
+                <span className="!w-[15px]">
+                  <img className="!w-[15px]" src={badgeIcon} alt="Badge" />
+                </span>
+                <span className="text-[13px]">Become Member</span>
+              </Link>
+              <Link
+                className="hidden md:flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]"
+                to={"/register"}
+              >
+                <span className="!w-[15px]">
+                  <img className="!w-[15px]" src={badgeIcon} alt="Badge" />
+                </span>
+                <span className="text-[13px]">Subscribe</span>
+              </Link>
+            </>
           )}
         </div>
       </div>
@@ -281,26 +354,6 @@ const NewHeader = () => {
               })}
           </Swiper>
         </div>
-      )}
-      {searchOpen && (
-        <form className="absolute -bottom-[50px] left-1/2 -translate-x-1/2 w-full h-[50px] max-w-[350px] p-1 flex flex-row justify-between items-center border-[1px] border-mainColor bg-[#ffffffd8] rounded-[5px] shadow-lg">
-          <input
-            type="text"
-            className="max-w-[350px] w-full mx-auto p-2 h-full bg-white"
-            value={searchText}
-            onChange={({ target: { value } }) => {
-              dispatch(setSearchText(value));
-            }}
-          />
-          <Link
-            to={`/search/${searchText}`}
-            className={`${
-              searchText?.length > 1 ? "grid bg-lightGrey " : "hidden"
-            } w-[50px] h-full place-items-center rounded-br-[5px] rounded-tr-[5px]`}
-          >
-            <FaSearch className="ml-auto mr-1 w-full text-[15px] text-secondary font-bold" />
-          </Link>
-        </form>
       )}
     </nav>
   );
