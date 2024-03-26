@@ -30,11 +30,23 @@ const AmazonSeries = () => {
   const [seriesBookLoaded, setSeriesBookLoaded] = useState(false);
   const [seriesChosen, setSeriesChosen] = useState(null);
 
-  function kFormatter(num) {
-    return Math.abs(num) > 999
-      ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
-      : Math.sign(num) * Math.abs(num);
+  function formatNumber(number) {
+    const suffixes = ["", "k", "M", "B"];
+    let suffixIndex = 0;
+
+    while (number >= 1000 && suffixIndex < suffixes.length - 1) {
+      number /= 1000;
+      suffixIndex++;
+    }
+
+    return number.toFixed(1) + suffixes[suffixIndex];
   }
+
+  // function formatNumber(num) {
+  //   return Math.abs(num) > 999
+  //     ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
+  //     : Math.sign(num) * Math.abs(num);
+  // }
 
   const getSeries = async (isMobile) => {
     const response = await axios
@@ -171,7 +183,7 @@ const AmazonSeries = () => {
                         <FaAmazon className="w-[8px] translate-y-[1px]" />
                         <p>
                           <span className="text-[8px]">
-                            {kFormatter(serie.review_count)}
+                            {formatNumber(serie.review_count)}
                           </span>
                           <span className="pl-[2px] text-[8px]">Reviews</span>
                         </p>

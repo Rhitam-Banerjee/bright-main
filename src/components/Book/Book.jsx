@@ -14,6 +14,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { FaAmazon, FaHeart, FaYoutube } from "react-icons/fa";
+import { PiGoodreadsLogoFill } from "react-icons/pi";
 import { FaStar } from "react-icons/fa";
 
 import { setBooksAuthors } from "../../reducers/bookSlice";
@@ -33,10 +34,16 @@ import pageIcon from "../../icons/pagesIcon.svg";
 // const yt_url_video_thumbnail_prefix = "https://i.ytimg.com/vi/";
 
 const Book = () => {
-  function kFormatter(num) {
-    return Math.abs(num) > 999
-      ? (Math.abs(num) / 1000).toFixed(1) + "k"
-      : Math.abs(num);
+  function formatNumber(number) {
+    const suffixes = ["", "k", "M", "B"];
+    let suffixIndex = 0;
+
+    while (number >= 1000 && suffixIndex < suffixes.length - 1) {
+      number /= 1000;
+      suffixIndex++;
+    }
+
+    return number.toFixed(1) + suffixes[suffixIndex];
   }
 
   const { isbn } = useParams();
@@ -103,7 +110,7 @@ const Book = () => {
       response.books.books?.forEach((book) => {
         totalReview += book.review_count;
       });
-      setSeriesReview(kFormatter(totalReview));
+      setSeriesReview(formatNumber(totalReview));
     } catch (err) {
       console.log(err);
     }
@@ -136,7 +143,7 @@ const Book = () => {
         response.book_videos.forEach((book) => {
           totalViews += book.views;
         });
-        totalViews = kFormatter(totalViews);
+        totalViews = formatNumber(totalViews);
         setTotalViews(totalViews);
       }
     } catch (error) {
@@ -159,7 +166,7 @@ const Book = () => {
         response.book_set_videos.forEach((book) => {
           totalViews += book.views;
         });
-        totalViews = kFormatter(totalViews);
+        totalViews = formatNumber(totalViews);
         setTotalSetViews(totalViews);
       }
     } catch (error) {
@@ -198,7 +205,7 @@ const Book = () => {
         author.author_books.forEach((book) => {
           totalReview += book.review_count;
         });
-        totalReview = kFormatter(totalReview);
+        totalReview = formatNumber(totalReview);
         setAuthorReview((prevState) => ({
           ...prevState,
           [author.name]: totalReview,
@@ -330,13 +337,27 @@ const Book = () => {
           )}
           <div className="relative w-full flex flex-row justify-between py-[11px] text-[16px] md:text-[12px] font-bold">
             <span className="text-[15px] font-bold">{book.name}</span>
-            <span className="flex flex-row items-center">
-              {kFormatter(book.review_count)} <FaAmazon className="mx-[4px]" />
-              Reviews
+            <span className="flex flex-row justify-between items-center">
+              <span className="flex flex-row items-center">
+                {book.rating}
+                <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
+              </span>
+              <span className="flex flex-row items-center pl-1 ml-1 border-l-[1px] border-secondary ">
+                {formatNumber(book.review_count)}
+                <FaAmazon className="mx-[4px]" />
+                Reviews
+              </span>
             </span>
-            <span className="absolute -bottom-[17px] right-0 w-[45px] h-[20px] flex flex-row items-center">
-              {book.rating}
-              <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
+            <span className="absolute -bottom-[17px] right-0 flex flex-row justify-between items-center">
+              <span className="flex flex-row items-center">
+                {book.good_reads_rating}
+                <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
+              </span>
+              <span className="flex flex-row items-center pl-1 ml-1 border-l-[1px] border-secondary ">
+                {formatNumber(book.good_reads_review_count)}
+                <PiGoodreadsLogoFill className="mx-[4px] fill-[#59461b]" />
+                Reviews
+              </span>
             </span>
           </div>
           {authors.map((author, index) => {
@@ -406,41 +427,28 @@ const Book = () => {
                 <span className="text-[10px] font-bold">view more</span>
               </div>
             )}
-            <div className="flex flex-row justify-start items-center gap-[33px]">
+            <div className="flex flex-row justify-start items-center">
               {book.genre && (
-                <div className="flex flex-row items-start text-[12px]">
-                  <img
-                    className="h-[16px] w-[16px]"
-                    src={genreIcon}
-                    alt="GenreIcon"
-                  />
-                  <span className="px-[7px]">Genre</span>
-                  <span className="text-mainColor font-bold">{book.genre}</span>
-                  {/* <Link to={`/genre/${book.genre_id}`}>{book.genre}</Link> */}
+                <div className="flex flex-row items-start text-[12px] pr-2 mr-2 border-r-[1px] border-secondary">
+                  <span className="text-unHighlightLight font-bold">
+                    {book.genre}
+                  </span>
                 </div>
               )}
               {book.book_type && (
-                <div className="flex flex-row items-start text-[12px]">
-                  <img
-                    className="h-[16px] w-[16px]"
-                    src={bookIconDetails}
-                    alt="BookIcon"
-                  />
-                  <span className="px-[7px]">Book Type</span>
-                  <span className="text-mainColor font-bold">
+                <div className="flex flex-row items-start text-[12px] pr-2 mr-2 border-r-[1px] border-secondary">
+                  <span className="text-unHighlightLight font-bold">
                     {book.book_type}
                   </span>
                 </div>
               )}
-              {/* <div className="flex flex-row items-start text-[12px]">
-                <img
-                  className="h-[16px] w-[16px]"
-                  src={pageIcon}
-                  alt="PageIcon"
-                />
-                <span className="px-[7px]">Pages</span>
-                <span>{book.pages}</span>
-              </div> */}
+              {book.book_pages && (
+                <div className="flex flex-row items-start text-[12px]">
+                  <span className="text-unHighlightLight font-bold">
+                    {book.book_pages}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -490,17 +498,27 @@ const Book = () => {
                 </div>
               </div>
             )}
-            <div className="w-full flex flex-row justify-between py-[11px] text-[16px] md:text-[12px] font-bold">
+            <div className="relative w-full flex flex-row justify-between py-[11px] text-[12px] md:text-[12px] font-bold">
               <span className="text-[20px] font-bold">{book.name}</span>
-              <span className="flex flex-row">
-                <span className="flex flex-row items-center text-[14px] pr-2">
+              <span className="flex flex-row justify-between items-center">
+                <span className="flex flex-row items-center">
                   {book.rating}
                   <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
                 </span>
-                <span className="h-[15px] w-[0.5px] bg-secondary translate-y-[7px]" />
-                <span className="flex flex-row items-center text-[14px] pl-2">
-                  {kFormatter(book.review_count)}
+                <span className="flex flex-row items-center pl-1 ml-1 border-l-[1px] border-secondary ">
+                  {formatNumber(book.review_count)}
                   <FaAmazon className="mx-[4px]" />
+                  Reviews
+                </span>
+              </span>
+              <span className="absolute -bottom-[17px] right-0 flex flex-row justify-between items-center">
+                <span className="flex flex-row items-center">
+                  {book.good_reads_rating}
+                  <FaStar className="text-secondary ml-1 -translate-y-[1px]" />
+                </span>
+                <span className="flex flex-row items-center pl-1 ml-1 border-l-[1px] border-secondary ">
+                  {formatNumber(book.good_reads_review_count)}
+                  <PiGoodreadsLogoFill className="mx-[4px] fill-[#59461b]" />
                   Reviews
                 </span>
               </span>
@@ -537,19 +555,6 @@ const Book = () => {
                   <span className="text-[10px] font-bold">view more</span>
                 </div>
               )}
-              {book.publisher && book.language && book.pages && (
-                <div className="mt-auto !p-0 mb-4 flex flex-row items-center">
-                  <div className="text-[12px] md:text-[8px] md:max-w-full !w-max font-bold">
-                    {book.publisher}
-                  </div>
-                  <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                    {book.language}
-                  </div>
-                  <div className="text-[12px] md:text-[8px] text-unHighlightDark font-bold border-l-[0.5px] border-secondary ml-2 pl-2">
-                    {book.pages} Pages
-                  </div>
-                </div>
-              )}
             </div>
             <div className="flex flex-row justify-start items-center gap-[33px]">
               {book.genre && (
@@ -584,8 +589,9 @@ const Book = () => {
                   alt="PageIcon"
                 />
                 <span className="px-[7px]">Pages</span>
-                <span className="text-mainColor font-bold">216</span>
-                {/* <span>{book.pages}</span> */}
+                <span className="text-mainColor font-bold">
+                  {book.book_pages}
+                </span>
               </div>
             </div>
             {isLoggedIn && (
@@ -657,7 +663,7 @@ const Book = () => {
                           : "0:" + video.duration}
                       </span>
                       <span className="flex flex-row items-center">
-                        {kFormatter(video.views)}
+                        {formatNumber(video.views)}
                         <FaYoutube className="w-[12px] -translate-y-[1px] mx-[5px] text-[#ff0000]" />{" "}
                         Views
                       </span>
@@ -767,7 +773,7 @@ const Book = () => {
                             : "0:" + video.duration}
                         </span>
                         <span className="flex flex-row items-center">
-                          {kFormatter(video.views)}
+                          {formatNumber(video.views)}
                           <FaYoutube className="w-[12px] -translate-y-[1px] mx-[5px] text-[#ff0000]" />{" "}
                           Views
                         </span>
@@ -798,7 +804,7 @@ const Book = () => {
                       <div className="mt-[10px] text-[10px] flex flex-row items-center justify-center bg-white w-full">
                         <div className="pl-[15px]">{video.duration}</div>
                         <div className="ml-[5px] pl-[5px] border-l-[0.5px] border-secondary">
-                          {kFormatter(video.views)} Views
+                          {formatNumber(video.views)} Views
                         </div>
                       </div>
                     </div> */}

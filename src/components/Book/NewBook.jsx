@@ -6,14 +6,14 @@ import axios from "axios";
 
 import star from "../../icons/star.svg";
 import { FaAmazon } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
-import { CiHeart } from "react-icons/ci";
+import { PiGoodreadsLogoFill } from "react-icons/pi";
+
 import heartOutline from "../../icons/heartstroke.svg";
 import heartFill from "../../icons/heartfill.svg";
 
 import { setAlert } from "../../reducers/mainSlice";
 
-const NewBook = ({ book }) => {
+const NewBook = ({ book, section = "amazon" }) => {
   const location = useLocation();
   const { pathname } = location;
   const dispatch = useDispatch();
@@ -34,10 +34,16 @@ const NewBook = ({ book }) => {
     total_books,
   } = book;
 
-  function kFormatter(num) {
-    return Math.abs(num) > 999
-      ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
-      : Math.sign(num) * Math.abs(num);
+  function formatNumber(number) {
+    const suffixes = ["", "k", "M", "B"];
+    let suffixIndex = 0;
+
+    while (number >= 1000 && suffixIndex < suffixes.length - 1) {
+      number /= 1000;
+      suffixIndex++;
+    }
+
+    return number.toFixed(1) + suffixes[suffixIndex];
   }
 
   const addToReadList = async (isbn) => {
@@ -161,11 +167,15 @@ const NewBook = ({ book }) => {
             </div>
             <div className="flex flex-row items-center justify-between border-l-[0.5px] ml-[5px] pl-[5px] border-secondary">
               <p className="text-black font-semibold text-[9px]">
-                {kFormatter(
-                  parseFloat(review_count?.toString()?.replace(/,/g, ""))
-                )}
+                {formatNumber(parseFloat(review_count))}
               </p>
-              <FaAmazon className="!w-[12px] px-[2px]" />
+              {section === "goodreads" && (
+                <PiGoodreadsLogoFill className="!w-[12px] px-[2px] -translate-y-[1px] fill-[#59461b]" />
+              )}
+              {section === "amazon" && (
+                <FaAmazon className="!w-[12px] px-[2px]" />
+              )}
+
               <p className="text-black font-semibold text-[9px]">Reviews</p>
             </div>
           </div>

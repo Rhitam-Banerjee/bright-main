@@ -19,10 +19,16 @@ import NewSlider from "../BookSlider/NewSlider";
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
 
-function kFormatter(num) {
-  return Math.abs(num) > 999
-    ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
-    : Math.sign(num) * Math.abs(num);
+function formatNumber(number) {
+  const suffixes = ["", "k", "M", "B"];
+  let suffixIndex = 0;
+
+  while (number >= 1000 && suffixIndex < suffixes.length - 1) {
+    number /= 1000;
+    suffixIndex++;
+  }
+
+  return number.toFixed(1) + suffixes[suffixIndex];
 }
 
 const AmazonAuthors = () => {
@@ -164,7 +170,7 @@ const AmazonAuthors = () => {
                       <FaAmazon className="w-[8px] translate-y-[1px]" />
                       <p>
                         <span className="text-[8px]">
-                          {kFormatter(author.review_count)}
+                          {formatNumber(author.review_count)}
                         </span>
                         <span className="pl-[2px] text-[8px]">Reviews</span>
                       </p>

@@ -28,10 +28,16 @@ const PopularGenre = () => {
   const [genreBookLoaded, setGenreBookLoaded] = useState(false);
   const [genreChosen, setGenreChosen] = useState(null);
 
-  function kFormatter(num) {
-    return Math.abs(num) > 999
-      ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
-      : Math.sign(num) * Math.abs(num);
+  function formatNumber(number) {
+    const suffixes = ["", "k", "M", "B"];
+    let suffixIndex = 0;
+
+    while (number >= 1000 && suffixIndex < suffixes.length - 1) {
+      number /= 1000;
+      suffixIndex++;
+    }
+
+    return number.toFixed(1) + suffixes[suffixIndex];
   }
 
   const getGenres = async () => {
@@ -155,7 +161,7 @@ const PopularGenre = () => {
                         <FaAmazon className="w-[8px] translate-y-[2px]" />
                         <p>
                           <span className="text-[8px]">
-                            {kFormatter(genre.review_count)}
+                            {formatNumber(genre.review_count)}
                           </span>
                           <span className="pl-[2px] text-[8px]">Reviews</span>
                         </p>

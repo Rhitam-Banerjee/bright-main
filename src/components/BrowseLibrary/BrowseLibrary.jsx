@@ -8,16 +8,15 @@ import {
   AmazonAuthors,
   PopularSeries,
   PopularGenre,
+  GoodReads,
 } from ".";
 import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 import { useSelector } from "react-redux";
-import { setIsMobile } from "../../reducers/mainSlice";
 import { useLocation } from "react-router-dom";
 const BrowseLibrary = () => {
   const { age } = useSelector((store) => store.book);
   const location = useLocation();
   const { pathname } = location;
-  // const [scrollPos,setScrollPos] = useState()
   const [isLoadSoughtAfter, setIsLoadSoughtAfter] = useState(false);
   const [isLoadseries, setIsLoadSeries] = useState(false);
   const loadSoughtAfter = useRef();
@@ -95,6 +94,7 @@ const BrowseLibrary = () => {
           <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />
+          <GoodReads />
           <AmazonGenre />
           <PopularGenre />
         </>
