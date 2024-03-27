@@ -81,6 +81,7 @@ const urls = {
 
   getPopularBooks: `${newDomainUpdated}/get-newyork-best-seller`,
   getGoodReadsBooks: `${newDomainUpdated}/get-good-reads-books`,
+  getHandpickedBooks: `${newDomainUpdated}/get-handpicked-books`,
   getBookYTVideos: `${newDomainUpdated}/get-videos-from-book`,
   getBookSetYtVideos: `${newDomainUpdated}/get-book-set-video`,
 

@@ -11,13 +11,11 @@ import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import newyorktimesLogo from "../../icons/newyorkTimesLogo.png";
-
 import { NewBook } from "../Book";
 
-const MostPopularDump = () => {
+const HandPicked = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [popularBooks, setPopularBooks] = useState([]);
+  const [handPickedBooks, setHandPickedBooks] = useState([]);
   const { age } = useSelector((store) => store.book);
 
   const getBooks = async () => {
@@ -25,15 +23,15 @@ const MostPopularDump = () => {
       const response = await axios
         .get(
           age === "" || age === undefined
-            ? `${urls.getPopularBooks}`
-            : `${urls.getPopularBooks}?age=${age}`
+            ? `${urls.getHandpickedBooks}`
+            : `${urls.getHandpickedBooks}?age=${age}`
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.books.sort((a, b) => {
         return b.stocks_available - a.stocks_available;
       });
-      setPopularBooks(response.books);
+      setHandPickedBooks(response.books);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -46,13 +44,9 @@ const MostPopularDump = () => {
     !isLoading && (
       <section className="pl-8 md:px-2 pb-[14px]">
         <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Chart Topping
-          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
-            <img
-              className="pl-2 h-[15px] translate-y-[2px]"
-              src={newyorktimesLogo}
-              alt="amazonLogo"
-            />
+          Rare Selection
+          <span className="border-l-[1px] border-secondary pl-2 ml-2">
+            Our Library
           </span>
         </h1>
         <Swiper
@@ -65,14 +59,14 @@ const MostPopularDump = () => {
           modules={[FreeMode, Navigation, Virtual]}
           className="mySwiper no-slider-arrow"
         >
-          {popularBooks?.map((book, index) => {
+          {handPickedBooks?.map((book, index) => {
             return (
               <SwiperSlide
                 key={index}
                 className="flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
-                <NewBook book={book} section={"NewYorkTimes"} />
+                <NewBook book={book} />
               </SwiperSlide>
             );
           })}
@@ -83,4 +77,4 @@ const MostPopularDump = () => {
   );
 };
 
-export default MostPopularDump;
+export default HandPicked;

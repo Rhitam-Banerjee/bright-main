@@ -79,7 +79,7 @@ const YoutubeTopBooks = () => {
                 className="relative flex flex-col !w-[150px]"
                 virtualIndex={index}
               >
-                <NewBook book={book} />
+                <NewBook book={book} section={"YoutubeBooks"} />
                 <div className="absolute bottom-[20px] left-3 text-[48px] font-bold text-white font-outline-1">
                   {index + 1}
                 </div>

@@ -7,10 +7,13 @@ import {
   YoutubeTopBooks,
   AmazonAuthors,
   PopularSeries,
-  PopularGenre,
+  AllGenre,
   GoodReads,
+  HandPicked,
+  PopularAuthors,
+  AmazonSeries,
+  PopularGenre,
 } from ".";
-import { PopularAuthors, AmazonSeries, AmazonGenre } from "./";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 const BrowseLibrary = () => {
@@ -83,7 +86,7 @@ const BrowseLibrary = () => {
   }, []);
   return (
     <main className="mt-[140px]">
-      <AmazonTopBooks />
+      <GoodReads />
       <AmazonSeries />
       <YoutubeTopBooks />
       <AmazonAuthors />
@@ -94,9 +97,10 @@ const BrowseLibrary = () => {
           <PopularSeries />
           <MostSoughtAfter />
           <PopularAuthors />
-          <GoodReads />
-          <AmazonGenre />
+          <AmazonTopBooks />
           <PopularGenre />
+          <HandPicked />
+          <AllGenre />
         </>
       )}
       <div ref={loadSeries}></div>

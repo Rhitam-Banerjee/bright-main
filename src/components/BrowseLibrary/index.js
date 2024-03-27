@@ -1,7 +1,7 @@
 import BrowseLibrary from "./BrowseLibrary";
 import PopularAuthors from "./PopularAuthors";
 import AmazonSeries from "./AmazonSeries";
-import AmazonGenre from "./AmazonGenre";
+import PopularGenre from "./PopularGenre";
 import SeriesDump from "./SeriesDump";
 import NewYorkTimes from "./NewYorkTimes";
 import AmazonTopBooks from "./AmazonTopBooks";
@@ -10,13 +10,13 @@ import YoutubeTopBooks from "./YoutubeTopBooks";
 import MostSoughtAfter from "./MostSoughtAfter";
 import AmazonAuthors from "./AmazonAuthors";
 import PopularSeries from "./PopularSeries";
-import PopularGenre from "./PopularGenre";
-
+import AllGenre from "./AllGenre";
+import HandPicked from "./Handpicked";
 export {
   BrowseLibrary,
   PopularAuthors,
   AmazonSeries,
-  AmazonGenre,
+  PopularGenre,
   SeriesDump,
   NewYorkTimes,
   GoodReads,
@@ -25,5 +25,6 @@ export {
   MostSoughtAfter,
   AmazonAuthors,
   PopularSeries,
-  PopularGenre,
+  AllGenre,
+  HandPicked,
 };

@@ -15,11 +15,11 @@ import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import genreImg from "../../icons/genreImg.svg";
 import genreImgSelected from "../../icons/genreImgSelected.svg";
-import amazonLogo from "../../icons/amazoncom.svg";
+
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
 
-const AmazonGenre = () => {
+const AllGenre = () => {
   const { age } = useSelector((store) => store.book);
   const { isLoggedIn } = useSelector((store) => store.main);
   const [genres, setGenres] = useState([]);
@@ -40,20 +40,12 @@ const AmazonGenre = () => {
     return number.toFixed(1) + suffixes[suffixIndex];
   }
 
-  // function formatNumber(num) {
-  //   return Math.abs(num) > 999
-  //     ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
-  //     : Math.sign(num) * Math.abs(num);
-  // }
-
-  const getGenres = async (isMobile) => {
+  const getGenres = async () => {
     const response = await axios
       .get(
         age === "" || age === undefined
-          ? `${urls.getAmazonBestsellersGenre}?isMobile=${isMobile ? 1 : 0}`
-          : `${urls.getAmazonBestsellersGenre}?age=${age}&isMobile=${
-              isMobile ? 1 : 0
-            }`
+          ? `${urls.getGenreAll}`
+          : `${urls.getGenreAll}?age=${age}`
       )
       .then((res) => res.data)
       .catch((err) => {
@@ -97,22 +89,12 @@ const AmazonGenre = () => {
   };
 
   useEffect(() => {
-    const window_width = window.innerWidth < 968;
-    getGenres(window_width);
+    getGenres();
   }, [age]);
   return (
     genreLoaded && (
       <section className="pl-8 md:px-2 pb-[10px]">
-        <h1 className="flex font-bold text-[12px] pb-[10px]">
-          Bestseller Genre
-          <span className="ml-2 pl-1 border-l-[1px] border-secondary">
-            <img
-              className="pl-2 h-[14px] w-[70px] translate-y-[6px] object-cover"
-              src={amazonLogo}
-              alt="amazonLogo"
-            />
-          </span>
-        </h1>
+        <h1 className="flex font-bold text-[12px] pb-[10px]">All Genres</h1>
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -224,14 +206,14 @@ const AmazonGenre = () => {
             })}
           </Swiper>
         )}
-        <div
+        {/* <div
           className={`${
             genreLoaded && genreChosen !== null ? "mt-0" : "mt-[14px]"
           } h-[0.5px] w-[calc(100%_-_50px)] md:w-full mr-auto bg-secondary`}
-        />
+        /> */}
       </section>
     )
   );
 };
 
-export default AmazonGenre;
+export default AllGenre;

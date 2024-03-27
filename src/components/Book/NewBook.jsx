@@ -5,12 +5,13 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 import star from "../../icons/star.svg";
-import { FaAmazon } from "react-icons/fa";
+import { FaAmazon, FaYoutube } from "react-icons/fa";
 import { PiGoodreadsLogoFill } from "react-icons/pi";
-
+import { SiNewyorktimes } from "react-icons/si";
+import calednderIconOrange from "../../icons/calenderIconOrange.svg";
 import heartOutline from "../../icons/heartstroke.svg";
 import heartFill from "../../icons/heartfill.svg";
-
+import totalVideoIcon from "../../icons/totalVideoIcon.svg";
 import { setAlert } from "../../reducers/mainSlice";
 
 const NewBook = ({ book, section = "amazon" }) => {
@@ -30,11 +31,15 @@ const NewBook = ({ book, section = "amazon" }) => {
     review_count,
     image,
     stocks_available,
+    total_videos,
+    total_views,
+    book_duration,
     book_order,
     total_books,
   } = book;
 
   function formatNumber(number) {
+    const orginalNumber = number;
     const suffixes = ["", "k", "M", "B"];
     let suffixIndex = 0;
 
@@ -43,7 +48,9 @@ const NewBook = ({ book, section = "amazon" }) => {
       suffixIndex++;
     }
 
-    return number.toFixed(1) + suffixes[suffixIndex];
+    return orginalNumber < 1000
+      ? orginalNumber
+      : number?.toFixed(1) + suffixes[suffixIndex];
   }
 
   const addToReadList = async (isbn) => {
@@ -158,25 +165,75 @@ const NewBook = ({ book, section = "amazon" }) => {
         >
           <div className="flex-1 flex flex-row items-center justify-center">
             <div className="flex flex-row justify-between items-center text-black">
-              <p className="text-[9px] font-semibold">
-                {rating?.length > 4 ? rating?.slice(0, 4) : rating}
-              </p>
-              <div className="pl-[2px] -translate-y-[1px]">
-                <img src={star} alt="Rating" />
-              </div>
+              {section === "NewYorkTimes" && (
+                <>
+                  <div className="pr-1 -translate-y-[1px]">
+                    <img src={calednderIconOrange} alt="CalenderIcon" />
+                  </div>
+                  <div className="-translate-y-[1px]">
+                    <span className="text-[9px] font-semibold">
+                      {parseInt(book_duration / 5) * 5} +
+                    </span>
+                    <span className="text-[9px] font-semibold">Weeks</span>
+                  </div>
+                </>
+              )}
+              {section === "YoutubeBooks" && (
+                <>
+                  <div className="pr-1 -translate-y-[1px]">
+                    <img src={totalVideoIcon} alt="CalenderIcon" />
+                  </div>
+                  <span className="text-[9px] font-semibold">
+                    {total_videos}
+                  </span>
+                </>
+              )}
+              {(section === "amazon" || section === "goodreads") && (
+                <>
+                  <p className="text-[9px] font-semibold">{rating}</p>
+                  <div className="pl-[2px] -translate-y-[1px]">
+                    <img src={star} alt="Rating" />
+                  </div>
+                </>
+              )}
             </div>
             <div className="flex flex-row items-center justify-between border-l-[0.5px] ml-[5px] pl-[5px] border-secondary">
-              <p className="text-black font-semibold text-[9px]">
-                {formatNumber(parseFloat(review_count))}
-              </p>
+              {(section === "amazon" || section === "goodreads") && (
+                <p className="text-black font-semibold text-[9px]">
+                  {formatNumber(parseFloat(review_count))}
+                </p>
+              )}
+              {section === "YoutubeBooks" && (
+                <p className="text-black font-semibold text-[9px]">
+                  {formatNumber(total_views)}
+                </p>
+              )}
               {section === "goodreads" && (
-                <PiGoodreadsLogoFill className="!w-[12px] px-[2px] -translate-y-[1px] fill-[#59461b]" />
+                <PiGoodreadsLogoFill className="!w-[14px] px-[1px] -translate-y-[1px] fill-[#59461b]" />
               )}
               {section === "amazon" && (
                 <FaAmazon className="!w-[12px] px-[2px]" />
               )}
-
-              <p className="text-black font-semibold text-[9px]">Reviews</p>
+              {section === "NewYorkTimes" && (
+                <SiNewyorktimes className="!w-[12px] px-[2px]" />
+              )}
+              {section === "YoutubeBooks" && (
+                <FaYoutube className="!w-[12px] px-[2px] fill-[red] -translate-y-[1px]" />
+              )}
+              {section === "NewYorkTimes" && (
+                <p className="text-black font-semibold text-[9px] translate-y-[1px]">
+                  List
+                </p>
+              )}
+              {section === "amazon" && (
+                <p className="text-black font-semibold text-[9px]">Reviews</p>
+              )}
+              {section === "goodreads" && (
+                <p className="text-black font-semibold text-[9px]">Rating</p>
+              )}
+              {section === "YoutubeBooks" && (
+                <p className="text-black font-semibold text-[9px]">Views</p>
+              )}
             </div>
           </div>
           {isLoggedIn && pathname !== "/your-library" && (
