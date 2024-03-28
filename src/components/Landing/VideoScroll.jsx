@@ -18,15 +18,10 @@ const VideoScroll = () => {
     <div className="pb-[30px] bg-mainColor">
       <Swiper
         slidesPerView={"auto"}
-        // autoplay={{
-        //   delay: 3000,
-        //   disableOnInteraction: true,
-        // }}
         loop={true}
         navigation={true}
         modules={[Navigation]}
-        // modules={[Navigation, Autoplay]}
-        className="mySwiper pb-[14px] no-slider-arrow"
+        className="mySwiper landingSwiperArrow pb-[14px] px-[50px] mx-auto"
       >
         {bookVideos.map((book, index) => {
           return (

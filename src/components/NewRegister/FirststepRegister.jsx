@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
 import devUrls from "../../utils/devUrls";
 
 import bookIcon from "../../icons/bookIconBlue.svg";
+import bookIconWhite from "../../icons/bookIcon.svg";
+import deliveryIconBlue from "../../icons/deliveryIconBlue.svg";
+import deliveryIconWhite from "../../icons/deliveryIconWhite.svg";
+
 import pouchMoney from "../../icons/moneyBagIconGrey.svg";
 import cycleIconGrey from "../../icons/cycleIconBlue.svg";
 import watchIconGrey from "../../icons/watchIconGrey.svg";
@@ -156,59 +160,144 @@ const FirststepRegister = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 200);
+  }, []);
+
   return (
     <>
-      <form className="mt-[20px] flex flex-col items-center justify-between w-[282px] h-[36px] text-[12px] font-semibold">
-        <span className="w-full text-mainColor mr-1 mb-2">Mobile Number</span>
-        <input
-          className="w-full flex-1 p-[4px] rounded-[5px] bg-transparent"
-          type="number"
-          value={mobileNumber}
-          placeholder="Enter mobile number to explore"
-          style={{
-            border: "2px solid #3B72FF",
-          }}
-          onChange={({ target: { value } }) =>
-            dispatch(setRegisterDetails({ mobileNumber: value }))
-          }
-        />
-      </form>
-      <section className="w-full max-w-[360px] flex flex-col justify-center items-center gap-[10px]">
-        <span className="mt-[10px] text-[13px] font-bold">
-          Select a plan based on the books you reed per week
+      <section className="w-full max-w-[340px] p-[10px] flex flex-col justify-center items-center gap-[10px]">
+        <span className="my-[10px] text-[13px] text-secondary font-bold">
+          Plan &amp; Pricing
         </span>
-        <div className="flex flex-row justify-center items-center gap-[8px]">
+        <div className="max-w-[340px] w-full flex flex-row justify-between items-center">
+          <span className="text-[11px] font-semibold">Change plan anytime</span>
+          <div className="h-[12px] w-[1px] bg-secondary" />
+          <span className="text-[11px] font-semibold">Pause anytime</span>
+          <div className="h-[12px] w-[1px] bg-secondary" />
+          <span className="text-[11px] font-semibold ">Reschedule anytime</span>
+        </div>
+        <div className="w-full flex flex-col justify-center items-center gap-[8px]">
           {planDetails.map((plan, index) => {
             return (
               <div
                 key={index}
-                className={`mt-[10px] relative flex flex-col justify-center items-center w-[100px] h-[100px] rounded-[5px] cursor-pointer ${
+                className={`mt-[10px] p-[15px] pt-[18px] relative flex flex-col justify-between items-center w-full h-[150px] rounded-[5px] cursor-pointer ${
                   plan.planId === selectedPlan.planId
                     ? "text-white bg-mainColor"
-                    : "text-unHighlightDark bg-mainColorLight"
+                    : "text-mainColor bg-mainColorLight"
                 }`}
                 onClick={() =>
                   dispatch(setRegisterDetails({ selectedPlan: plan }))
                 }
               >
-                <span className="text-[30px] font-extrabold">{plan.books}</span>
-                <span className="text-[10px] font-semibold">
-                  {plan.books > 1 ? "Books" : "Book"} / Week
-                </span>
-                <span className="text-[13px] font-bold pt-[14px] ">
-                  Rs.{plan.price}
-                </span>
+                <div className="w-full flex flex-row justify-between items-center">
+                  <div className="flex flex-col">
+                    <div className="flex flex-row justify-start items-center">
+                      <span className="text-[20px] font-semibold pr-[10px]">
+                        {plan.title}
+                      </span>
+                      <img
+                        className="h-[20px]"
+                        src={
+                          plan.planId === selectedPlan.planId
+                            ? plan.activeIcon
+                            : plan.icon
+                        }
+                        alt="PlanIcon"
+                      />
+                    </div>
+                    <span className="text-[13px] font-semibold">
+                      {plan.books} {plan.books > 1 ? "Books" : "Book"} / week
+                    </span>
+                  </div>
+                  <div className="ml-auto flex flex-col justify-between items-center">
+                    <span
+                      className={`${
+                        plan.planId === selectedPlan.planId
+                          ? "text-secondary"
+                          : "text-mainColor"
+                      } text-[24px] font-black`}
+                    >
+                      &#8377; {plan.price}/-
+                    </span>
+                    <span
+                      className={`${
+                        plan.planId === selectedPlan.planId
+                          ? "text-secondary"
+                          : "text-unHighlightLight"
+                      } tetx-[10px]`}
+                    >
+                      per {plan.duration}
+                    </span>
+                  </div>
+                </div>
+                <div className="w-full flex flex-col justify-center items-center">
+                  <div className="w-full flex flex-row justify-between items-center">
+                    <div className="flex flex-row">
+                      <img
+                        className="w-[10px] mr-[10px]"
+                        src={
+                          plan.planId === selectedPlan.planId
+                            ? bookIconWhite
+                            : bookIcon
+                        }
+                        alt=""
+                      />
+                      <span className="text-[13px] font-semibold">
+                        Books - <b className="font-black">{plan.totalBooks}</b>
+                      </span>
+                    </div>
+                    <span
+                      className={`${
+                        plan.planId === selectedPlan.planId
+                          ? "text-white"
+                          : "text-unHighlightLight"
+                      } text-[9px] font-thin ml-auto`}
+                    >
+                      Avg. member reads books worth
+                    </span>
+                  </div>
+                  <div className="w-full flex flex-row justify-between items-center">
+                    <div className="flex flex-row">
+                      <img
+                        className="w-[12px] mr-[10px]"
+                        src={
+                          plan.planId === selectedPlan.planId
+                            ? deliveryIconWhite
+                            : deliveryIconBlue
+                        }
+                        alt=""
+                      />
+                      <span className="text-[13px] font-semibold">
+                        Deliveries -
+                        <b className="pl-1 font-black">
+                          {plan.totalDeliveries}
+                        </b>
+                      </span>
+                    </div>
+                    <span
+                      className={`${
+                        plan.planId === selectedPlan.planId
+                          ? "text-white"
+                          : "text-unHighlightLight"
+                      } text-[9px] font-thin ml-auto`}
+                    >
+                      Rs. {plan.avgRead} +
+                    </span>
+                  </div>
+                </div>
                 <div
                   className={`${
                     plan.popular ? "" : "hidden"
-                  } absolute -top-[2px] -right-[5px] w-[45px] h-[15px] flex items-center justify-center bg-secondary text-white rounded-[2px] rounded-br-none text-[8px] z-[2]`}
+                  } absolute top-1 -right-[5px] w-[65px] h-[18px] flex items-center justify-center bg-secondary text-white rounded-[2px] rounded-br-none text-[10px] z-[2]`}
                 >
                   Popular
                 </div>
                 <div
                   className={`${
                     plan.popular ? "" : "hidden"
-                  } absolute top-[13px] -right-[5px] bg-[#db8726] w-[5px] h-[7px] `}
+                  } absolute top-[17px] -right-[5px] bg-[#db8726] w-[5px] h-[7px] `}
                   style={{
                     clipPath: "polygon(0% 0%, 100% 0%, 0% 100%)",
                   }}
@@ -217,71 +306,28 @@ const FirststepRegister = () => {
             );
           })}
         </div>
-        <div className="mt-[40px] w-full grid grid-cols-2 gap-[13px]">
-          {selectedPlan && (
-            <>
-              <div className="flex flex-col justify-center items-center bg-lightGrey rounded-[5px] py-[10px] w-full">
-                <span className="flex flex-row items-center justify-center text-[13px] text-unHighlightDark font-bold">
-                  <img
-                    className="mr-[10px] w-[13px] "
-                    src={pouchMoney}
-                    alt="Pouch Book"
-                  />
-                  Price Per Book
-                </span>
-                <span className="text-[14px] text-mainColor font-bold">
-                  Rs.{selectedPlan.pricePerBook}/-
-                </span>
-              </div>
-              <div className="flex flex-col justify-center items-center bg-lightGrey rounded-[5px] py-[10px] w-full">
-                <span className="flex flex-row items-center justify-center text-[13px] text-unHighlightDark font-bold">
-                  <img
-                    className="mr-[10px] w-[13px]  saturate-0"
-                    src={bookIcon}
-                    alt="Book Icon"
-                  />
-                  Number of books
-                </span>
-                <span className="text-[14px] text-mainColor font-bold">
-                  {selectedPlan.totalBooks}
-                </span>
-              </div>
-              <div className="flex flex-col justify-center items-center bg-lightGrey rounded-[5px] py-[10px] w-full">
-                <span className="flex flex-row items-center justify-center text-[13px] text-unHighlightDark font-bold">
-                  <img
-                    className="mr-[10px] w-[13px]  saturate-0"
-                    src={cycleIconGrey}
-                    alt="Delivery Icon"
-                  />
-                  Number of Delivery
-                </span>
-                <span className="text-[14px] text-mainColor font-bold">
-                  {selectedPlan.totalDeliveries}
-                </span>
-              </div>
-              <div className="flex flex-col justify-center items-center bg-lightGrey rounded-[5px] py-[10px] w-full">
-                <span className="flex flex-row items-center justify-center text-[13px] text-unHighlightDark font-bold">
-                  <img
-                    className="mr-[10px] w-[13px] "
-                    src={watchIconGrey}
-                    alt="Pouch Book"
-                  />
-                  Duration
-                </span>
-                <span className="text-[14px] text-mainColor font-bold">
-                  {selectedPlan.duration}
-                </span>
-              </div>
-            </>
-          )}
-        </div>
         <div className="w-full max-w-[360px] mx-auto">
-          <span className="flex flex-row justify-center items-center text-[10px] text-unHighlightDark">
-            <img className="w-[13px] mr-[5px]" src={infoIcon} alt="Info" /> The
-            price mentioned above is for a 6 month plan paid in full
-          </span>
+          <form className="mt-[20px] flex flex-col items-center justify-between w-full max-w-[350px] h-[36px] mx-auto text-[12px] font-semibold">
+            <input
+              className="w-full flex-1 p-[4px] rounded-[5px] bg-transparent placeholder-[#FF9F30] placeholder-opacity-70"
+              type="number"
+              value={mobileNumber}
+              placeholder="Enter mobile number"
+              style={{
+                border: "2px solid #FF9F30",
+              }}
+              onChange={({ target: { value } }) =>
+                dispatch(setRegisterDetails({ mobileNumber: value }))
+              }
+            />
+          </form>
           <span
-            className="mt-[20px] flex flex-row justify-center items-center max-w-[260px] w-full mx-auto px-[65px] py-[11px] text-white text-[12px] bg-mainColor rounded-[5px] cursor-pointer"
+            className={`${
+              mobileNumber.length === 10
+                ? "opacity-100 pointer-events-auto cursor-pointer"
+                : "opacity-50 pointer-events-none !cursor-not-allowed"
+            }
+            bg-secondary mt-[20px] flex flex-row justify-center items-center w-full max-w-[350px] mx-auto px-[65px] py-[11px] text-white text-[12px] rounded-[5px] cursor-pointer`}
             // onClick={initiatePayment}
             onClick={initiatePayment}
           >

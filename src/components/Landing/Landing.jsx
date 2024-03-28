@@ -303,23 +303,28 @@ const Landing = () => {
         <span className="text-[13px] text-white font-semibold">
           Select a plan based on the books you reed per week
         </span>
-        <div className="flex flex-row justify-center items-center gap-[8px]">
+        <div className="flex flex-row justify-center items-center gap-[20px]">
           {planDetails.map((plan, index) => {
             return (
               <div
                 key={index}
-                className={`relative flex flex-col justify-center items-center w-[100px] h-[100px] rounded-[5px] ${
-                  plan.popular
-                    ? "text-mainColor bg-white"
-                    : "text-unHighlightDark bg-mainColorLight"
-                }`}
+                className="relative flex flex-col justify-center items-center w-[74px] h-[132px] rounded-[5px] text-mainColor bg-white"
               >
+                <div className="flex flex-col justify-between items-center">
+                  <span className="h-[20px] mb-[10px]">
+                    <img className="w-full" src={plan.icon} alt="PlanIcon" />
+                  </span>
+                  <span className="text-[10px] font-extrabold">
+                    {plan.title}
+                  </span>
+                </div>
                 <span className="text-[30px] font-extrabold">{plan.books}</span>
                 <span className="text-[10px] font-semibold">Book/Week</span>
-                <span className="text-[13px] font-bold pt-[14px] ">
+                {/* <span className="text-[13px] font-bold pt-[14px] ">
                   Rs.{plan.price}
-                </span>
-                <div
+                </span> */}
+
+                {/* <div
                   className={`${
                     plan.popular ? "" : "hidden"
                   } absolute -top-[2px] -right-[5px] w-[45px] h-[15px] flex items-center justify-center bg-secondary text-white rounded-[2px] rounded-br-none text-[8px] z-[2]`}
@@ -333,14 +338,14 @@ const Landing = () => {
                   style={{
                     clipPath: "polygon(0% 0%, 100% 0%, 0% 100%)",
                   }}
-                ></div>
+                ></div> */}
               </div>
             );
           })}
         </div>
         <div className="mt-[30px] h-[36px] w-[108px] mx-auto bg-secondary rounded-[5px] flex items-center justify-center">
           <Link to={"/register"} className="text-white text-[12px] font-bold">
-            Explore Pricing
+            Explore Plan
           </Link>
         </div>
       </section>

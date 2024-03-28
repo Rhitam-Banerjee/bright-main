@@ -1,21 +1,31 @@
 import authorImg from "../../icons/authorImg.svg";
 import seriesImage from "../../icons/seriesImgSelected.svg";
 import genreImage from "../../icons/genreImg.svg";
+
+import turtleIcon from "../../icons/turtleIcon.svg";
+import bearIcon from "../../icons/bearIcon.svg";
+import tigerIcon from "../../icons/tigerIcon.svg";
 export const planDetails = [
   {
     books: 1,
     price: "2,399",
     popular: false,
+    icon: turtleIcon,
+    title: "Basic",
   },
   {
     books: 2,
     price: "3,599",
     popular: true,
+    icon: bearIcon,
+    title: "Standard",
   },
   {
     books: 4,
     price: "4,799",
     popular: false,
+    icon: tigerIcon,
+    title: "Premium",
   },
 ];
 export const bookVideos = [

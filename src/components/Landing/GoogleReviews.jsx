@@ -79,9 +79,9 @@ const GoogleReviews = () => {
                 >
                   {review.reviewer_name}
                 </a>
-                <span className="text-[10px]">
+                {/* <span className="text-[10px]">
                   {getDateString(review.review_date_time)}
-                </span>
+                </span> */}
               </div>
             </div>
             <div className="text-[9px] my-auto text-center text-unHighlightDark line-clamp-6">
