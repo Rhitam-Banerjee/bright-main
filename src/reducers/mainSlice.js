@@ -85,7 +85,7 @@ export const mainSlice = createSlice({
       state.registerDetails.childDateOfBirth = "";
     },
     setSelectedSubscription: (stat, { payload }) => {
-      stat.registerDetails.selectedSubscription = payload;
+      stat.registerDetails.selectedSubscription = parseInt(payload);
     },
     initializePreferences: (state, action) => {
       state.childPreferences = action.payload.children.map((child) => {
