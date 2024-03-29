@@ -14,7 +14,6 @@ import urls from "../../utils/urls";
 import bookIcon from "../../icons/bookIcon.svg";
 import bookIconOrange from "../../icons/bookIconOrange.svg";
 import authorImg from "../../icons/authorImg.svg";
-import NewSlider from "../BookSlider/NewSlider";
 
 import { FaAmazon } from "react-icons/fa";
 import { NewBook } from "../Book";
@@ -190,7 +189,6 @@ const AmazonAuthors = () => {
         })}
       </Swiper>
       {authorsBookLoaded && authorChosen && (
-        // <NewSlider id={authorChosen} container={authorBooks} />
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}

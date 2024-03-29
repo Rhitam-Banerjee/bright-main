@@ -17,7 +17,6 @@ import seriesImg from "../../icons/seriesImg.svg";
 import seriesImgSelected from "../../icons/seriesImgSelected.svg";
 import amazonLogo from "../../icons/amazoncom.svg";
 import { FaAmazon } from "react-icons/fa";
-import NewSlider from "../BookSlider/NewSlider";
 import { NewBook } from "../Book";
 
 const AmazonSeries = () => {
@@ -208,7 +207,6 @@ const AmazonSeries = () => {
           })}
         </Swiper>
         {seriesBookLoaded && seriesChosen && (
-          // <NewSlider id={seriesChosen} container={seriesBook} />
           <Swiper
             slidesPerView={"auto"}
             grabCursor={true}

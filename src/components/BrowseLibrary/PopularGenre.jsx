@@ -202,7 +202,6 @@ const PopularGenre = () => {
           })}
         </Swiper>
         {genreBookLoaded && genreChosen && (
-          // <NewSlider id={genreChosen} container={genreBook} />
           <Swiper
             slidesPerView={"auto"}
             grabCursor={true}
