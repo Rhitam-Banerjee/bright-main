@@ -23,22 +23,6 @@ const Wishlist = () => {
     (store) => store.wishlist
   );
 
-  const getWishlist = async () => {
-    try {
-      const response = await axios.get(devUrls.getWishlist, {
-        withCredentials: true,
-        params: { guid: user.guid },
-      });
-      dispatch(setWishlist({ wishlist: response.data.wishlists }));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getWishlist();
-  }, [orderBucket, bucket]);
-
   return (
     <section className="mt-[20px] w-full mx-auto px-[15px] ">
       <div className="flex flex-row justify-start items-center">

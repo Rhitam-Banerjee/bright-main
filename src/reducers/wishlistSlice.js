@@ -8,6 +8,7 @@ const initialState = {
   dumpedBooks: [],
   previousBooks: [],
   currentBooks: [],
+  completeSeries: [],
 };
 
 export const wishlistSlice = createSlice({

@@ -22,15 +22,102 @@ import {
   setWishlist,
 } from "../../reducers/wishlistSlice";
 import Wishlist from "./Wishlist";
+import CompleteSeries from "./CompleteSeries";
+import { setAcitveChild, setAlert, setUser } from "../../reducers/mainSlice";
+import { FaEdit } from "react-icons/fa";
 
+const getDate = (date) => {
+  const d = new Date(date);
+  const month = d.toLocaleString("default", { month: "long" });
+  return `${d.getDate()} ${month} ${d.getFullYear()}`;
+};
+const getFormattedDate = (date) => {
+  const d = new Date(date);
+  let month = String(d.getMonth() + 1);
+  if (month.length < 2) month = "0" + month;
+  let day = String(d.getDate() + 1);
+  if (day.length < 2) day = "0" + day;
+  return `${d.getFullYear()}-${month}-${day - 1}`;
+};
 const YourLibrary = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.main);
-  const { orderBucket, bucket, wishlist, suggestedBooks } = useSelector(
-    (store) => store.wishlist
-  );
-  const [activeChild, setActiveChild] = useState(0);
-  useEffect(() => {}, []);
+  const { user, activeChild } = useSelector((store) => store.main);
+  const { orderBucket, bucket, wishlist, suggestedBooks, completeSeries } =
+    useSelector((store) => store.wishlist);
+
+  const getOrderBucket = async () => {
+    try {
+      const response = await axios.get(devUrls.getOrderBucket, {
+        withCredentials: true,
+        params: { guid: user.guid },
+      });
+      dispatch(setOrderBucket({ orderBucket: response.data.wishlists }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getBucket = async () => {
+    try {
+      const response = await axios.get(devUrls.getBucket, {
+        withCredentials: true,
+        params: { guid: user.guid },
+      });
+      dispatch(setBucket({ bucket: response.data.wishlists }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getWishlist = async () => {
+    try {
+      const response = await axios.get(devUrls.getWishlist, {
+        withCredentials: true,
+        params: { guid: user.guid },
+      });
+      dispatch(setWishlist({ wishlist: response.data.wishlists }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateDeliveryDate = async (event) => {
+    try {
+      const response = await axios.post(
+        devUrls.changeDeliveryDate,
+        {
+          delivery_date: getFormattedDate(event.target.value),
+        },
+        { withCredentials: true }
+      );
+      dispatch(setAlert({ text: "Delivery date updated", color: "#33A200" }));
+      dispatch(setUser({ user: response.data.user }));
+    } catch (err) {
+      console.log(err);
+      dispatch(setAlert({ text: err.response.data.message, color: "#F75549" }));
+    }
+  };
+
+  const getCompleteSeries = async () => {
+    const response = await axios.get(devUrls.getCompleteSeries, {
+      withCredentials: true,
+      params: { guid: user.children[activeChild].guid },
+    });
+    // console.log(user.children[activeChild]);
+  };
+
+  useEffect(() => {
+    getWishlist();
+  }, [orderBucket, bucket]);
+
+  useEffect(() => {
+    getOrderBucket();
+    getBucket();
+  }, []);
+
+  // useEffect(() => {
+  //   getCompleteSeries();
+  // }, [activeChild]);
 
   return (
     <main className="mt-[100px] px-[5px]">
@@ -55,7 +142,7 @@ const YourLibrary = () => {
                 }
                 `}
                 onClick={() => {
-                  setActiveChild(index);
+                  dispatch(setAcitveChild(index));
                 }}
               >
                 <div className="flex flex-col justify-between items-start w-[180px] h-[83px] p-[12px]">
@@ -66,7 +153,7 @@ const YourLibrary = () => {
                   <div className="text-[9px] font-semibold">
                     <span className="text-secondary">Age group - </span>
                     <span className="text-white">
-                      {child.age_group} - {child.age_group + 1}
+                      {child.age} - {child.age + 1}
                     </span>
                   </div>
                 </div>
@@ -83,7 +170,7 @@ const YourLibrary = () => {
           Upcomming delivery
         </span>
         {orderBucket.length ? (
-          <div className="bucket-details">
+          <div className="bucket-details mt-[50px]">
             <div className="bucket-list">
               {orderBucket.map((book, i) => {
                 return (
@@ -97,9 +184,19 @@ const YourLibrary = () => {
         ) : (
           <p className="blue-button create-bucket">No Bucket Created</p>
         )}
+        <button className="blue-button date-button">
+          <span>
+            Delivery Date
+            {user.next_delivery_date &&
+              ` - ${getDate(user.next_delivery_date)}`}
+          </span>
+          <FaEdit />
+          <input type="date" onChange={updateDeliveryDate} />
+        </button>
       </section>
       <div className="w-[95%] mx-auto h-[0.5px] my-[20px] bg-secondary" />
-      {Wishlist.length > 0 && <Wishlist />}
+      {wishlist.length > 0 && <Wishlist />}
+      {completeSeries.length > 0 && <CompleteSeries />}
     </main>
   );
 };

@@ -31,6 +31,7 @@ const initialState = {
     registrationDone: false,
     paymentStatus: "",
   },
+  activeChild: 0,
 };
 
 export const mainSlice = createSlice({
@@ -83,6 +84,9 @@ export const mainSlice = createSlice({
       ];
       state.registerDetails.childName = "";
       state.registerDetails.childDateOfBirth = "";
+    },
+    setAcitveChild: (state, { payload }) => {
+      state.activeChild = parseInt(payload);
     },
     setSelectedSubscription: (stat, { payload }) => {
       stat.registerDetails.selectedSubscription = parseInt(payload);
@@ -140,6 +144,7 @@ export const {
   setRegisterDetails,
   setSelectedSubscription,
   addChildToRegisterDetails,
+  setAcitveChild,
   flushRegisterDetails,
   updatePreferences,
   initializePreferences,
