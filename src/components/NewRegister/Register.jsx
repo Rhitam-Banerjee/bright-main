@@ -68,12 +68,6 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(registrationStep);
-    console.log(paymentStatus);
-    console.log(paymentDone);
-  }, [registrationStep, paymentDone, paymentStatus]);
-
   return (
     <main className="mt-[90px] flex flex-col justify-center items-center gap-[30px]">
       {!registrationDone && (

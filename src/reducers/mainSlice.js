@@ -6,7 +6,7 @@ const initialState = {
   isLoggedIn: false,
   alert: { text: "", color: "" },
   user: {},
-  plan: planDetails[1],
+  plan: planDetails[0][1],
   // plan: plans[2],
   registrationStep: 0,
   childPreferences: [],
@@ -18,7 +18,7 @@ const initialState = {
     mobileNumber: "",
     contactNumber: "",
     otp: "",
-    selectedPlan: planDetails[1],
+    selectedPlan: planDetails[0][1],
     // selectedPlan: plans[1],
     selectedSubscription: 6,
     address: "",
@@ -84,6 +84,9 @@ export const mainSlice = createSlice({
       state.registerDetails.childName = "";
       state.registerDetails.childDateOfBirth = "";
     },
+    setSelectedSubscription: (stat, { payload }) => {
+      stat.registerDetails.selectedSubscription = payload;
+    },
     initializePreferences: (state, action) => {
       state.childPreferences = action.payload.children.map((child) => {
         if (child.preferences)
@@ -135,6 +138,7 @@ export const {
   previousStepRegister,
   goToStepRegister,
   setRegisterDetails,
+  setSelectedSubscription,
   addChildToRegisterDetails,
   flushRegisterDetails,
   updatePreferences,

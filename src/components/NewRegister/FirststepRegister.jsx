@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
@@ -22,6 +22,7 @@ import {
   nextStepRegister,
   setAlert,
   setRegisterDetails,
+  setSelectedSubscription,
 } from "../../reducers/mainSlice";
 import { planDetails, stepsComplete } from "./constants";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +33,8 @@ const FirststepRegister = () => {
   const {
     registerDetails: { mobileNumber, selectedPlan, selectedSubscription },
   } = useSelector((store) => store.main);
+
+  const [planType, setPlanType] = useState(true);
 
   const selectPlan = async () => {
     try {
@@ -177,8 +180,41 @@ const FirststepRegister = () => {
           <div className="h-[12px] w-[1px] bg-secondary" />
           <span className="text-[11px] font-semibold ">Reschedule anytime</span>
         </div>
+        <div className="flex flex-row items-center gap-[10px]">
+          <span
+            className={`${
+              planType ? "text-mainColor" : "text-unHighlightLight"
+            } text-[11px] font-bold `}
+          >
+            Semi
+          </span>
+          <span
+            className="relative w-[54px] h-[25px] bg-mainColor rounded-[25px] p-[2px]"
+            onClick={() => {
+              setPlanType((prev) => {
+                return (prev = !planType);
+              });
+              dispatch(setSelectedSubscription(`${!planType ? 6 : 12}`));
+            }}
+          >
+            <span
+              className={`${
+                planType === true
+                  ? "left-[2px] right-auto"
+                  : "left-auto right-[2px]"
+              } absolute top-1/2 -translate-y-1/2 w-[21px] h-[21px] bg-white rounded-full`}
+            ></span>
+          </span>
+          <span
+            className={`${
+              !planType ? "text-mainColor" : "text-unHighlightLight"
+            } text-[11px] font-bold `}
+          >
+            Annual
+          </span>
+        </div>
         <div className="w-full flex flex-col justify-center items-center gap-[8px]">
-          {planDetails.map((plan, index) => {
+          {planDetails[`${planType ? 0 : 1}`].map((plan, index) => {
             return (
               <div
                 key={index}
@@ -307,20 +343,25 @@ const FirststepRegister = () => {
           })}
         </div>
         <div className="w-full max-w-[360px] mx-auto">
-          <form className="mt-[20px] flex flex-col items-center justify-between w-full max-w-[350px] h-[36px] mx-auto text-[12px] font-semibold">
-            <input
-              className="w-full flex-1 p-[4px] rounded-[5px] bg-transparent placeholder-[#FF9F30] placeholder-opacity-70"
-              type="number"
-              value={mobileNumber}
-              placeholder="Enter mobile number"
-              style={{
-                border: "2px solid #FF9F30",
-              }}
-              onChange={({ target: { value } }) =>
-                dispatch(setRegisterDetails({ mobileNumber: value }))
-              }
-            />
-          </form>
+          {mobileNumber.length !== 10 && (
+            <form className="mt-[20px] flex flex-col items-center justify-between w-full max-w-[350px] h-[36px] mx-auto text-[12px] font-semibold">
+              <input
+                className="w-full flex-1 p-[4px] rounded-[5px] bg-transparent placeholder-[#FF9F30] placeholder-opacity-70"
+                type="text"
+                maxLength={10}
+                value={mobileNumber}
+                placeholder="Enter mobile number"
+                style={{
+                  border: "2px solid #FF9F30",
+                }}
+                onChange={({ target: { value } }) => {
+                  if (value.match(/^[0-9]*$/)) {
+                    dispatch(setRegisterDetails({ mobileNumber: value }));
+                  }
+                }}
+              />
+            </form>
+          )}
           <span
             className={`${
               mobileNumber.length === 10
