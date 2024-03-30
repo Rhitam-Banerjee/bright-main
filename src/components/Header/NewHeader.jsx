@@ -161,7 +161,7 @@ const NewHeader = () => {
           )}
         </div>
         <Link
-          to={"/"}
+          to={isLoggedIn ? "/browse-library" : "/"}
           className="flex w-max mx-auto items-center justify-center"
         >
           <img className="w-[100px] mr-auto" src={logo} alt="Logo" />

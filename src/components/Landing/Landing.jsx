@@ -160,14 +160,18 @@ const Landing = () => {
             </span>
           </div>
           {!isLoggedIn && (
-            <form className="mt-[25px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor rounded-[5px] p-[4px]">
+            <form className="mt-[25px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor bg-[#ffffffcb] rounded-[5px] p-[4px]">
               <input
-                className="flex-1 bg-transparent"
-                type="number"
-                placeholder="Enter mobile number to explore"
-                onChange={({ target: { value } }) =>
-                  dispatch(setRegisterDetails({ mobileNumber: value }))
-                }
+                className="flex-1 bg-transparent placeholder-mainColor"
+                type="text"
+                maxLength={10}
+                value={mobileNumber}
+                placeholder="Enter mobile number"
+                onChange={({ target: { value } }) => {
+                  if (value.match(/^[0-9]*$/)) {
+                    dispatch(setRegisterDetails({ mobileNumber: value }));
+                  }
+                }}
               />
               <button
                 className={`${

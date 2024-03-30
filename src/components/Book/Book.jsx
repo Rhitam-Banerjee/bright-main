@@ -98,7 +98,7 @@ const Book = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err));
       response.books.books?.sort((a, b) => {
-        return b.stock_available - a.stock_available;
+        return b.stocks_available - a.stocks_available;
       });
       setSeriesName(response.books.name);
       setSeriesBook(response.books.books);
@@ -173,6 +173,7 @@ const Book = () => {
       console.log(error);
     }
   };
+
   const getAuthorBooks = async () => {
     try {
       const response = await axios
@@ -183,11 +184,6 @@ const Book = () => {
         )
         .then((res) => res.data)
         .catch((err) => console.log(err));
-      // response.authors.forEach((author, index) => {
-      //   if (author.author_books.length === 0) {
-      //     delete response.author[index];
-      //   }
-      // });
       const title = response.authors.map((author) => {
         return author.name;
       });
@@ -393,10 +389,8 @@ const Book = () => {
                 <img
                   className="w-auto h-[280px] !max-h-[280px] m-auto"
                   src={book.image
-                    .replace("US2", "US8")
-                    .replace("SX2", "SX8")
-                    .replace("_US", "_SY")
-                    .replace(".pg", ".jpg")}
+                    ?.replace(".pg", ".jpg")
+                    .replace(".jpgjpg", ".jpg")}
                   alt="BookImage"
                 />
               </div>
@@ -627,7 +621,7 @@ const Book = () => {
               freeMode={true}
               navigation={true}
               modules={[FreeMode, Navigation, Virtual]}
-              className="mySwiper py-2 no-slider-arrow"
+              className="mySwiper py-2"
             >
               {bookVideos.map((video, index) => {
                 return (
@@ -724,7 +718,7 @@ const Book = () => {
               freeMode={true}
               navigation={true}
               modules={[FreeMode, Navigation, Virtual]}
-              className="mySwiper !py-2 no-slider-arrow"
+              className="mySwiper !py-2"
             >
               {bookSetVideos.map((video, index) => {
                 return (

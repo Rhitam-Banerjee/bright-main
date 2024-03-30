@@ -289,7 +289,7 @@ const FirststepRegister = () => {
                         plan.planId === selectedPlan.planId
                           ? "text-white"
                           : "text-unHighlightLight"
-                      } text-[9px] font-thin ml-auto`}
+                      } text-[9px] font-light ml-auto`}
                     >
                       Avg. member reads books worth
                     </span>
@@ -317,7 +317,7 @@ const FirststepRegister = () => {
                         plan.planId === selectedPlan.planId
                           ? "text-white"
                           : "text-unHighlightLight"
-                      } text-[9px] font-thin ml-auto`}
+                      } text-[9px] font-light ml-auto`}
                     >
                       Rs. {plan.avgRead} +
                     </span>

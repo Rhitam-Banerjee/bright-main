@@ -210,7 +210,7 @@ const YourLibrary = () => {
         </button> */}
       </section>
       <section className="mt-[20px] flex flex-col justify-between items-center gap-[10px] w-max mx-auto">
-        <div className="w-full flex flex-row justify-start items-end gap-[10px]">
+        <div className="w-full flex flex-row justify-center items-center gap-[10px]">
           <img className="w-[15px]" src={calenderOrange} alt="CalenderIcon" />
           {user.next_delivery_date && (
             <span className="text-[9px] font-bold">
@@ -241,15 +241,6 @@ const YourLibrary = () => {
                         {index + 1}
                       </div>
                     </div>
-                  </div>
-                  <div className="flex flex-row justify-between items-center">
-                    <span>
-                      <img className="w-[10px]" src={editIcon} alt="" />
-                      <span>Delivery details</span>
-                    </span>
-                    <span className="w-[75px] h-[18px] rounded-[5px] bg-unHighlightLight">
-                      <IoIosCloseCircle className="text-white" />
-                    </span>
                   </div>
                 </SwiperSlide>
               );
