@@ -34,7 +34,7 @@ import logOutIcon from "../../icons/logOutIcon.svg";
 // import { FaRegUser } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
-import { FaCross, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { searchReset, setSearchText } from "../../reducers/mainSlice";
 
 const maxAge = 13;
@@ -92,9 +92,7 @@ const NewHeader = () => {
 
   return (
     <nav
-      className={`fixed ${
-        renderAge ? "h-[130px]" : "h-max"
-      } top-0 left-0 w-full mb-16 px-[13px] py-[14px] flex flex-col justify-start items-center bg-mainColor z-[99]`}
+      className={`fixed top-0 left-0 w-full mb-16 px-[13px] py-[14px] flex flex-col justify-start items-center bg-mainColor z-[99]`}
     >
       <div className="w-full flex flex-row justify-between items-center gap-[10px]">
         <div
@@ -179,7 +177,7 @@ const NewHeader = () => {
               className="w-max h-full grid place-items-center mr-[10px]"
               type="submit"
             >
-              <img className="w-[14px]" src={searchIcon} alt="SearchIcon" />
+              <CiSearch className="text-[14px] text-white" />
             </button>
             <input
               type="text"
@@ -284,8 +282,32 @@ const NewHeader = () => {
             )}
         </div>
       </div>
+      {(pathname === "/browse-library" || pathname.includes("/search")) && (
+        <form
+          onSubmit={() => {
+            navigate(`/search/${searchText}`);
+          }}
+          className="absolute bottom-0 md:-bottom-[50px] left-1/2 -translate-x-1/2 !w-full h-[50px] py-[10px] px-[20px] hidden md:flex flex-row justify-start items-center bg-white gap-[10px]"
+        >
+          <button
+            className="w-max h-full grid place-items-center mr-[10px]"
+            type="submit"
+          >
+            <CiSearch className="text-[14px] text-mainColor" />
+          </button>
+          <input
+            type="text"
+            className="w-full h-full bg-transparent placeholder-mainColor text-[13px] text-white"
+            placeholder="Search Book,Author,Series,Genre..."
+            value={searchText}
+            onChange={({ target: { value } }) => {
+              dispatch(setSearchText(value));
+            }}
+          />
+        </form>
+      )}
       {renderAge && (
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 !w-full px-8 md:px-3 py-2 flex flex-row items-center justify-start gap-[15px] bg-gradient-to-b from-mainColorLight to-white">
+        <div className="absolute -bottom-[60px] md:-bottom-[110px] left-1/2 -translate-x-1/2 !w-full px-8 md:px-3 py-2 flex flex-row items-center justify-start gap-[15px] bg-gradient-to-b from-mainColorLight to-white">
           <Swiper
             slidesPerView={"auto"}
             grabCursor={true}

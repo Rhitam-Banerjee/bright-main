@@ -77,15 +77,19 @@ const Login = () => {
           </label>
           <input
             className="w-[283px] h-[29px] text-[13px] p-[5px] rounded-[5px]"
-            id="mobileNumber"
-            value={mobileNumber}
             style={{
               border: "1px solid #3B72FF",
             }}
-            type="number"
-            onChange={({ target: { value } }) =>
-              dispatch(setRegisterDetails({ mobileNumber: value.trim() }))
-            }
+            id="mobileNumber"
+            type="text"
+            maxLength={10}
+            value={mobileNumber}
+            placeholder="Enter mobile number"
+            onChange={({ target: { value } }) => {
+              if (value.match(/^[0-9]*$/)) {
+                dispatch(setRegisterDetails({ mobileNumber: value }));
+              }
+            }}
           />
         </div>
         <div className="flex flex-col items-start justify-start gap-[5px]">

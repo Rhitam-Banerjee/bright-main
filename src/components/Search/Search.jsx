@@ -86,7 +86,7 @@ const Search = () => {
   }, [search, age]);
 
   return (
-    <main className="mt-[140px] pl-8 md:px-2 pb-[10px]">
+    <main className="mt-[190px] pl-8 md:px-2 pb-[10px]">
       {!loading ? (
         <>
           <h1 className="flex font-bold text-[12px] pb-[10px]">

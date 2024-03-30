@@ -153,14 +153,14 @@ const Landing = () => {
             <span className="px-2 text-secondary">-</span>
             Home Delivered
           </div>
-          <div className="text-[15px] font-bold text-unHighlightDark">
+          <div className="mb-[20px] text-[15px] font-bold text-unHighlightDark">
             <span>World class books</span>
             <span className="ml-2 pl-2 border-l-[2px] border-secondary">
               Doorstep Delivery
             </span>
           </div>
           {!isLoggedIn && (
-            <form className="mt-[25px] mb-[10px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor bg-[#ffffffcb] rounded-[5px] p-[4px]">
+            <form className="mt-[5px] mb-[10px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor bg-[#ffffffcb] rounded-[5px] p-[4px]">
               <input
                 className="flex-1 bg-transparent placeholder-mainColor"
                 type="text"
