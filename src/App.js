@@ -17,7 +17,7 @@ import Login from "./components/Login/Login";
 import { Register } from "./components/NewRegister";
 import ForgotPassword from "./components/Login/ForgotPassword";
 
-import Content from "./components/Content";
+import { AboutUs, ContactUs } from "./components/Content";
 import HowItWorks from "./components/Content/HowItWorks";
 import Pricing from "./components/Pricing";
 
@@ -114,8 +114,8 @@ const App = () => {
         />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
-        <Route path="/about-us" element={<Content type="About Us" />} />
-        <Route path="/contact-us" element={<Content type="Contact Us" />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />

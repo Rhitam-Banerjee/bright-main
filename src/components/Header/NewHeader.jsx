@@ -33,7 +33,7 @@ import logOutIcon from "../../icons/logOutIcon.svg";
 
 // import { FaRegUser } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
-import { CiSearch } from "react-icons/ci";
+import { CiSearch, CiCircleRemove } from "react-icons/ci";
 import { FaSearch } from "react-icons/fa";
 import { searchReset, setSearchText } from "../../reducers/mainSlice";
 
@@ -168,7 +168,8 @@ const NewHeader = () => {
           className={`flex flex-1 ml-auto flex-row items-center justify-between gap-[50px] md:gap-[10px]`}
         >
           <form
-            onSubmit={() => {
+            onSubmit={(e) => {
+              e.preventDefault();
               navigate(`/search/${searchText}`);
             }}
             className="md:hidden mx-auto p-[10px] h-[34px] max-w-[530px] flex-1 flex flex-row justify-start items-center border-[1px] border-white bg-[#ffffff36] rounded-[5px]"
@@ -189,8 +190,21 @@ const NewHeader = () => {
               }}
             />
           </form>
-
-          <div className="md:hidden ml-auto w-max flex flex-row items-center justify-start gap-[60px] md:!gap-[50px]">
+          {pathname !== "/browse-library" && !pathname.includes("/search") && (
+            <div
+              className="ml-auto w-max hidden md:flex flex-row justify-center items-center"
+              onClick={() => {
+                setSearchOpen(!searchOpen);
+              }}
+            >
+              {searchOpen ? (
+                <CiCircleRemove className="text-[20px] text-white" />
+              ) : (
+                <CiSearch className="text-[20px] text-white" />
+              )}
+            </div>
+          )}
+          <div className="md:hidden w-max flex flex-row items-center justify-start gap-[60px] md:!gap-[50px]">
             {searchBarLinks.map((link, index) => {
               return (
                 <Link
@@ -211,7 +225,7 @@ const NewHeader = () => {
           {isLoggedIn ? (
             <>
               <Link
-                className="md:hidden flex flex-row justify-start items-center text-[13px] text-white"
+                className={` md:hidden flex flex-row justify-start items-center text-[13px] text-white`}
                 to={"/your-library"}
               >
                 <img
@@ -221,12 +235,18 @@ const NewHeader = () => {
                 />
                 <span>My Library</span>
               </Link>
-              <Link className="hidden md:grid" to={"/your-library"}>
-                <img
+              <Link
+                className={`${
+                  pathname === "/browse-library" ? "ml-auto" : ""
+                } hidden md:flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]`}
+                to={"/your-library"}
+              >
+                {/* <img
                   className="w-[15px] ml-[10px]"
                   src={bookIcon}
                   alt="LoginIcon"
-                />
+                /> */}
+                <span className="text-[13px]">My Library</span>
               </Link>
 
               <div
@@ -271,17 +291,46 @@ const NewHeader = () => {
             (pathname !== "/login" ||
               (pathname !== "/register" && registrationStep === 1)) && (
               <Link
-                className="ml-auto hidden md:flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]"
-                to={"/register"}
+                className={` ${
+                  pathname === "/browse-library" ? "ml-auto" : ""
+                } hidden md:flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]`}
+                to={pathname !== "/register" ? "/register" : "/browse-library"}
               >
                 <span className="!w-[15px]">
                   <img className="!w-[15px]" src={badgeIcon} alt="Badge" />
                 </span>
-                <span className="text-[13px]">Subscribe</span>
+                <span className="text-[13px]">
+                  {pathname === "/register" ? "Browse" : "Subscribe"}
+                </span>
               </Link>
             )}
         </div>
       </div>
+      {(pathname !== "/browse-library" || !pathname.includes("/search")) &&
+        searchOpen && (
+          <form
+            onSubmit={() => {
+              navigate(`/search/${searchText}`);
+            }}
+            className="absolute bottom-0 md:-bottom-[50px] left-1/2 -translate-x-1/2 !w-full h-[50px] py-[10px] px-[20px] hidden md:flex flex-row justify-start items-center bg-white gap-[10px]"
+          >
+            <button
+              className="w-max h-full grid place-items-center mr-[10px]"
+              type="submit"
+            >
+              <CiSearch className="text-[20px] text-mainColor" />
+            </button>
+            <input
+              type="text"
+              className="w-full h-full bg-transparent placeholder-mainColor text-[13px] font-semibold text-mainColor"
+              placeholder="Search Book,Author,Series,Genre..."
+              value={searchText}
+              onChange={({ target: { value } }) => {
+                dispatch(setSearchText(value));
+              }}
+            />
+          </form>
+        )}
       {(pathname === "/browse-library" || pathname.includes("/search")) && (
         <form
           onSubmit={() => {
@@ -293,11 +342,11 @@ const NewHeader = () => {
             className="w-max h-full grid place-items-center mr-[10px]"
             type="submit"
           >
-            <CiSearch className="text-[14px] text-mainColor" />
+            <CiSearch className="text-[20px] text-mainColor" />
           </button>
           <input
             type="text"
-            className="w-full h-full bg-transparent placeholder-mainColor text-[13px] text-white"
+            className="w-full h-full bg-transparent placeholder-mainColor text-[13px] font-semibold text-mainColor"
             placeholder="Search Book,Author,Series,Genre..."
             value={searchText}
             onChange={({ target: { value } }) => {

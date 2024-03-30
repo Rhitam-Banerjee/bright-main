@@ -148,15 +148,21 @@ const Landing = () => {
         />
         <div className="absolute top-0 left-0 bottom-0 right-0 bg-[#ffffff59]" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[450px] w-full flex flex-col justify-center items-center bg-gradient-to-b from-[#ffffff0b] to-[#ffffff] to-80%">
-          <div className="mt-auto text-mainColor text-[19px] font-bold">
+          <div className="mt-auto mb-[10px] text-[15px] font-bold text-unHighlightDark">
+            India's Most Loved
+          </div>
+          <div className="text-mainColor text-[19px] font-bold">
             Library
             <span className="px-2 text-secondary">-</span>
             Home Delivered
           </div>
-          <div className="mb-[20px] text-[15px] font-bold text-unHighlightDark">
+          <div className="mb-[20px] text-[12px] font-bold text-unHighlightDark">
             <span>World class books</span>
             <span className="ml-2 pl-2 border-l-[2px] border-secondary">
-              Doorstep Delivery
+              Premium Delivery Service
+            </span>
+            <span className="ml-2 pl-2 border-l-[2px] border-secondary">
+              Curated Reading List
             </span>
           </div>
           {!isLoggedIn && (
