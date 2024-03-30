@@ -24,7 +24,7 @@ const Wishlist = () => {
   );
 
   return (
-    <section className="mt-[20px] w-full mx-auto px-[15px] ">
+    <section className="mt-[20px] w-full">
       <div className="flex flex-row justify-start items-center">
         <img
           className="w-[15px] mr-[5px]"

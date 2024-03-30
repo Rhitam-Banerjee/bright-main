@@ -13,6 +13,10 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import borwseIconOrangeFill from "../../icons/browseIconOrangeFill.svg";
 import childIcon from "../../icons/childIconYourLibrary.svg";
+import calenderOrange from "../../icons/calenderIconOrange.svg";
+import editIcon from "../../icons/editIcon.svg";
+
+import { IoIosCloseCircle } from "react-icons/io";
 
 import {
   setBucket,
@@ -21,15 +25,19 @@ import {
   setPreviousBooks,
   setWishlist,
 } from "../../reducers/wishlistSlice";
+
 import Wishlist from "./Wishlist";
 import CompleteSeries from "./CompleteSeries";
+
 import { setAcitveChild, setAlert, setUser } from "../../reducers/mainSlice";
-import { FaEdit } from "react-icons/fa";
 
 const getDate = (date) => {
   const d = new Date(date);
+  const dateNumber = d.getDate();
+  const day = d.toLocaleDateString("default", { weekday: "long" });
   const month = d.toLocaleString("default", { month: "long" });
-  return `${d.getDate()} ${month} ${d.getFullYear()}`;
+
+  return `${day}, ${dateNumber} ${month} ${d.getFullYear()}`;
 };
 const getFormattedDate = (date) => {
   const d = new Date(date);
@@ -120,7 +128,7 @@ const YourLibrary = () => {
   // }, [activeChild]);
 
   return (
-    <main className="mt-[100px] px-[5px]">
+    <main className="mt-[100px] px-[15px]">
       <section className="mt-[9px] w-max mx-auto">
         <Swiper
           slidesPerView={"auto"}
@@ -169,7 +177,14 @@ const YourLibrary = () => {
         <span className="text-[10px] font-semibold text-secondary">
           Upcomming delivery
         </span>
-        {orderBucket.length ? (
+        {/* <span>
+            Delivery Date
+            {user.next_delivery_date &&
+              ` - ${getDate(user.next_delivery_date)}`}
+          </span>
+          <FaEdit />
+          <input type="date" onChange={updateDeliveryDate} /> */}
+        {/* {orderBucket.length ? (
           <div className="bucket-details mt-[50px]">
             <div className="bucket-list">
               {orderBucket.map((book, i) => {
@@ -183,8 +198,8 @@ const YourLibrary = () => {
           </div>
         ) : (
           <p className="blue-button create-bucket">No Bucket Created</p>
-        )}
-        <button className="blue-button date-button">
+        )} */}
+        {/* <button className="blue-button date-button">
           <span>
             Delivery Date
             {user.next_delivery_date &&
@@ -192,9 +207,59 @@ const YourLibrary = () => {
           </span>
           <FaEdit />
           <input type="date" onChange={updateDeliveryDate} />
-        </button>
+        </button> */}
       </section>
-      <div className="w-[95%] mx-auto h-[0.5px] my-[20px] bg-secondary" />
+      <section className="mt-[20px] flex flex-col justify-between items-center gap-[10px] w-max mx-auto">
+        <div className="w-full flex flex-row justify-start items-end gap-[10px]">
+          <img className="w-[15px]" src={calenderOrange} alt="CalenderIcon" />
+          {user.next_delivery_date && (
+            <span className="text-[9px] font-bold">
+              {getDate(user.next_delivery_date)}
+            </span>
+          )}
+        </div>
+        {orderBucket.length > 0 ? (
+          <Swiper
+            slidesPerView={"auto"}
+            grabCursor={true}
+            freeMode={true}
+            navigation={true}
+            modules={[FreeMode, Navigation, Virtual]}
+            className="mySwiper !py-4 no-slider-arrow w-max !ml-0 mr-auto"
+          >
+            {orderBucket?.map((book, index) => {
+              return (
+                <SwiperSlide key={index} virtualIndex={index}>
+                  <div className="flex flex-col justify-center items-center !w-[200px] !h-[200px] bg-lightGrey rounded-[5px]">
+                    <div className="relative !max-w-[160px] w-full h-[160px]">
+                      <img
+                        className="!max-w-[160px] !max-h-[160px]"
+                        src={book.image}
+                        alt="BookImage"
+                      />
+                      <div className="absolute -bottom-[20px] -left-[15px] text-[48px] font-bold text-white font-outline-1">
+                        {index + 1}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-row justify-between items-center">
+                    <span>
+                      <img className="w-[10px]" src={editIcon} alt="" />
+                      <span>Delivery details</span>
+                    </span>
+                    <span className="w-[75px] h-[18px] rounded-[5px] bg-unHighlightLight">
+                      <IoIosCloseCircle className="text-white" />
+                    </span>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        ) : (
+          <div></div>
+        )}
+      </section>
+      <div className="w-full h-[0.5px] my-[20px] bg-secondary" />
       {wishlist.length > 0 && <Wishlist />}
       {completeSeries.length > 0 && <CompleteSeries />}
     </main>
