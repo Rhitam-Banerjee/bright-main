@@ -138,7 +138,7 @@ const Landing = () => {
     <main className="mt-[50px]">
       <section className="relative h-[570px] w-full overflow-hidden">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120%] w-[120%] rotate-6"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120%] w-[120%] rotate-1"
           style={{
             backgroundImage: `url(${heroBg})`,
             backgroundPosition: "50% 70%",
@@ -147,8 +147,8 @@ const Landing = () => {
           }}
         />
         <div className="absolute top-0 left-0 bottom-0 right-0 bg-[#ffffff59]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[150px] w-full flex flex-col justify-center items-center bg-[#ffffffd0]">
-          <div className="text-mainColor text-[19px] font-bold">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[450px] w-full flex flex-col justify-center items-center bg-gradient-to-b from-[#ffffff0b] to-[#ffffff] to-80%">
+          <div className="mt-auto text-mainColor text-[19px] font-bold">
             Library
             <span className="px-2 text-secondary">-</span>
             Home Delivered
@@ -160,7 +160,7 @@ const Landing = () => {
             </span>
           </div>
           {!isLoggedIn && (
-            <form className="mt-[25px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor bg-[#ffffffcb] rounded-[5px] p-[4px]">
+            <form className="mt-[25px] mb-[10px] flex flex-row items-center justify-between w-[282px] h-[36px] border-[2px] text-[12px] font-semibold border-mainColor bg-[#ffffffcb] rounded-[5px] p-[4px]">
               <input
                 className="flex-1 bg-transparent placeholder-mainColor"
                 type="text"
