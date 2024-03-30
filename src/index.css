@@ -18,8 +18,8 @@
 }
 
 body {
+  position: relative;
   margin: 0;
-  overflow-x: hidden;
   min-height: 100vh;
 }
 
@@ -183,9 +183,6 @@ img {
   font-size: 1rem !important;
   box-shadow: 0 5px 10px #00000060;
 }
-/* .swiper-button-next:hover,
-.swiper-button-prev:hover {
-} */
 .swiper-button-disabled {
   display: none;
 }
@@ -197,14 +194,3 @@ img {
 .no-slider-arrow > .swiper-button-prev {
   display: none;
 }
-/* .landingSwiperArrow > .swiper-button-prev,
-.landingSwiperArrow > .swiper-button-next {
-  width: 20px !important;
-  height: 20px !important;
-}
-.landingSwiperArrow > .swiper-button-prev {
-  left: 10px;
-}
-.landingSwiperArrow > .swiper-button-next {
-  right: 10px;
-} */

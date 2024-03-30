@@ -48,7 +48,7 @@ const NewHeader = () => {
   const [hamburgerClicked, setHamburgerClicked] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const {
-    main: { isLoggedIn, searchText },
+    main: { isLoggedIn, searchText, registrationStep },
     book: { age },
   } = useSelector((state) => state);
 
@@ -167,30 +167,13 @@ const NewHeader = () => {
           <img className="w-[100px] mr-auto" src={logo} alt="Logo" />
         </Link>
         <div
-          className={`flex flex-1 w-full ml-auto flex-row items-center justify-between gap-[50px] md:gap-[10px]`}
+          className={`flex flex-1 ml-auto flex-row items-center justify-between gap-[50px] md:gap-[10px]`}
         >
-          {/* <div
-            className="ml-auto h-[34px] w-full max-w-[530px] flex flex-row justify-start items-center bg-[#ffffffe0] rounded-[5px] border-[1px] border-white"
-            >
-              <img src={searchIcon} alt="SearchIcon" />
-              <input type="text" />
-          </div> */}
-          {/* onClick={() => {
-              setSearchOpen(!searchOpen);
-              if (searchOpen) {
-                dispatch(searchReset());
-              }
-            }} */}
-          {/* {!searchOpen ? (
-              <FaSearch className="ml-auto mr-1 w-max text-[15px] text-white font-bold" />
-            ) : (
-              <IoClose className="ml-auto mr-1 w-max text-[20px] text-white font-bold" />
-            )} */}
           <form
             onSubmit={() => {
               navigate(`/search/${searchText}`);
             }}
-            className="mx-auto p-[10px] w-full h-[34px] max-w-[530px] flex flex-row justify-start items-center border-[1px] border-white bg-[#ffffff36] rounded-[5px]"
+            className="md:hidden mx-auto p-[10px] h-[34px] max-w-[530px] flex-1 flex flex-row justify-start items-center border-[1px] border-white bg-[#ffffff36] rounded-[5px]"
           >
             <button
               className="w-max h-full grid place-items-center mr-[10px]"
@@ -286,19 +269,11 @@ const NewHeader = () => {
               </Link>
             </>
           )}
-          {!isLoggedIn && (
-            <>
+          {!isLoggedIn &&
+            (pathname !== "/login" ||
+              (pathname !== "/register" && registrationStep === 1)) && (
               <Link
-                className="md:hidden flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]"
-                to={"/register"}
-              >
-                <span className="!w-[15px]">
-                  <img className="!w-[15px]" src={badgeIcon} alt="Badge" />
-                </span>
-                <span className="text-[13px]">Become Member</span>
-              </Link>
-              <Link
-                className="hidden md:flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]"
+                className="ml-auto hidden md:flex flex-row justify-center items-center bg-secondary text-white font-bold rounded-[5px] p-[10px] gap-[7px]"
                 to={"/register"}
               >
                 <span className="!w-[15px]">
@@ -306,8 +281,7 @@ const NewHeader = () => {
                 </span>
                 <span className="text-[13px]">Subscribe</span>
               </Link>
-            </>
-          )}
+            )}
         </div>
       </div>
       {renderAge && (

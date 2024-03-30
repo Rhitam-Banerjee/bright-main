@@ -11,7 +11,7 @@ import { Book } from "./components/Book";
 import YourLibrary from "./components/OldYourLibrary";
 import { Search } from "./components/Search";
 import Author from "./components/Author/Author";
-import Footer from "./components/Footer";
+import Footer from "./components/Footer/Footer";
 
 import Login from "./components/Login/Login";
 import { Register } from "./components/NewRegister";
@@ -68,7 +68,7 @@ const App = () => {
   }, [dispatch, alert]);
 
   return (
-    <div className="app">
+    <div className="">
       {alert.text && (
         <div
           className="alert flex flex-row items-center justify-around"

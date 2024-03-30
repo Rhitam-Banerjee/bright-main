@@ -136,12 +136,12 @@ const Landing = () => {
 
   return (
     <main className="mt-[50px]">
-      <section className="relative h-[570px] w-full">
+      <section className="relative h-[570px] w-full overflow-hidden">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120%] w-[120%] rotate-6"
           style={{
             backgroundImage: `url(${heroBg})`,
-            backgroundPosition: "50% 50%",
+            backgroundPosition: "50% 70%",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
