@@ -328,7 +328,7 @@ const FirststepRegister = () => {
                     plan.popular ? "" : "hidden"
                   } absolute top-1 -right-[5px] w-[65px] h-[18px] flex items-center justify-center bg-secondary text-white rounded-[2px] rounded-br-none text-[10px] z-[2]`}
                 >
-                  Popular
+                  {planType ? "Popular" : "Saver"}
                 </div>
                 <div
                   className={`${
