@@ -11,22 +11,14 @@ import "swiper/css/virtual";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import { mobileNavLinks, searchBarLinks } from "./constants";
-import {
-  load,
-  stopLoad,
-  setSearchedBookSet,
-  setSearchQuery,
-  setAge,
-} from "../../reducers/bookSlice";
+import { setAge } from "../../reducers/bookSlice";
 
 import devUrls from "../../utils/devUrls";
-import urls from "../../utils/urls";
 import axios from "axios";
 
 import logo from "../../icons/BrightR.svg";
 import badgeIcon from "../../icons/badgeIcon.svg";
 import bookIcon from "../../icons/bookIconOutline.svg";
-import searchIcon from "../../icons/searchIcon.svg";
 import pricingIcon from "../../icons/pricingIcon.svg";
 import logInIcon from "../../icons/loginIcon.svg";
 import logOutIcon from "../../icons/logOutIcon.svg";
@@ -34,8 +26,7 @@ import logOutIcon from "../../icons/logOutIcon.svg";
 // import { FaRegUser } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { CiSearch, CiCircleRemove } from "react-icons/ci";
-import { FaSearch } from "react-icons/fa";
-import { searchReset, setSearchText } from "../../reducers/mainSlice";
+import { setSearchText } from "../../reducers/mainSlice";
 
 const maxAge = 13;
 
