@@ -78,9 +78,6 @@ const BookSlider = ({
         withCredentials: true,
         params: { guid: user.guid },
       });
-      response.data.wishlists.sort((a, b) => {
-        return b.date_added - a.date_added;
-      });
       dispatch(setWishlist({ wishlist: response.data.wishlists }));
     } catch (err) {
       console.log(err);

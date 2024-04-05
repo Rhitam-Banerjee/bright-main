@@ -77,12 +77,9 @@ const Landing = () => {
   const getWishlist = async () => {
     try {
       const response = await axios.get(devUrls.getWishlist, {
+        withCredentials: true,
         params: { guid: user.guid },
       });
-      response.data.wishlists.sort((b, a) => {
-        return b.date_added - a.date_added;
-      });
-      console.log(response.data.wishlists);
       dispatch(setWishlist({ wishlist: response.data.wishlists }));
     } catch (err) {
       console.log(err);
