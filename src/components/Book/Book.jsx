@@ -226,7 +226,7 @@ const Book = () => {
     }
   };
 
-  const wishlistAdd = async (book) => {
+  const wishlistAdd = async (book, isbn) => {
     dispatch(
       setAlert({ text: `${book.name} added to wishlist`, color: "#33A200" })
     );
@@ -234,7 +234,7 @@ const Book = () => {
     try {
       await axios.post(
         devUrls.addToWishlist,
-        { isbn: book.isbn },
+        { isbn: isbn },
         { withCredentials: true }
       );
     } catch (err) {
@@ -408,7 +408,7 @@ const Book = () => {
           {isLoggedIn && (
             <div
               className="flex flex-row justify-center items-center text-[12px] text-mainColor font-bold h-[45px] w-full max-w-[340px] m-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
-              onClick={() => wishlistAdd(book)}
+              onClick={() => wishlistAdd(book, isbn)}
             >
               <CiHeart className="w-[22px] h-[22px]" />
               Add To Wishlist

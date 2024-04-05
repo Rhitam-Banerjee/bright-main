@@ -9,11 +9,6 @@ import bookIconWhite from "../../icons/bookIcon.svg";
 import deliveryIconBlue from "../../icons/deliveryIconBlue.svg";
 import deliveryIconWhite from "../../icons/deliveryIconWhite.svg";
 
-import pouchMoney from "../../icons/moneyBagIconGrey.svg";
-import cycleIconGrey from "../../icons/cycleIconBlue.svg";
-import watchIconGrey from "../../icons/watchIconGrey.svg";
-import infoIcon from "../../icons/infoIconGrey.svg";
-
 import razorpay from "../../icons/razorpayIcon.svg";
 
 import { FaArrowRightLong } from "react-icons/fa6";

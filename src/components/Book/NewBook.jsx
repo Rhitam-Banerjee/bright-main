@@ -236,7 +236,7 @@ const NewBook = ({ book, section = "amazon" }) => {
               )}
             </div>
           </div>
-          {isLoggedIn && pathname !== "/your-library" && (
+          {isLoggedIn && (
             <div className="cursor-pointer">
               {wishClickedMap[isbn] ? (
                 <img

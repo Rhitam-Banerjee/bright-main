@@ -13,10 +13,9 @@ import childIcon from "../../icons/childIcon.svg";
 import nameDetailsIcon from "../../icons/nameDetailsIcon.svg";
 import calenderBlueIcon from "../../icons/calenderIconBlue.svg";
 
-import badgeIcon from "../../icons/badgeIconOrange.svg";
 import tickIconWhite from "../../icons/tickIconWhite.svg";
 
-import { FaArrowRightLong, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 
 import { getAge, getApiAgeGroup, getFormattedDate } from "../../utils";
 

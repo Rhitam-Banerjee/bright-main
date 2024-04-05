@@ -94,7 +94,7 @@ export const allFaqs = [
   {
     ques: "How does BrightR.club work ?",
     ans: (
-      <html>
+      <>
         <h1 className="text-[10px] font-bold">Step 1</h1>
         <p className="text-[10px] text-unHighlightDark pl-2">
           Register and Become a Member Sign up and become a member to access all
@@ -116,14 +116,14 @@ export const allFaqs = [
           book exchange. Build the best reading habit with new adventures each
           week!
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "What is the process for borrowing books ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           Borrowing books from BrightR.club is as easy as pie!
         </p>
@@ -140,14 +140,14 @@ export const allFaqs = [
           age group and interests. It's an easy way to discover new favourites
           without searching!
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "How do I return the book ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           Returning books to BrightR.club is as easy as a wave of your wand! Our
           friendly delivery team, who comes to deliver your new adventures, will
@@ -163,14 +163,14 @@ export const allFaqs = [
           of BrightR.club, where reading is a delightful adventure from start to
           finish. Happy reading and returning! 📚🚚✨
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "Can you help me choose books for my children ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           That's why every book in our enchanted library comes with a treasure
           trove of information, including Amazon reviews and ratings. You can
@@ -197,14 +197,14 @@ export const allFaqs = [
           guidance from our librarians, you're in for a magical reading journey
           with BrightR.club! 📚🌟✨
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "What types of books do you offer ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           BrightR.club is a magical world of books for young explorers aged 0 to
           12! We have an endless collection that goes beyond just stories. Dive
@@ -224,14 +224,14 @@ export const allFaqs = [
           countless adventures and unlock the doors to knowledge with
           BrightR.club! 📚🌟✨
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "How often do you deliver books ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           At BrightR.club, we're on a magical mission to help you build a love
           for reading, and that's why we deliver books to your doorstep every
@@ -250,14 +250,14 @@ export const allFaqs = [
           BrightR.club. We're here to make sure you always have new stories to
           explore and keep that reading habit shining bright! 📚🌟✨
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "What happens if a book is damaged or lost while returning it ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           We completely understand that accidents can happen, even in the most
           magical of adventures. At BrightR.club, we are a library that shares
@@ -281,14 +281,14 @@ export const allFaqs = [
           always count on us to ensure you have the most delightful stories in
           your hands. Happy reading, young adventurer! 📚✨
         </p>
-      </html>
+      </>
     ),
     open: false,
   },
   {
     ques: "What are the duration options for membership ?",
     ans: (
-      <html>
+      <>
         <p className="text-[10px] text-unHighlightDark pl-2">
           We offer a standard 6-month membership because we understand that
           building a deep and lasting connection with books takes time. This
@@ -306,7 +306,7 @@ export const allFaqs = [
           So, join us for six months of enchanting reading adventures, and let
           the love for books grow and flourish in your young reader's heart!
         </p>
-      </html>
+      </>
     ),
     open: false,
   },

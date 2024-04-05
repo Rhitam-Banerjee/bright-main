@@ -51,7 +51,7 @@ const urls = {
   forgotPassword: domain + "/forgot-password",
   getOrderBucket: domain + "/get-order-bucket",
 
-  getCompleteSeries: `${newDomain}/get-child-read-series`,
+  getUserCompleteBooks: `${newDomain}/get-user-complete-books`,
 };
 
 export default urls;

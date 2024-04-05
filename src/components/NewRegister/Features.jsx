@@ -1,7 +1,5 @@
 import React from "react";
 
-import badgeIcon from "../../icons/badgeIconOrange.svg";
-
 import { features } from "./constants";
 
 const Features = () => {

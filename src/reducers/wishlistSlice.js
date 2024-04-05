@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  completeAuthors: [],
+  completeSeries: [],
+  booksRead: [],
+
   bucket: [],
   orderBucket: [],
   wishlist: [],
@@ -8,7 +12,6 @@ const initialState = {
   dumpedBooks: [],
   previousBooks: [],
   currentBooks: [],
-  completeSeries: [],
 };
 
 export const wishlistSlice = createSlice({
@@ -135,6 +138,16 @@ export const wishlistSlice = createSlice({
       }
       state.wishlist = [...wishlist];
     },
+
+    setCompleteAuthors: (state, { payload }) => {
+      state.completeAuthors = payload;
+    },
+    setCompleteSeries: (state, { payload }) => {
+      state.completeSeries = payload;
+    },
+    setBooksRead: (state, { payload }) => {
+      state.booksRead = payload;
+    },
   },
 });
 
@@ -156,6 +169,9 @@ export const {
   removeFromBucket,
   setCurrentBooks,
   retainBook,
+  setCompleteAuthors,
+  setCompleteSeries,
+  setBooksRead,
 } = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;
