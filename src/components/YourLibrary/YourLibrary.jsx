@@ -11,33 +11,42 @@ import "swiper/css/free-mode";
 import "swiper/css/virtual";
 import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
-import borwseIconOrangeFill from "../../icons/browseIconOrangeFill.svg";
-import childIcon from "../../icons/childIconYourLibrary.svg";
-import calenderOrange from "../../icons/calenderIconOrange.svg";
-import editIcon from "../../icons/editIcon.svg";
-
-import { IoIosCloseCircle } from "react-icons/io";
+import deliveryIconWhite from "../../icons/deliveryIconWhite.svg";
 
 import {
+  setBooksRead,
   setBucket,
-  setCurrentBooks,
+  setCompleteAuthors,
+  setCompleteSeries,
   setOrderBucket,
   setPreviousBooks,
   setWishlist,
 } from "../../reducers/wishlistSlice";
 
 import Wishlist from "./Wishlist";
-import CompleteSeries from "./CompleteSeries";
+import {
+  CompleteSeries,
+  CompleteAuthors,
+  PreviousBooks,
+  SearchBooks,
+} from "./";
 
 import { setAcitveChild, setAlert, setUser } from "../../reducers/mainSlice";
 
+const getDay = (date) => {
+  const d = new Date(date);
+  const day = d.toLocaleDateString("default", { weekday: "long" });
+  return `${day}`;
+};
 const getDate = (date) => {
   const d = new Date(date);
   const dateNumber = d.getDate();
-  const day = d.toLocaleDateString("default", { weekday: "long" });
+  return `${dateNumber}`;
+};
+const getMonth = (date) => {
+  const d = new Date(date);
   const month = d.toLocaleString("default", { month: "long" });
-
-  return `${day}, ${dateNumber} ${month} ${d.getFullYear()}`;
+  return `${month}`;
 };
 const getFormattedDate = (date) => {
   const d = new Date(date);
@@ -50,8 +59,16 @@ const getFormattedDate = (date) => {
 const YourLibrary = () => {
   const dispatch = useDispatch();
   const { user, activeChild } = useSelector((store) => store.main);
-  const { orderBucket, bucket, wishlist, suggestedBooks, completeSeries } =
-    useSelector((store) => store.wishlist);
+  const {
+    orderBucket,
+    bucket,
+    wishlist,
+    completeAuthors,
+    completeSeries,
+    previousBooks,
+  } = useSelector((store) => store.wishlist);
+
+  const [changeDeliveryShow, setChangeDeliveryShow] = useState(false);
 
   const getOrderBucket = async () => {
     try {
@@ -80,10 +97,25 @@ const YourLibrary = () => {
   const getWishlist = async () => {
     try {
       const response = await axios.get(devUrls.getWishlist, {
+        params: { guid: user.guid },
+      });
+      response.data.wishlists.sort((b, a) => {
+        return b.date_added - a.date_added;
+      });
+      console.log(response.data.wishlists);
+      dispatch(setWishlist({ wishlist: response.data.wishlists }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getPreviousBooks = async () => {
+    try {
+      const response = await axios.get(devUrls.getPreviousBooks, {
         withCredentials: true,
         params: { guid: user.guid },
       });
-      dispatch(setWishlist({ wishlist: response.data.wishlists }));
+      dispatch(setPreviousBooks({ previousBooks: response.data.books }));
     } catch (err) {
       console.log(err);
     }
@@ -106,30 +138,42 @@ const YourLibrary = () => {
     }
   };
 
-  const getCompleteSeries = async () => {
-    const response = await axios.get(devUrls.getCompleteSeries, {
-      withCredentials: true,
-      params: { guid: user.children[activeChild].guid },
-    });
-    // console.log(user.children[activeChild]);
+  const getUserCompleteBooks = async () => {
+    try {
+      const response = await axios
+        .get(devUrls.getUserCompleteBooks, {
+          withCredentials: true,
+          params: { guid: user.guid },
+        })
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      if (response.result) {
+        dispatch(setBooksRead(response.result.books));
+        response.result.author.sort((a, b) => {
+          return b.books_read - a.books_read;
+        });
+        dispatch(setCompleteAuthors(response.result.author));
+        response.result.category.sort((a, b) => {
+          return b.books_read - a.books_read;
+        });
+        dispatch(setCompleteSeries(response.result.category));
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     getWishlist();
-  }, [orderBucket, bucket]);
-
-  useEffect(() => {
     getOrderBucket();
     getBucket();
+    getPreviousBooks();
+    getUserCompleteBooks();
   }, []);
 
-  // useEffect(() => {
-  //   getCompleteSeries();
-  // }, [activeChild]);
-
   return (
-    <main className="mt-[100px] px-[15px]">
-      <section className="mt-[9px] w-max mx-auto">
+    <main className="relative mt-[100px] px-[15px]">
+      {/* <section className="mt-[9px] w-max mx-auto">
         <Swiper
           slidesPerView={"auto"}
           grabCursor={true}
@@ -169,53 +213,41 @@ const YourLibrary = () => {
             );
           })}
         </Swiper>
-      </section>
-      <section className="max-w-[350px] w-full mx-auto mt-[15px] flex flex-col justify-between items-center">
-        <span className="text-[12px] font-bold text-mainColor">
-          Next book bucket
-        </span>
-        <span className="text-[10px] font-semibold text-secondary">
-          Upcomming delivery
-        </span>
-        {/* <span>
-            Delivery Date
-            {user.next_delivery_date &&
-              ` - ${getDate(user.next_delivery_date)}`}
-          </span>
-          <FaEdit />
-          <input type="date" onChange={updateDeliveryDate} /> */}
-        {/* {orderBucket.length ? (
-          <div className="bucket-details mt-[50px]">
-            <div className="bucket-list">
-              {orderBucket.map((book, i) => {
-                return (
-                  <div className="bucket-book" key={i}>
-                    <img src={book.image} alt="Book" />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          <p className="blue-button create-bucket">No Bucket Created</p>
-        )} */}
-        {/* <button className="blue-button date-button">
-          <span>
-            Delivery Date
-            {user.next_delivery_date &&
-              ` - ${getDate(user.next_delivery_date)}`}
-          </span>
-          <FaEdit />
-          <input type="date" onChange={updateDeliveryDate} />
-        </button> */}
-      </section>
-      <section className="mt-[20px] flex flex-col justify-between items-center gap-[10px] w-max mx-auto">
-        <div className="w-full flex flex-row justify-center items-center gap-[10px]">
-          <img className="w-[15px]" src={calenderOrange} alt="CalenderIcon" />
-          {user.next_delivery_date && (
-            <span className="text-[9px] font-bold">
-              {getDate(user.next_delivery_date)}
+      </section> */}
+      {/* <section className="p-[20px] mt-[20px] mx-auto w-full max-w-[360px] flex flex-col justify-between items-center gap-[10px] bg-mainColor rounded-[5px]">
+        <div className="w-full flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-start items-center gap-[10px]">
+            <img
+              className="w-[20px]"
+              src={deliveryIconWhite}
+              alt="DeliveryIcon"
+            />
+            <span className="text-[13px] font-semibold text-white">
+              Next Delivery
             </span>
+          </div>
+          {user.next_delivery_date && (
+            <div className="ml-auto relative">
+              <div
+                className="flex flex-col justify-start items-center w-max h-max bg-white rounded-[5px]"
+                onClick={() => setChangeDeliveryShow(!changeDeliveryShow)}
+              >
+                <div className="w-full p-[3px] bg-unHighlightLight text-center text-[8px] text-white font-bold rounded-tl-[5px] rounded-tr-[5px]">
+                  {getDay(user.next_delivery_date)}
+                </div>
+                <div className="w-full text-unHighlightLight text-center text-[12px] font-black">
+                  {getDate(user.next_delivery_date)}
+                </div>
+                <div className="w-full text-unHighlightLight text-center text-[7px] font-semibold">
+                  {getMonth(user.next_delivery_date)}
+                </div>
+              </div>
+              {changeDeliveryShow && (
+                <div className="absolute top-full right-0 ">
+                  <input type="date" onChange={updateDeliveryDate} />
+                </div>
+              )}
+            </div>
           )}
         </div>
         {orderBucket.length > 0 ? (
@@ -225,7 +257,7 @@ const YourLibrary = () => {
             freeMode={true}
             navigation={true}
             modules={[FreeMode, Navigation, Virtual]}
-            className="mySwiper !py-4 no-slider-arrow w-max !ml-0 mr-auto"
+            className="mySwiper !py-4 no-slider-arrow max-w-[360px] w-max mx-auto"
           >
             {orderBucket?.map((book, index) => {
               return (
@@ -249,10 +281,12 @@ const YourLibrary = () => {
         ) : (
           <div></div>
         )}
-      </section>
-      <div className="w-full h-[0.5px] my-[20px] bg-secondary" />
+      </section> */}
       {wishlist.length > 0 && <Wishlist />}
       {completeSeries.length > 0 && <CompleteSeries />}
+      <SearchBooks />
+      {completeAuthors.length > 0 && <CompleteAuthors />}
+      {previousBooks.length > 0 && <PreviousBooks />}
     </main>
   );
 };

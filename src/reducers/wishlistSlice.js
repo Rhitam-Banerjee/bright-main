@@ -2,8 +2,25 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   completeAuthors: [],
+
+  bookSeries: {
+    wishlistBooks: 0,
+    readBooks: 0,
+  },
+
   completeSeries: [],
+
+  bookAuthor: {
+    wishlistBooks: 0,
+    readBooks: 0,
+  },
+
   booksRead: [],
+
+  searchBooks: [],
+  searchAuthors: [],
+  searchSeries: [],
+  searchGenre: [],
 
   bucket: [],
   orderBucket: [],
@@ -139,6 +156,19 @@ export const wishlistSlice = createSlice({
       state.wishlist = [...wishlist];
     },
 
+    setSearchBooks: (state, { payload }) => {
+      state.searchBooks = payload;
+    },
+    setSearchAuthors: (state, { payload }) => {
+      state.searchAuthors = payload;
+    },
+    setSearchSeries: (state, { payload }) => {
+      state.searchSeries = payload;
+    },
+    setSearchGenre: (state, { payload }) => {
+      state.searchGenre = payload;
+    },
+
     setCompleteAuthors: (state, { payload }) => {
       state.completeAuthors = payload;
     },
@@ -147,6 +177,11 @@ export const wishlistSlice = createSlice({
     },
     setBooksRead: (state, { payload }) => {
       state.booksRead = payload;
+    },
+
+    setBooksSeries: (state, { payload }) => {
+      state.bookSeries.wishlistBooks = payload.wishlistBooks;
+      state.bookSeries.readBooks = payload.readBooks;
     },
   },
 });
@@ -172,6 +207,11 @@ export const {
   setCompleteAuthors,
   setCompleteSeries,
   setBooksRead,
+  setSearchBooks,
+  setSearchAuthors,
+  setSearchGenre,
+  setSearchSeries,
+  setBooksSeries,
 } = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;

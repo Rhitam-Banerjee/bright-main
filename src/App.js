@@ -8,7 +8,7 @@ import axios from "axios";
 import Header from "./components/Header/NewHeader";
 import Landing from "./components/Landing/Landing";
 import { Book } from "./components/Book";
-import YourLibrary from "./components/OldYourLibrary";
+import { YourLibrary } from "./components/YourLibrary";
 import { Search } from "./components/Search";
 import Author from "./components/Author/Author";
 import Footer from "./components/Footer/Footer";

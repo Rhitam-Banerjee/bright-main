@@ -13,15 +13,11 @@ import { FreeMode, Navigation, Virtual } from "swiper/modules";
 
 import heartFillBlue from "../../icons/heartfill.svg";
 
-import { setWishlist } from "../../reducers/wishlistSlice";
-import BookSlider from "../BookSlider";
+// import BookSlider from "../BookSlider";
+import BookSlider from "./BookSlider";
 
 const Wishlist = () => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.main);
-  const { orderBucket, bucket, wishlist, suggestedBooks } = useSelector(
-    (store) => store.wishlist
-  );
+  const { wishlist } = useSelector((store) => store.wishlist);
 
   return (
     <section className="mt-[20px] w-full">
@@ -33,7 +29,23 @@ const Wishlist = () => {
         />
         <span className="text-[12px] font-bold">Wishlist</span>
       </div>
-      <BookSlider books={wishlist} showTags={false} overlay="wishlist" />
+      <Swiper
+        slidesPerView={"auto"}
+        grabCursor={true}
+        freeMode={true}
+        navigation={true}
+        modules={[FreeMode, Navigation, Virtual]}
+        className="mySwiper no-slider-arrow"
+      >
+        {wishlist?.map((book, index) => {
+          return (
+            <SwiperSlide key={index}>
+              <BookSlider book={book} section={"wishlist"} />
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+      {/* <BookSlider books={wishlist} showTags={false} overlay="wishlist" /> */}
     </section>
   );
 };

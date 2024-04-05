@@ -1,6 +1,18 @@
 import YourLibrary from "./YourLibrary";
-import Wishlist from "./Wishlist";
+import BookSlider from "./BookSlider";
 import DeliveryBooks from "./DeliveryBooks";
-import BookSlider from "../BookSlider";
+import Wishlist from "./Wishlist";
 import CompleteSeries from "./CompleteSeries";
-export { YourLibrary, Wishlist, DeliveryBooks, BookSlider, CompleteSeries };
+import CompleteAuthors from "./CompleteAuthors";
+import PreviousBooks from "./PreviousBooks";
+import SearchBooks from "./SearchBooks";
+export {
+  YourLibrary,
+  BookSlider,
+  DeliveryBooks,
+  Wishlist,
+  CompleteSeries,
+  SearchBooks,
+  CompleteAuthors,
+  PreviousBooks,
+};

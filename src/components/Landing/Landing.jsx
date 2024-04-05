@@ -39,12 +39,19 @@ import FAQ from "./FAQ";
 import GoogleReviews from "./GoogleReviews";
 import InstagramEmbed from "./InstagramEmbed";
 import Segregation from "./Segregation";
+import {
+  setBooksRead,
+  setCompleteAuthors,
+  setCompleteSeries,
+  setWishlist,
+} from "../../reducers/wishlistSlice";
 
 const Landing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const {
+    user,
     isLoggedIn,
     registerDetails: { mobileNumber },
   } = useSelector((store) => store.main);
@@ -65,6 +72,21 @@ const Landing = () => {
         return faq;
       })
     );
+  };
+
+  const getWishlist = async () => {
+    try {
+      const response = await axios.get(devUrls.getWishlist, {
+        params: { guid: user.guid },
+      });
+      response.data.wishlists.sort((b, a) => {
+        return b.date_added - a.date_added;
+      });
+      console.log(response.data.wishlists);
+      dispatch(setWishlist({ wishlist: response.data.wishlists }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const goToRegister = async (event) => {
@@ -116,6 +138,31 @@ const Landing = () => {
         setLoadVideos(true);
   };
 
+  const getUserCompleteBooks = async () => {
+    try {
+      const response = await axios
+        .get(devUrls.getUserCompleteBooks, {
+          withCredentials: true,
+          params: { guid: user.guid },
+        })
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      if (response.result) {
+        dispatch(setBooksRead(response.result.books));
+        response.result.author.sort((a, b) => {
+          return b.books_read - a.books_read;
+        });
+        dispatch(setCompleteAuthors(response.result.author));
+        response.result.category.sort((a, b) => {
+          return b.books_read - a.books_read;
+        });
+        dispatch(setCompleteSeries(response.result.category));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (location.hash) {
       let elem = document.getElementById(location.hash.slice(1));
@@ -132,6 +179,13 @@ const Landing = () => {
     return () => {
       window.removeEventListener("scroll", loadHeavyComponentsFunction);
     };
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      getWishlist();
+      getUserCompleteBooks();
+    }
   }, []);
 
   return (

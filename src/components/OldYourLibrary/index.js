@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import BookSlider from "../BookSlider";
-import "./styles.scss";
+import { useDispatch, useSelector } from "react-redux";
+
+import axios from "axios";
+import devUrls from "../../utils/devUrls";
+
 import { suggestedCategories, bookArchives } from "./constants";
 
-import { useDispatch, useSelector } from "react-redux";
 import {
   setBucket,
   setWishlist,
@@ -12,25 +14,38 @@ import {
   setPreviousBooks,
   setCurrentBooks,
   setOrderBucket,
+  setCompleteAuthors,
+  setCompleteSeries,
 } from "../../reducers/wishlistSlice";
+import { setUser, setAlert } from "../../reducers/mainSlice";
 import {
   getAgeGroupColor,
   getDay,
   getDate,
   getFormattedDate,
 } from "../../utils";
+
 import { FaEdit, FaCalendar } from "react-icons/fa";
-import axios from "axios";
-import devUrls from "../../utils/devUrls";
-import { setUser, setAlert } from "../../reducers/mainSlice";
-import { MdClose } from "react-icons/md";
+import { PiFlagPennantFill } from "react-icons/pi";
+
 import BrowseLibraryLinks from "../Content/BrowseLibraryLinks";
+
+import BookSlider from "../BookSlider";
+import "./styles.scss";
 
 const YourLibrary = () => {
   const state = useSelector((state) => state);
   const {
     main: { user },
-    wishlist: { orderBucket, bucket, wishlist, suggestedBooks },
+    wishlist: {
+      orderBucket,
+      bucket,
+      wishlist,
+      suggestedBooks,
+      completeAuthors,
+      completeSeries,
+      booksRead,
+    },
   } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [changingBucket, setChangingBucket] = useState(false);
@@ -192,116 +207,116 @@ const YourLibrary = () => {
     }
   };
 
+  const getUserCompleteBooks = async () => {
+    try {
+      const response = await axios
+        .get(`${devUrls.getUserCompleteBooks}?guid=${user.guid}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+      console.log(response.result);
+      if (response.result) {
+        response.result.author.sort((a, b) => {
+          return b.books_read - a.books_read;
+        });
+        dispatch(setCompleteAuthors(response.result.author));
+        response.result.category.sort((a, b) => {
+          return b.books_read - a.books_read;
+        });
+        dispatch(setCompleteSeries(response.result.category));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     getWishlist();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderBucket, bucket]);
 
-  useEffect(
-    () => {
-      getOrderBucket();
-      getBucket();
-      getSuggestions();
-      getPreviousBooks();
-      getDumpedBooks();
-      getCurrentBooks();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getOrderBucket();
+    getBucket();
+    getSuggestions();
+    getPreviousBooks();
+    getDumpedBooks();
+    getCurrentBooks();
+    getUserCompleteBooks();
+  }, []);
 
   return (
-    <div className='your-library'>
+    <div className="your-library">
       <h3>Your Library</h3>
-      <div className='bucket'>
+      <div className="bucket">
         <h3>Next Delivery Bucket</h3>
         {orderBucket.length ? (
-          <div className='bucket-details'>
-            <div className='bucket-list'>
+          <div className="bucket-details">
+            <div className="bucket-list">
               {orderBucket.map((book, i) => {
                 return (
-                  <div className='bucket-book' key={i}>
-                    <img src={book.image} alt='Book' />
+                  <div className="bucket-book" key={i}>
+                    <img src={book.image} alt="Book" />
                   </div>
                 );
               })}
             </div>
           </div>
         ) : (
-          <p className='blue-button create-bucket'>No Bucket Created</p>
+          <p className="blue-button create-bucket">No Bucket Created</p>
         )}
-        <button className='blue-button date-button'>
+        <button className="blue-button date-button">
           <span>
             Delivery Date
             {user.next_delivery_date &&
               ` - ${getDate(user.next_delivery_date)}`}
           </span>
           <FaEdit />
-          <input type='date' onChange={updateDeliveryDate} />
+          <input type="date" onChange={updateDeliveryDate} />
         </button>
         {user.next_delivery_date && (
-          <div className='time-date'>
-            <div className='time-date-column'>
-              <img src='/icons/time.png' alt='Time' />
+          <div className="time-date">
+            <div className="time-date-column">
+              <img src="/icons/time.png" alt="Time" />
               <p>Time - {user.delivery_time}</p>
             </div>
-            <div className='time-date-column'>
+            <div className="time-date-column">
               <FaCalendar />
               <p>Day - {getDay(user.next_delivery_date)}</p>
             </div>
           </div>
         )}
       </div>
-      <div className='wishlist'>
+      <div className="wishlist">
         <h3>Wishlist</h3>
         {wishlist.length > 0 ? (
-          <BookSlider books={wishlist} showTags={false} overlay='wishlist' />
+          <BookSlider books={wishlist} showTags={false} overlay="wishlist" />
         ) : (
-          <div className='empty-wishlist'>
+          <div className="empty-wishlist">
             <h2>
               <span>Like Books</span> to add
               <br />
               them in your wishlist
             </h2>
-            <img src='/icons/wishlist.png' alt='Wishlist' />
+            <img src="/icons/wishlist.png" alt="Wishlist" />
           </div>
         )}
       </div>
-      {user.children?.map((child, i) => {
+      {/* {user.children?.map((child, i) => {
         return (
-          <div className='suggestions' key={i}>
+          <div className="suggestions" key={i}>
             <BookSlider
               books={suggestedBooks.length ? suggestedBooks[i] : []}
               color={getAgeGroupColor(child.dob)}
               categories={suggestedCategories}
               title={`Suggested for ${child.name}`}
-              overlay='suggested'
+              overlay="suggested"
             />
           </div>
         );
-      })}
-      <div className='archives'>
-        {bookArchives.map((archive, i) => {
-          return (
-            <div className='archive' key={i}>
-              <h3>{archive.title}</h3>
-              {state.wishlist[archive.name]?.length ? (
-                <BookSlider
-                  books={state.wishlist[archive.name]}
-                  bookBackground='#F1F1F0'
-                  showTags={false}
-                  overlay={archive.overlay}
-                />
-              ) : (
-                <div className='archive-empty'>
-                  {archive.emptyText}
-                  <img src={archive.emptyImage} alt='Archive' />
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      })} */}
+      {completeSeries?.length > 0()}
+      {/* {completeAuthors?.length>0 && <div>
+
+        </div>} */}
       <BrowseLibraryLinks />
     </div>
   );

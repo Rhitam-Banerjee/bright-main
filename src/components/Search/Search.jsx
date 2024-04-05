@@ -8,6 +8,7 @@ import urls from "../../utils/urls";
 import { SearchBooks, SearchGenres, SearchSeries, SearchAuthors } from "./";
 
 import { load, stopLoad } from "../../reducers/bookSlice";
+import { setSearchText } from "../../reducers/mainSlice";
 
 const Search = () => {
   const { search } = useParams();
@@ -15,7 +16,6 @@ const Search = () => {
   const { age, loading } = useSelector((store) => store.book);
   const {
     isLoggedIn,
-    searchText,
     registerDetails: { mobileNumber },
   } = useSelector((store) => store.main);
 
@@ -25,7 +25,6 @@ const Search = () => {
   const [genreData, setGenreData] = useState([]);
 
   const getSearch = async () => {
-    console.log(mobileNumber);
     dispatch(load());
     try {
       const response = await axios
@@ -76,6 +75,7 @@ const Search = () => {
       });
       setGenreData(response.result.genres);
       dispatch(stopLoad());
+      dispatch(setSearchText(""));
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +90,7 @@ const Search = () => {
       {!loading ? (
         <>
           <h1 className="flex font-bold text-[12px] pb-[10px]">
-            Search Results for{" "}
+            Search Results for
             <span className="text-secondary pl-2">{search}</span>
           </h1>
           {bookData?.length > 0 && <SearchBooks data={bookData} />}
