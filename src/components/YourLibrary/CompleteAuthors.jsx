@@ -122,7 +122,7 @@ const CompleteAuthors = () => {
     if (wishlist.length > 0) {
       getBooks();
     }
-  }, []);
+  }, [filter]);
 
   return (
     <section className="relative mt-[20px] w-full pt-[20px]">
@@ -233,6 +233,9 @@ const CompleteAuthors = () => {
                   } else {
                     setAuthorChosen(author.id);
                     getBooksOfSeries(author.id);
+                    setFilter((prev) => {
+                      return (prev = "all");
+                    });
                   }
                 }}
               >

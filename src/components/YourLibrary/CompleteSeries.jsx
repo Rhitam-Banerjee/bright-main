@@ -126,7 +126,7 @@ const CompleteSeries = () => {
     if (wishlist.length > 0) {
       getBooks();
     }
-  }, []);
+  }, [filter]);
 
   return (
     <section className="mt-[20px] w-full">
@@ -235,6 +235,9 @@ const CompleteSeries = () => {
                   } else {
                     setSeriesChosen(serie.id);
                     getBooksOfSeries(serie.id);
+                    setFilter((prev) => {
+                      return (prev = "all");
+                    });
                   }
                 }}
               >
