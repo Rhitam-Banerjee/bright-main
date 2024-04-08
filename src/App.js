@@ -112,8 +112,8 @@ const App = () => {
           path="/register"
           element={isLoggedIn ? <Navigate to="/" /> : <Register />}
         />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/pricing" element={<Register />} />
+        <Route path="/how-it-works" element={<Navigate to="/" />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
