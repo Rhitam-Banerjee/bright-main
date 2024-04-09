@@ -21,7 +21,11 @@ import { setBooksAuthors } from "../../reducers/bookSlice";
 
 import { NewBook } from "./";
 
-import { addToWishlist } from "../../reducers/wishlistSlice";
+import {
+  addToWishlist,
+  removeFromWishlist,
+  setWishlist,
+} from "../../reducers/wishlistSlice";
 import { setAlert } from "../../reducers/mainSlice";
 import { CiHeart } from "react-icons/ci";
 import clockIcon from "../../icons/clock.svg";
@@ -48,9 +52,9 @@ const Book = () => {
 
   const { isbn } = useParams();
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const { age, authors } = useSelector((store) => store.book);
-  const { isLoggedIn } = useSelector((store) => store.main);
+  const { user, isLoggedIn } = useSelector((store) => store.main);
+  const { wishlist } = useSelector((store) => store.wishlist);
   const [hasBookVideos, setHasBookVideos] = useState(false);
   const [hasBookSetVideos, setHasBookSetVideos] = useState(false);
 
@@ -69,6 +73,7 @@ const Book = () => {
   const [authorReview, setAuthorReview] = useState({});
   const [authorIds, setAuthorIds] = useState({});
 
+  const [isInWishlist, setIsInWishlist] = useState(false);
   const [wishClickedMap, setWishClickedMap] = useState({});
   const [wishListBooks, setWishListBooks] = useState([]);
 
@@ -226,20 +231,46 @@ const Book = () => {
     }
   };
 
-  const wishlistAdd = async (book, isbn) => {
-    dispatch(
-      setAlert({ text: `${book.name} added to wishlist`, color: "#33A200" })
-    );
-    dispatch(addToWishlist({ book }));
+  const getWishlist = async () => {
+    try {
+      const response = await axios.get(devUrls.getWishlist, {
+        withCredentials: true,
+        params: { guid: user.guid },
+      });
+      dispatch(setWishlist({ wishlist: response.data.wishlists }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const wishlistAdd = async (isbn) => {
+    dispatch(setAlert({ text: `Added to wishlist`, color: "#33A200" }));
     try {
       await axios.post(
         devUrls.addToWishlist,
         { isbn: isbn },
         { withCredentials: true }
       );
+      setIsInWishlist(true);
     } catch (err) {
       console.log(err);
     }
+    getWishlist();
+  };
+
+  const wishlistRemove = async (isbn) => {
+    dispatch(setAlert({ text: `Removed from wishlist`, color: "#F75549" }));
+    try {
+      await axios.post(
+        devUrls.removeFromWishlist,
+        { isbn: isbn },
+        { withCredentials: true }
+      );
+      setIsInWishlist(false);
+    } catch (err) {
+      console.log(err);
+    }
+    getWishlist();
   };
 
   const addToReadList = async (isbn) => {
@@ -304,6 +335,15 @@ const Book = () => {
     getBookVideo();
     getBookSetVideo();
   }, [isbn]);
+
+  getWishlist();
+
+  useEffect(() => {
+    if (wishlist.length > 0) {
+      setIsInWishlist(wishlist.some((book) => book.isbn === isbn));
+      console.log("Run");
+    }
+  }, []);
 
   if (!book)
     return (
@@ -406,13 +446,25 @@ const Book = () => {
         </div>
         <div className="flex flex-col h-full">
           {isLoggedIn && (
-            <div
-              className="flex flex-row justify-center items-center text-[12px] text-mainColor font-bold h-[45px] w-full max-w-[340px] m-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
-              onClick={() => wishlistAdd(book, isbn)}
-            >
-              <CiHeart className="w-[22px] h-[22px]" />
-              Add To Wishlist
-            </div>
+            <>
+              {isInWishlist ? (
+                <div
+                  className="flex flex-row justify-center items-center text-[12px] text-white bg-mainColor font-bold h-[45px] w-full max-w-[340px] m-auto border-[2px] border-white cursor-pointer rounded-[5px]"
+                  onClick={() => wishlistRemove(isbn)}
+                >
+                  <CiHeart className="w-[22px] h-[22px]" />
+                  Remove from Wishlist
+                </div>
+              ) : (
+                <div
+                  className="flex flex-row justify-center items-center text-[12px] text-mainColor bg-white font-bold h-[45px] w-full max-w-[340px] m-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
+                  onClick={() => wishlistAdd(isbn)}
+                >
+                  <CiHeart className="w-[22px] h-[22px]" />
+                  Add To Wishlist
+                </div>
+              )}
+            </>
           )}
           <div className="mb-auto">
             {book.description && (
@@ -589,13 +641,25 @@ const Book = () => {
               </div>
             </div>
             {isLoggedIn && (
-              <div
-                className="flex flex-row justify-center items-center text-[12px] text-mainColor font-bold h-[45px] w-full max-w-[340px] mr-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
-                onClick={() => wishlistAdd(book)}
-              >
-                <CiHeart className="w-[22px] h-[22px]" />
-                Add To Wishlist
-              </div>
+              <>
+                {isInWishlist ? (
+                  <div
+                    className="flex flex-row justify-center items-center text-[12px] text-white bg-mainColor font-bold h-[45px] w-full max-w-[340px] mr-auto border-[2px] border-white cursor-pointer rounded-[5px]"
+                    onClick={() => wishlistRemove(isbn)}
+                  >
+                    <CiHeart className="w-[22px] h-[22px]" />
+                    Remove from Wishlist
+                  </div>
+                ) : (
+                  <div
+                    className="flex flex-row justify-center items-center text-[12px] text-mainColor bg-white font-bold h-[45px] w-full max-w-[340px] mr-auto border-[2px] border-mainColor cursor-pointer rounded-[5px]"
+                    onClick={() => wishlistAdd(isbn)}
+                  >
+                    <CiHeart className="w-[22px] h-[22px]" />
+                    Add To Wishlist
+                  </div>
+                )}
+              </>
             )}
             {/* {book.book_type && <div>{book.book_type}</div>} */}
           </div>

@@ -57,9 +57,6 @@ const NewAuthor = () => {
             <h2 className="font-semibold text-[2rem] text-unHighlightDark md:text-center my-7">
               {authorDetails.name}
             </h2>
-            {/* <p className="font-light text-[0.8rem] text-unHighlightDark">
-              {authorDetails.description}
-            </p> */}
           </div>
           <div className="saturate-0 grid place-items-center">
             <img
@@ -67,11 +64,6 @@ const NewAuthor = () => {
               src={authorImg}
               alt="author_Image"
             />
-            {/* <img
-              className="!max-w-[300px]"
-              src={authorDetails.image}
-              alt="author_Image"
-            /> */}
           </div>
         </div>
         <div className="mt-10 w-full flex-1 flex flex-row items-center justify-center gap-4 text-unHighlightDark">
